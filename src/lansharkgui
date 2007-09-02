@@ -167,7 +167,17 @@ class GtkIconFactory(icons.IconFactory):
     def get_icon(self, name, size):
         # damn it! why did no one tell me I have to cache this!!!
         if not (name, size) in self.cache:
-            self.cache[(name, size)] = self.icon_theme.load_icon(name, size, 0)
+            try:
+                self.cache[(name, size)] = self.icon_theme.load_icon(name,
+                        size, 0)
+            except gobject.GError, e:
+                logging.exception("Unable to load icon %r probably your "
+                        "icon theme isn't conforming to the icon naming "
+                        "convention. You might want to try the tango icon "
+                        "theme", name)
+                return None
+                self.cache[(name, size)] = self.icon_theme.load_icon(
+                        "error", size, 0)
         return self.cache[(name, size)]
 
     def get_image(self, name, size):
@@ -262,8 +272,12 @@ class MainWindow(gtk.Window):
         self.search = Search(self.browser, self.downloads)
         self.notebook.append_page(self.browser,
                 IconLabel(_('Browser'), 'applications-internet'))
+        if iconfactory.get_icon('system-search', 16):
+            searchicon = 'system-search'
+        else:
+            searchicon = 'find'
         self.notebook.append_page(self.search,
-                IconLabel(_('Search'), 'system-search'))
+                IconLabel(_('Search'), searchicon))
         self.notebook.append_page(self.downloads,
                 IconLabel(_('Download Queue'), 'go-down'))
         self.vbox.pack_start(self.notebook)
@@ -380,7 +394,11 @@ class Browser(gtk.Frame):
             hbox.pack_start(button, False, False)
         self.entry_location = gtk.Entry()
         hbox.pack_start(self.entry_location, True, True)
-        button_go = IconButton("go-jump", 16)
+        # this icon is missing quite often
+        if iconfactory.get_icon("go-jump", 16):
+            button_go = IconButton("go-jump", 16)
+        else:
+            button_go = IconButton("gtk-ok", 16)
         button_go.connect("clicked", self.goto)
         button_go.set_relief(gtk.RELIEF_NONE)
         hbox.pack_start(button_go, False, False)
