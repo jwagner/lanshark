@@ -1,0 +1,12 @@
+include: HEADER
+-
+*External Dependencies
+-
+python >= 2.5 (does not work with 2.4!)
+pygtk >= 2.10 (only for the GUI)
+-
+*Installation
+-
+As simple as that:
+$ python setup.py install
+-

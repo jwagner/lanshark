@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Encoding=ISO-8859-1
+Name=LanShark
+Comment=Lan filesharing tool
+Icon=lanshark
+Type=Application
+Categories=Application;Network
+Terminal=false
+Exec=lansharkgui

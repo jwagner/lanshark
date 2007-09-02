@@ -1,0 +1,279 @@
+# German translations for PACKAGE package
+# German messages for PACKAGE.
+# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#  <veers@gmx.ch>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-26 00:26+0200\n"
+"PO-Revision-Date: 2007-07-20 22:04+0200\n"
+"Last-Translator:  <veers@gmx.ch>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/lansharkgui:48
+msgid "Archive"
+msgstr "Archiv"
+
+#: ../src/lansharkgui:50
+msgid "Audio"
+msgstr "Audio"
+
+#: ../src/lansharkgui:53
+msgid "Executable"
+msgstr "Anwendung"
+
+#: ../src/lansharkgui:55
+msgid "Folder"
+msgstr "Ordner"
+
+#: ../src/lansharkgui:56
+msgid "Image"
+msgstr "Bild"
+
+#: ../src/lansharkgui:59
+msgid "Office"
+msgstr "Office"
+
+#: ../src/lansharkgui:61
+msgid "Text"
+msgstr "Text"
+
+#: ../src/lansharkgui:63
+msgid "Video"
+msgstr "Video"
+
+#: ../src/lansharkgui:102
+msgid "Error"
+msgstr "Fehler"
+
+#: ../src/lansharkgui:225
+msgid "Open Web Interface"
+msgstr "Webinterface oeffnen"
+
+#: ../src/lansharkgui:232
+msgid "Edit"
+msgstr "Editieren"
+
+#: ../src/lansharkgui:239
+msgid "Help"
+msgstr "Hilfe"
+
+#: ../src/lansharkgui:258
+msgid "Browser"
+msgstr "Browser"
+
+#: ../src/lansharkgui:260
+msgid "Search"
+msgstr "Suchen"
+
+#: ../src/lansharkgui:262
+msgid "Download Queue"
+msgstr "Downloads"
+
+#: ../src/lansharkgui:289
+msgid "A filesharing application for local area networks"
+msgstr "Eine Filesharing Anwendung fuer Lokale Netzwerke"
+
+#: ../src/lansharkgui:339
+msgid "Peers"
+msgstr "Peers"
+
+#: ../src/lansharkgui:532
+#, fuzzy, python-format
+msgid "%s could not be found"
+msgstr "%s konnte nicht gefunden werden"
+
+#: ../src/lansharkgui:558
+msgid "All"
+msgstr "Alle"
+
+#: ../src/lansharkgui:559
+msgid "Regex"
+msgstr "Regex"
+
+#: ../src/lansharkgui:605
+#, python-format
+msgid ""
+"Invalid Regex:\n"
+"%s"
+msgstr ""
+"Fehlerhafte Regex:\n"
+"%s"
+
+#: ../src/lansharkgui:613
+msgid "No active download"
+msgstr "Kein download aktiv"
+
+#: ../src/lansharkgui:632
+msgid "Downloads"
+msgstr "Downloads"
+
+#: ../src/lansharkgui:657
+msgid "Finished downloads"
+msgstr "Fertiggestellte Downloads"
+
+#: ../src/lansharkgui:713
+#, fuzzy
+msgid "Drag and Drop only works for http!"
+msgstr "Drag and Drop funktioniert nur mit http uris!"
+
+#: ../src/lansharkgui:723
+msgid "Could not add url"
+msgstr "Url konnte nicht hinzugefuegt werden"
+
+#: ../src/lansharkgui:752
+#, fuzzy
+msgid "Download paused"
+msgstr "Downloads"
+
+#: ../src/lansharkgui:755
+#, fuzzy
+msgid "Downloading..."
+msgstr "Downloaden"
+
+#: ../src/lansharkgui:760
+#, fuzzy
+msgid "Download complete"
+msgstr "Downloads"
+
+#: ../src/lansharkgui:771
+#, fuzzy, python-format
+msgid "%s left %s/s"
+msgstr "%s verbleibend %s/s"
+
+#: ../src/lansharkgui:814
+#, python-format
+msgid "An unhandled error occured whiledownloading %r"
+msgstr ""
+
+#: ../src/lansharkgui:830 ../src/lansharkgui:843
+#, fuzzy
+msgid "Starting download"
+msgstr "Kein aktiver download"
+
+#: ../src/lansharkgui:871
+msgid "Skipped: "
+msgstr "Uebersprungen: "
+
+#: ../src/lansharkgui:875
+#, fuzzy
+msgid "Error: "
+msgstr "Fehler"
+
+#: ../src/lansharkgui:876
+#, python-format
+msgid "Error while downloading %r%s"
+msgstr "Fehler beim downloaden von %r%s"
+
+#: ../src/lansharkgui:961
+#, python-format
+msgid "%s - %i Folders %i Files"
+msgstr "%s - %i Ordner %i Dateien"
+
+#: ../src/lansharkgui:978
+#, python-format
+msgid "%i files total %s - %i folders"
+msgstr "%i Dateien total %s - %i Ordner"
+
+#: ../src/lansharkgui:1063
+msgid "Preview"
+msgstr "Vorschau"
+
+#: ../src/lansharkgui:1069
+msgid "Download"
+msgstr "Downloaden"
+
+#: ../src/lansharkgui:1076
+msgid "Icon Size"
+msgstr "Icon groesse"
+
+#: ../src/lansharkgui:1119
+msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
+msgstr ""
+"Bitte installiere vlc von http://videolan.org/vlc/ um dieses feature zu "
+"benutzen"
+
+#: ../src/lansharkgui:1123
+#, fuzzy, python-format
+msgid ""
+"Could not find a suitable mediaplayer on your system. Please configure one "
+"manually.The path to the config file is %s."
+msgstr ""
+"Es wurde kein brauchbarer Medienabspieler auf deinem system gefunden.falls "
+"einer installiert sein sollte kannst du diesen Manuell unter %s "
+"konfigurieren."
+
+#: ../src/lansharkgui:1156
+#, python-format
+msgid "%s Configuration"
+msgstr "%s Konfiguration"
+
+#: ../src/lansharkgui:1160
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#: ../src/lansharkgui:1166
+msgid "Hostname"
+msgstr "Hostname"
+
+#: ../src/lansharkgui:1168
+msgid "Select the share path"
+msgstr "Freigabe Pfad auswaehlen"
+
+#: ../src/lansharkgui:1171
+msgid "Share Path"
+msgstr "Freigabe Pfad"
+
+#: ../src/lansharkgui:1173
+msgid "Select the incoming path"
+msgstr "Einkommenden Pfad auswaehlen"
+
+#: ../src/lansharkgui:1176
+msgid "Incoming Path"
+msgstr "Einkommender Pfad"
+
+#: ../src/lansharkgui:1180
+msgid "Autostart"
+msgstr "Autostart"
+
+#: ../src/lansharkgui:1185
+msgid "Hello Message"
+msgstr "Hallo Nachricht"
+
+#: ../src/lansharkgui:1188
+msgid "Broadcast Address"
+msgstr "Broadcast Addresse"
+
+#: ../src/lansharkgui:1191
+msgid "Port"
+msgstr "Port"
+
+#: ../src/lansharkgui:1200
+msgid "Basic"
+msgstr "Einfach"
+
+#: ../src/lansharkgui:1201
+msgid "Advanced"
+msgstr "Erweitert"
+
+#: ../src/lansharkgui:1205
+#, python-format
+msgid ""
+"For more advanced configuration please\n"
+"take a look at lansharks config file:\n"
+"%s"
+msgstr ""
+"Fuer erweiterte Einstellungen koennen in\n"
+"der Konfigurations Datei vorgenommen werden:\n"
+"%s"
+
+#: ../src/lansharkgui:1208
+msgid "More"
+msgstr "Mehr"

@@ -1,0 +1,105 @@
+include: HEADER
+-
+You are very welcome to hack on lanshark. Here are some
+guidelines for doing so. If you need help to understand the
+source code please just ask :)
+-
+*Coordination
+-
+Please use launchpad and irc for coordination!
+https://launchpad.net/lanshark
+irc://irc.freenode.net/#lanshark
+-
+*Getting started
+-
+1: get the source code from my bazaar repository
+   $ git clone ...
+
+2: Search for a ticket that covers the work you are planning to do.
+   In case you cannot find one, just create a new one.
+
+2: start hacking!
+   $ vim src/lansharkgui
+
+3: test your changes
+   $ python src/lanshark/test.py
+
+3: when finnished make a patch
+   $ git diff > agoodname.patch
+
+4: publish your path or a link to your branch in launchpad
+-
+*Coding Style
+-
+See PEP8 - http://www.python.org/dev/peps/pep-0008/
+-
+*Lanshark Protocol
+-
+The protocol used by lanshark is really simple. Its split in two
+parts one is based on udp and handles searching and discovery,
+the other is based on http and json and is used for the
+datatransfer and directory listings.
+-
+*UDP Protocol
+-
+The udp protocol knows three types of messages: hello, search
+and search response. The maximal length of a message is 1024
+bytes.
+
+The hello message consists of a simple use configurable string.
+For the provided examples we assume this string is 'HELO'.
+This string will be sent to the broadcast address. Every lanshark
+instance that recieves this message will reply with a hello message
+and its (host)name seperated by a space to the sender. The hostname
+has nothing to do with the real hostname and is just used for display
+purposes.
+Example: 'HELO example.com'
+
+The search message consists of the string 'search' a space followed
+by the hello message another space and finally a regular expression.
+Example: 'search HELO foo'. The message has to be encoded in utf8. The
+search message does get sent to the broadcast address. Every
+lanshark instance that receives the search query searches its index
+for matches. Every match will result in a match message to the sender.
+
+The reply message consists of the regular expression used for the
+search that resultet in the reply and the path of the match reperated
+by a :. The reply messages are encoded in utf8 aswell.
+Example: 'foo:/some/folder/foo.png'. The response of the example
+means that a file matching the search query foo is locatet at
+http://senderaddress:port/some/folder/foo.png.
+-
+*HTTP Protocol
+-
+The only thing you need to know about the http based protocol is how
+to get the directory listings as json and how to interpret them.
+There is one important thing about it, the Accept request header
+may not contain html. Otherwise you will get a HTML response
+rather than json. Another important thing is to include the
+trailing slash for directories.
+
+The response format is really simple:
+Its a list of lists which consist of filename, size, icon.
+The filename of a folder always ends with a slash.
+For folders size is a list with two items: the number of
+subfolders and the number of files inside there. The
+icon is at the moment only used for folders. But enough
+bla bla. Its easier to show some code:
+[
+    [
+        'foo/', // foldername,
+        [
+            2 // number of subfolders,
+            10 // number of files in the folder
+        ],
+        'cover.jpg'
+    ],
+    [
+        'foobar.jpg', // filename
+        65536, // filesize
+        null // no icon at all
+    ]
+]
+
+I think that's everything you need to know about the protocol.
+-

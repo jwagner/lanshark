@@ -1,0 +1,1289 @@
+#!/usr/bin/env python
+# vim: set fileencoding=utf-8 :
+"""The pygtk gui for lanshark"""
+from __future__ import with_statement
+import errno
+import gc
+import os
+import re
+import sys
+import socket
+import math
+import time
+import threading
+import urllib2
+import webbrowser
+
+import pygtk
+import posixpath
+pygtk.require('2.0')
+import gtk
+import gobject
+
+from lanshark.config import config
+from lanshark import autostart
+import logging
+try:
+    appdir = os.path.dirname(__file__)
+    print appdir
+    config.set_prefix(os.path.abspath(os.path.join(appdir, os.pardir)))
+    print config.DATA_PATH
+except NameError:
+    # frozen
+    appdir = os.path.dirname(sys.argv[0])
+    config.set_prefix(os.path.abspath(appdir))
+    logging.debug("frozen")
+# config.set_prefix(".") # useful for tracing
+from lanshark import lib, icons
+
+import locale
+locale.setlocale(locale.LC_ALL, '')
+
+import gettext
+#gettext.install('lanshark', config.LOCALE_PATH, unicode=1, codeset="ISO-8859-1")
+gettext.bindtextdomain('lanshark', config.LOCALE_PATH)
+gettext.textdomain('lanshark')
+_ = gettext.gettext
+
+NAME = "Lanshark"
+VERSION = "0.0.0"
+
+# this mighty thingy maps fileendings to File Categories, Icons and
+# preview applications, could be done nicer as a class
+FILETYPES = (
+            (_("Archive"), "package-x-generic",
+                ("tar", "bz2", "gz", "zip", "rar", "7zip", "ace"), None),
+            (_("Audio"), "audio-x-generic",
+                ("mp3", "ogg", "flac", "mpc", "m4a", "wma", "wav"),
+                config.AUDIO_PLAYER),
+            (_("Executable"), "application-x-executable",
+                ("bin", "exe", "sh"), None),
+            (_("Folder"), "folder", ("/"), None),
+            (_("Image"), "image-x-generic",
+                ("png", "jpg", "jpeg", "bmp", "gif", "tif", "tiff", "svg"),
+                config.IMAGE_VIEWER),
+            (_("Office"), "x-office-document",
+                ("doc", "ppt", "odt", "xls", "csv"), None),
+            (_("Text"), "text-x-generic", ("txt", "nfo"), None),
+            # no ogg here because its mostly audio
+            (_("Video"), "video-x-generic",
+                ("avi", "mpg", "wmv", "asf", "flv"), config.VIDEO_PLAYER),
+        )
+
+icon_theme = gtk.icon_theme_get_default()
+if icon_theme:
+    iconpath = os.path.join(config.DATA_PATH, "icons/scalable/")
+    icon_theme.append_search_path(iconpath)
+    iconpath = os.path.join(config.DATA_PATH, "icons/32x32/")
+    icon_theme.append_search_path(iconpath)
+
+def iter_idle(obj, func, list_mode=False, interval=0):
+    """iterate func(element) over object using gobject.idle_add
+       in list mode func does get called with a list of all elements
+       until there is a None"""
+    i = iter(obj)
+    def wrap_func():
+        try:
+            if list_mode:
+                arg = []
+                item = i.next()
+                while item:
+                    arg.append(item)
+                    item = i.next()
+            else:
+                arg = i.next()
+            func(arg)
+        except StopIteration:
+            return False
+        return True
+    if interval:
+        gobject.timeout_add(interval, wrap_func)
+    else:
+        gobject.idle_add(wrap_func)
+
+def show_error(msg):
+    """Show a 'nice' errbox"""
+    dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, message_format=str(msg),
+            buttons=gtk.BUTTONS_OK)
+    dialog.set_title(_("Error"))
+    # dialog.run() - this breaks when called from gobject.idle_add
+    # dialog.hide()
+    # dialog.destroy
+    dialog.show()
+    dialog.connect("response", lambda dialog, response: dialog.destroy())
+
+def make_table(widgets):
+    """return a gtk.Table containing all the widgets"""
+    columns = max(map(len, widgets))
+    table = gtk.Table(len(widgets), columns, False)
+    for y, row in enumerate(widgets):
+        for x, widget in enumerate(row):
+            table.attach(widget, x, x+1, y, y+1, xoptions=gtk.EXPAND|gtk.FILL,
+                    xpadding=4, ypadding=4)
+    return table
+
+def idle_do(func, *args):
+    """wrapper arround idle_add that will always run once"""
+    def wrapper(*args):
+        func(*args)
+    gobject.idle_add(wrapper, *args)
+
+class gtklock:
+    """A context manger for the gtk.gdk.threads_*"""
+    @staticmethod
+    def __enter__():
+        gtk.gdk.threads_enter()
+
+    @staticmethod
+    def __exit__(*args):
+        gtk.gdk.threads_leave()
+
+def bind_context_menu(view, menu):
+    """Bind a context menu to a treeview"""
+    def on_button_press(view, event, menu):
+        if event.button == 3:
+            path = view.get_path_at_pos(int(event.x), int(event.y))
+            if path is not None:
+                #iter = view.get_model().get_iter(path)
+                path, col, cellx, celly = path
+                view.grab_focus()
+                view.set_cursor(path, col, 0)
+            menu(view).popup(None, None, None, event.button, event.time)
+    view.connect("button-press-event", on_button_press, menu)
+
+def open_url(d, link, data):
+    webbrowser.open(link)
+gtk.about_dialog_set_url_hook(open_url, None)
+
+
+class GtkIconFactory(icons.IconFactory):
+    def __init__(self, icon_theme):
+        self.cache = {}
+        self.icon_theme = icon_theme
+
+    def guess_icon(self, filename, size):
+        return self.get_icon(self.guess_icon_name(filename), size)
+
+    def get_icon(self, name, size):
+        # damn it! why did no one tell me I have to cache this!!!
+        if not (name, size) in self.cache:
+            self.cache[(name, size)] = self.icon_theme.load_icon(name, size, 0)
+        return self.cache[(name, size)]
+
+    def get_image(self, name, size):
+        pixbuf = self.get_icon(name, size)
+        img = gtk.Image()
+        img.set_from_pixbuf(pixbuf)
+        return img
+
+    def has_icon(self, name):
+        return self.icon_theme.has_icon(name)
+
+iconfactory = GtkIconFactory(icon_theme)
+
+
+class IconLabel(gtk.HBox):
+    def __init__(self, label, icon):
+        gtk.HBox.__init__(self, False, 0)
+        img = iconfactory.get_image(icon, 24)
+        self.pack_start(img, 0)
+        lbl = gtk.Label(label)
+        self.pack_start(lbl, 0)
+        self.show_all()
+
+
+class IconButton(gtk.Button):
+    def __init__(self, icon, size=32):
+        gtk.Button.__init__(self)
+        self.img = None
+        self.size = size
+        self.set_icon(icon)
+
+    def set_icon(self, icon):
+        if self.img:
+            self.img.set_from_pixbuf(iconfactory.get_icon(icon, self.size))
+        else:
+            self.img = iconfactory.get_image(icon, self.size)
+            self.add(self.img)
+        self._icon = icon
+    icon = property(lambda self: self._icon, set_icon)
+
+
+class SetURLException(Exception):
+    pass
+
+
+class MainWindow(gtk.Window):
+    def __init__(self):
+        gtk.Window.__init__(self,gtk.WINDOW_TOPLEVEL)
+        self.set_default_size(900, 600)
+        self.set_border_width(4)
+        self.set_title(NAME)
+        self.set_icon_from_file(os.path.join(config.DATA_PATH, "icons",
+            "scalable", "lanshark.svg"))
+        self.vbox = gtk.VBox(False, 0)
+
+        self.menubar = gtk.MenuBar()
+        main_item = gtk.MenuItem(NAME)
+        main_menu = gtk.Menu()
+        main_item.set_submenu(main_menu)
+        if not config.DISABLE_WEBINTERFACE:
+            web_item = gtk.MenuItem(_("Open Web Interface"))
+            web_item.connect("activate", self.open_webinterface)
+            main_menu.append(web_item)
+        quit_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_QUIT)
+        quit_item.connect("activate", self.destroy)
+        main_menu.append(quit_item)
+        self.menubar.append(main_item)
+        tools_item = gtk.MenuItem(_("Edit"))
+        tools_menu = gtk.Menu()
+        tools_item.set_submenu(tools_menu)
+        settings_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_PROPERTIES)
+        settings_item.connect("activate", self.settings)
+        tools_menu.append(settings_item)
+        self.menubar.append(tools_item)
+        help_item = gtk.MenuItem(_("Help"))
+        help_menu = gtk.Menu()
+        help_item.set_submenu(help_menu)
+        about_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_ABOUT)
+        about_item.connect("activate", self.about)
+        help_menu.append(about_item)
+        if config.DEBUG:
+            debug_item = gtk.MenuItem("Debug")
+            debug_item.connect("activate", self.debug)
+            help_menu.append(debug_item)
+        self.menubar.append(help_item)
+
+        self.vbox.pack_start(self.menubar, 0, False)
+
+        self.notebook = gtk.Notebook()
+        self.downloads = Downloads()
+        self.browser = Browser(self.downloads)
+        self.search = Search(self.browser, self.downloads)
+        self.notebook.append_page(self.browser,
+                IconLabel(_('Browser'), 'applications-internet'))
+        self.notebook.append_page(self.search,
+                IconLabel(_('Search'), 'system-search'))
+        self.notebook.append_page(self.downloads,
+                IconLabel(_('Download Queue'), 'go-down'))
+        self.vbox.pack_start(self.notebook)
+
+        self.status = gtk.Statusbar()
+        self.vbox.pack_end(self.status, False)
+
+        self.add(self.vbox)
+        self.connect("delete-event", lambda *args: self.close())
+        self.connect("destroy", self.destroy)
+        self.show_all()
+
+        if config.STATUSICON:
+            self.status_icon = StatusIcon()
+
+    def debug(self, event):
+        try:
+            #import pdb;pdb.set_trace()
+            import IPython.Shell
+            IPython.Shell.IPShellEmbed()()
+        except ImportError:
+            import pdb;pdb.set_trace()
+
+    def about(self, event):
+        dialog = gtk.AboutDialog()
+        dialog.set_name(NAME)
+        dialog.set_version(VERSION)
+        dialog.set_comments(
+                _("A filesharing application for local area networks"))
+        dialog.set_copyright("Copyright (c) 2007 by Jonas Wagner")
+        dialog.set_license(lib.copyright)
+        dialog.set_logo(iconfactory.get_icon("lanshark", 128))
+        dialog.set_website(config.WEBSITE)
+        dialog.set_website_label(config.WEBSITE)
+        dialog.set_authors(["Jonas 'veers' Wagner"])
+        dialog.set_artists(["Jonas 'veers' Wagner",
+            "Tango project (http://tango.freedesktop.org/)"])
+        dialog.run()
+        dialog.destroy()
+
+    def open_webinterface(self, event):
+        webbrowser.open("http://%s:%i/" % (lib.guess_ip(), config.PORT))
+
+    def settings(self, event):
+        dialog = ConfigDialog()
+        dialog.run()
+        dialog.destroy()
+
+    def toggle_visibility(self):
+        if self.props.visible:
+            self.hide()
+        else:
+            self.show()
+
+    def close(self, minimize=True):
+        print "close"
+        self.hide()
+        if config.STATUSICON and minimize:
+            # just hide
+            return True
+
+    def destroy(self, event=None):
+        print "destroy"
+        self.downloads.save()
+        gtk.main_quit()
+
+class Browser(gtk.Frame):
+    """The Browser Tab"""
+    _url = None
+    def __init__(self, downloads):
+        gtk.Frame.__init__(self)
+        self.set_shadow_type(gtk.SHADOW_NONE)
+        self.pane = gtk.HPaned()
+
+        self.tree = gtk.TreeView()
+        self.create_tree_model()
+        tvcolumn = gtk.TreeViewColumn(_('Peers'))
+        iconcell = gtk.CellRendererPixbuf()
+        namecell = gtk.CellRendererText()
+        tvcolumn.pack_start(iconcell, False)
+        tvcolumn.pack_start(namecell, True)
+        tvcolumn.add_attribute(iconcell, 'pixbuf', 0)
+        tvcolumn.add_attribute(namecell, 'text', 1)
+        tvcolumn.set_sort_column_id(1)
+        self.tree.append_column(tvcolumn)
+        self.tree.set_search_column(0)
+        self.tree.connect("test-expand-row", self.tree_expanded)
+        self.tree.connect("cursor-changed", self.tree_selected)
+        self.tree_frame = gtk.ScrolledWindow()
+        self.tree_frame.set_shadow_type(gtk.SHADOW_IN)
+        self.tree_frame.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.tree_frame.add(self.tree)
+        self.pane.add1(self.tree_frame)
+
+        vbox = gtk.VBox()
+        hbox = gtk.HBox()
+        self.button_back = IconButton("go-previous", 16)
+        self.button_back.set_sensitive(False)
+        self.history_back = []
+        self.button_back.connect("clicked", self.go_back)
+        self.button_forward = IconButton("go-next", 16)
+        self.button_forward.set_sensitive(False)
+        self.history_forward = []
+        self.button_forward.connect("clicked", self.go_forward)
+        self.button_up = IconButton("go-up", 16)
+        self.button_up.connect("clicked", self.go_up)
+        self.button_up.set_sensitive(False)
+        self.button_refresh = IconButton("view-refresh", 16)
+        self.button_refresh.connect("clicked", self.refresh)
+        for button in (self.button_back, self.button_forward, self.button_up,
+                self.button_refresh):
+            button.set_relief(gtk.RELIEF_NONE)
+            # hack: remove text
+            hbox.pack_start(button, False, False)
+        self.entry_location = gtk.Entry()
+        hbox.pack_start(self.entry_location, True, True)
+        button_go = IconButton("go-jump", 16)
+        button_go.connect("clicked", self.goto)
+        button_go.set_relief(gtk.RELIEF_NONE)
+        hbox.pack_start(button_go, False, False)
+        vbox.pack_start(hbox, False, False)
+        self.list = URLView(self, downloads)
+        vbox.pack_start(self.list, True, True)
+        self.pane.add2(vbox)
+        self.pane.add2(self.list)
+
+        self.pane.set_position(200)
+        self.add(self.pane)
+        gobject.timeout_add(config.DISCOVER_INTERVAL*1000, self.discover)
+
+    def goto(self, event):
+        self.set_url(self.entry_location.get_text())
+
+    def go_back(self, event):
+        url = self.history_back.pop()
+        self.history_forward.append(self._url)
+        self.button_forward.set_sensitive(True)
+        self.set_url(url)
+        if len(self.history_back) == 0:
+            self.button_back.set_sensitive(False)
+
+    def go_up(self, event):
+        up_url = self._url[:self.url.rindex("/", 0, -1)+1]
+        self.set_url(up_url)
+
+    def go_forward(self, event):
+        url = self.history_forward.pop()
+        self.set_url(url)
+        if len(self.history_forward) == 0:
+            self.button_forward.set_sensitive(False)
+
+    def refresh(self, event, reset=True):
+        if reset:
+            lib.reset_cache()
+            delete = []
+            hostiter = self.treemodel.iter_children(None)
+            while hostiter:
+                treeiter = self.treemodel.iter_children(hostiter)
+                while treeiter:
+                    _treeiter = treeiter
+                    treeiter = self.treemodel.iter_next(treeiter)
+                    self.treemodel.remove(_treeiter)
+                self.treemodel.append(hostiter, (None, None, None))
+                hostiter = self.treemodel.iter_next(hostiter)
+            for treeiter in delete:
+                self.treemodel.remove(treeiter)
+            self.discover()
+        if self._url:
+            self.set_url(self._url)
+
+    def add_history(self, url):
+        if url:
+            self.history_back.append(url)
+            self.button_back.set_sensitive(True)
+
+    def create_tree_model(self):
+        # icon, name, url
+        self.treemodel = gtk.TreeStore(gtk.gdk.Pixbuf, str, str)
+        self.treemodel.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        self.tree.set_model(self.treemodel)
+        self.treemodel.clear()
+        self.discover()
+
+    def discover(self):
+        def func(peers):
+            for peer in peers:
+                name, peer = peer
+                if not peer in [r[2] for r in self.treemodel]:
+                    peericon = iconfactory.get_icon("computer", 16)
+                    treeiter = self.treemodel.append(None,
+                            (peericon, name, peer))
+                    self.treemodel.append(treeiter, (None, None, None))
+        iter_idle(lib.discover(True), func, True, 100)
+        return True
+
+    def tree_selected(self, tree):
+        model, treeiter = tree.get_selection().get_selected()
+        url = model.get_value(treeiter, 2)
+        self.set_list_url(url)
+
+    def set_list_url(self, url):
+        self.add_history(self.url)
+        self._url = url
+        self.button_up.set_sensitive(self._url.count("/") > 3)
+        self.entry_location.set_text(url)
+        self.list.set_url(url)
+
+    def tree_expanded(self, tree, treeiter, path, user_data=None):
+        self.tree_load(treeiter)
+
+    def tree_load(self, treeiter):
+        child = self.treemodel.iter_children(treeiter)
+        if child and self.treemodel.get_value(child, 0) is None:
+            self.treemodel.remove(child)
+            url = self.treemodel.get_value(treeiter, 2)
+            folder_icon = iconfactory.get_icon("folder", 16)
+            for url, size, icon in filter(lambda s: s[0].endswith("/"),
+                    lib.ls_l(url)):
+                name = urllib2.unquote(url[url.rindex("/", 0, -1)+1:-1])
+                try:
+                    name = name.decode("utf8")
+                except UnicodeError, e:
+                    if config.DEBUG:
+                        logging.exception("Exception in tree_load name=%r",
+                                name)
+                name = name.encode(config.SYS_ENCODING, "replace")
+                parent = self.treemodel.append(treeiter, (folder_icon,
+                    name, url))
+                if size[0]:
+                    self.treemodel.append(parent, (None, None, None))
+
+    def grab_focus(self):
+        gtk.Frame.grab_focus(self)
+        # hack: change notebook page
+        self.get_parent().set_current_page(0)
+
+    def set_tree_url(self, url, expand_only=False):
+        model = self.treemodel
+        if url.count("/") > 3:
+            head  = url[:url.rindex("/",0,-1)+1]
+            treeiter = self.set_tree_url(head, True)
+        else:
+            treeiter = model.get_iter_root()
+            while treeiter:
+                if model.get_value(treeiter, 2) == url:
+                    break
+                else:
+                    treeiter = model.iter_next(treeiter)
+            if not treeiter:
+                raise SetURLException()
+        path = model.get_path(treeiter)
+        self.tree.expand_row(path, False)
+        if model.get_value(treeiter, 2) == url:
+            child = treeiter
+        else:
+            child = model.iter_children(treeiter)
+            while child:
+                if model.get_value(child, 2) == url:
+                    break
+                child = model.iter_next(child)
+        if child:
+            if expand_only:
+                return child
+            path = model.get_path(child)
+            self.tree.set_cursor(path)
+        else:
+            raise SetURLException()
+
+    def set_url(self, url):
+        try:
+            self.set_tree_url(url)
+        except SetURLException:
+            try:
+                self.set_list_url(url)
+            except SetURLException:
+                show_error(_("%s could not be found") % url)
+    url = property(lambda self: self._url, set_url)
+
+
+class Search(gtk.Frame):
+    """The search tab"""
+    def __init__(self, browser, downloads):
+        gtk.Frame.__init__(self)
+        self.set_shadow_type(gtk.SHADOW_NONE)
+        self.vbox = gtk.VBox()
+        self.hbox = gtk.HBox()
+        self.search_entry = gtk.Entry()
+        self.hbox.pack_start(self.search_entry, 1, True)
+        self.search_combo = self.create_combo()
+        self.hbox.pack_start(self.search_combo, 0, True)
+        self.search_button = gtk.Button(stock=gtk.STOCK_FIND)
+        self.search_button.connect("clicked", self.search)
+        self.hbox.pack_start(self.search_button, 0, False)
+        self.vbox.pack_start(self.hbox, 0, False)
+        self.list = URLView(browser, downloads)
+        self.vbox.pack_end(self.list)
+        self.add(self.vbox)
+
+    def create_combo(self):
+        model = gtk.ListStore(gtk.gdk.Pixbuf, str, str)
+        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        modes = [("text-x-generic", _("All"), ".*%s.*"),
+                 ("text-x-script", _("Regex"), None)]
+        for filetype, icon, endings, viewer in FILETYPES:
+            # ugly exception
+            if filetype == "Folder":
+                regex = ".*%s.*\/"
+            else:
+                regex = ".*%s.*\.(" + "|".join(endings) + ")$"
+            modes.append((icon, filetype, regex))
+        for icon, name, regex in modes:
+            model.append((iconfactory.get_icon(icon, 16), name, regex))
+        combo = gtk.ComboBox(model)
+        pixbuf_cell = gtk.CellRendererPixbuf()
+        combo.pack_start(pixbuf_cell, False)
+        combo.add_attribute(pixbuf_cell, 'pixbuf', 0)
+        text_cell = gtk.CellRendererText()
+        combo.pack_start(text_cell, True)
+        combo.add_attribute(text_cell, 'text', 1)
+        combo.set_active(0)
+        return combo
+
+    def search(self, event):
+        i = self.search_combo.get_active()
+        model = self.search_combo.get_model()
+        regex = model.get_value(model.get_iter(i),2)
+        if regex:
+            search = regex % re.escape(self.search_entry.get_text())
+        else:
+            search = self.search_entry.get_text()
+        try:
+            re.compile(search)
+            # work arroung gnome bug #404541
+            #self.list.view.props.selection_mode = gtk.SELECTION_SINGLE
+            self.list.clear()
+            def add(results):
+                for result in results:
+                    try:
+                        self.list.add_url(result)
+                    except:
+                        logging.exception("Exception while searching for %r",
+                                search)
+            iter_idle(lib.search(search, True), add, True, 100)
+            #for url in lib.search(search):
+            #    self.list.add_url(url)
+        except re.error, e:
+            dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
+                    buttons=gtk.BUTTONS_OK,
+                    message_format=_("Invalid Regex:\n%s") %  e.message)
+            dialog.run()
+            dialog.hide()
+            dialog.destroy()
+
+
+class Downloads(gtk.Frame):
+    """the downloads tab"""
+    inactive = _("No active download")
+    def __init__(self):
+        gtk.Frame.__init__(self)
+        self.set_shadow_type(gtk.SHADOW_NONE)
+        vbox = gtk.VBox()
+        self.url_label = gtk.Label(self.inactive)
+        self.url_label.set_ellipsize(True)
+        vbox.pack_start(self.url_label, False, False)
+        hbox = gtk.HBox()
+        self.progress = gtk.ProgressBar()
+        hbox.pack_start(self.progress, True, True)
+        self.toggle = IconButton("media-playback-stop", 22)
+        self.toggle.set_sensitive(False)
+        self.toggle.connect("clicked", self.toggle_download)
+        hbox.pack_start(self.toggle, False, False)
+        vbox.pack_start(hbox, False, True)
+        # url, relpath
+        self.model = gtk.ListStore(str, str)
+        self.list = gtk.TreeView(self.model)
+        tvcolumn = gtk.TreeViewColumn(_('Downloads'))
+        url_cell = gtk.CellRendererText()
+        tvcolumn.pack_start(url_cell)
+        tvcolumn.add_attribute(url_cell, 'text', 0)
+        self.list.append_column(tvcolumn)
+        self.list.set_reorderable(True)
+        self.list.set_enable_search(True)
+        self.list.enable_model_drag_dest([
+                ('INTERNAL', gtk.TARGET_SAME_WIDGET, 0),
+                ("text/uri-list", 0, 1),
+                ("text/plain", 0, 2)],
+                gtk.gdk.ACTION_DEFAULT)
+        self.list.connect("drag_data_received", self.drag_data_received)
+        self.list.enable_model_drag_source(gtk.gdk.BUTTON1_MASK,
+                [('INTERNAL', gtk.TARGET_SAME_WIDGET, 0)], gtk.gdk.ACTION_MOVE)
+        self.list.connect("drag_data_get", self.drag_data_get)
+        bind_context_menu(self.list, DownloadContextMenu)
+        win = gtk.ScrolledWindow()
+        win.set_shadow_type(gtk.SHADOW_IN)
+        win.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        win.add(self.list)
+        vbox.pack_start(win)
+        # icon, url
+        self.finishedmodel = gtk.ListStore(str, str)
+        self.finishedview = gtk.TreeView(self.finishedmodel)
+        tvcolumn = gtk.TreeViewColumn(_('Finished downloads'))
+        icon_cell = gtk.CellRendererPixbuf()
+        url_cell = gtk.CellRendererText()
+        tvcolumn.pack_start(icon_cell, False)
+        tvcolumn.add_attribute(icon_cell, 'stock-id', 0)
+        #tvcolumn.add_attribute(icon_cell, 'stock-size',
+        #        gtk.ICON_SIZE_SMALL_TOOLBAR)
+        tvcolumn.pack_start(url_cell, True)
+        tvcolumn.add_attribute(url_cell, 'text', 1)
+        self.finishedview.append_column(tvcolumn)
+        self.finishedview.set_enable_search(True)
+        bind_context_menu(self.finishedview, DownloadContextMenu)
+        win = gtk.ScrolledWindow()
+        win.set_shadow_type(gtk.SHADOW_IN)
+        win.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        win.add(self.finishedview)
+        vbox.pack_start(win)
+        self.add(vbox)
+        # list to keep track of urls in model, ugly but fast
+        self.path = os.path.join(config.dir, "downloads")
+
+        self.downloader = Downloader(self)
+
+    def drag_data_get(self, treeview, context, selection, target_id, etime):
+        """make drag and drop data avaible as text/uri-list"""
+        # XXX TODO: drag multiple..
+        treeselection = treeview.get_selection()
+        model, iter = treeselection.get_selected()
+        url = model.get_value(iter, 0)
+        relpath = model.get_value(iter, 1)
+        selection.set(selection.target, 8, url + ";" + relpath)
+
+    def drag_data_received(self, treeview, context, x, y, selection, info, t):
+        model = treeview.get_model()
+        urls = selection.data.split("\r\n")
+        drop_info = treeview.get_dest_row_at_pos(x, y)
+        cb = None
+        if drop_info:
+            path, position = drop_info
+            treeiter = model.get_iter(path)
+            if (position == gtk.TREE_VIEW_DROP_BEFORE or
+                    position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE):
+                cb = lambda url, rel: model.insert_before(treeiter, (url, rel))
+            else:
+                cb = lambda url, rel: model.insert_after(treeiter, (url, rel))
+        for url in urls:
+            if ";" in url:
+                url, relpath = url.split(";")
+            else:
+                relpath = None
+            if url.startswith("http"):
+                self.add_url(url, relpath, cb)
+                if context.action == gtk.gdk.ACTION_MOVE:
+                    context.finish(True, True, t)
+            else:
+                logging.info("Unsupported Url: %s" % repr(url))
+                show_error(_("Drag and Drop only works for http!"))
+
+    def add_url(self, url, relpath=None, append_cb=None):
+        # sanity check, we will use the ; to seperate url and relpath later
+        url = url.replace(";", "%3B")
+        if url.endswith("/"):
+            try:
+                urls = lib.ls_r(url)
+            except ValueError, e:
+                logging.debug(e)
+                show_error(_("Could not add url"))
+        else:
+            urls = (url,)
+        if config.DOWNLOAD_RELPATH:
+            if not relpath:
+                relpath = url[:url.rindex("/", 0, -1)+1]
+        else:
+            relpath = None
+        for url in urls:
+            if append_cb:
+                append_cb(url, relpath)
+            else:
+                self.model.append((url, relpath))
+        if not self.downloader.paused:
+            self.downloader.activate()
+        self.toggle_download_state()
+
+    def toggle_download(self, button):
+        if self.downloader.paused:
+            self.downloader.activate()
+        else:
+            self.downloader.stop()
+        idle_do(self.toggle_download_state)
+
+    def toggle_download_state(self):
+        treeiter = self.model.get_iter_root()
+        if treeiter:
+            if self.downloader.paused:
+                self.toggle.icon = "media-playback-start"
+                message = _("Download paused")
+            else:
+                self.toggle.icon = "media-playback-stop"
+                message = _("Downloading...")
+            self.toggle.set_sensitive(True)
+        else:
+            self.toggle.icon = "media-playback-stop"
+            self.toggle.set_sensitive(False)
+            message = _("Download complete")
+        mainwindow.status.pop(hash("downloads"))
+        mainwindow.status.push(hash("downloads"), message)
+
+    def save(self):
+        self.downloader.kill()
+
+
+class Downloader(threading.Thread):
+    """The downloader downloads all the items in the "downloads" model"""
+    # this is for optimization only
+    msg_left = _("%s left %s/s")
+    def __init__(self, downloads):
+        threading.Thread.__init__(self)
+        self.event = threading.Event()
+        self.model = downloads.model
+        self.downloads = downloads
+        self.paused = False
+        self.killed = False
+        self.url = None
+        self.start()
+
+    def stop(self):
+        """Stop the downloader"""
+        self.paused = True
+        if self.url:
+            self.model.insert(0, (self.url, self.relpath))
+        self.event.clear()
+        self.clear()
+
+    def kill(self):
+        """Kill the downloader"""
+        self.stop()
+        self.killed = True
+        self.event.set()
+
+    def activate(self):
+        """Start the downloader"""
+        self.paused = False
+        self.killed = False
+        self.event.set()
+
+    def run(self):
+        while True:
+            self.event.wait()
+            if self.killed:
+                return
+            treeiter = self.model.get_iter_root()
+            if treeiter:
+                try:
+                    self.download(treeiter)
+                except:
+                    logging.exception("Exception while downloading %r",
+                            self.url)
+                    idle_do(show_error, _("An unhandled error occured while"
+                            "downloading %r") % self.url)
+                    self.clear()
+                    self.event.clear()
+            else:
+                self.clear()
+                self.event.clear()
+
+    def download(self, treeiter):
+        """download the top item"""
+        #import pdb;pdb.set_trace()
+        if sys.platform.startswith("win"):
+            self.url = self.model.get_value(treeiter, 0)
+            self.relpath = self.model.get_value(treeiter, 1)
+            idle_do(self.downloads.url_label.set_label, self.url)
+            idle_do(self.downloads.progress.set_text,
+                    _("Starting download"))
+            # HACK: wait a little bit so gtk has time to remove
+            # the tree iter
+            maincontext = gobject.main_context_default()
+            idle_do(self.model.remove, treeiter)
+            time.sleep(0.1)
+        else:
+            with gtklock:
+                # this is duplicated because this is the better way
+                # but it doesnt work on windows
+                self.url = self.model.get_value(treeiter, 0)
+                self.relpath = self.model.get_value(treeiter, 1)
+                self.downloads.url_label.set_label(self.url)
+                self.downloads.progress.set_text(_("Starting download"))
+                self.model.remove(treeiter)
+                time.sleep(0.1)
+        try:
+            download = lib.download(self.url, self.relpath)
+            localpath, length = download.next()
+            resume = download.next()
+            downloaded = 0
+            fact = length and (1.0/length) or 0
+            start = time.time()
+            for bytes in download:
+                if self.paused or self.killed:
+                    break
+                downloaded += bytes
+                idle_do(self.downloads.progress.set_fraction,
+                        (downloaded+resume)*fact)
+                idle_do(self.downloads.progress.set_text,
+                        self.msg_left
+                        % (lib.byteformat(length - downloaded - resume),
+                            lib.byteformat(int(downloaded /
+                                ((time.time()-start) or 0.1)))
+                          )
+                        )
+            else:
+                idle_do(self.downloads.finishedmodel.append,
+                        (gtk.STOCK_HARDDISK, self.url,))
+        except lib.DownloadExistsException, e:
+            idle_do(self.downloads.finishedmodel.append,
+                    (gtk.STOCK_MEDIA_NEXT, _("Skipped: ") + self.url,))
+        except lib.DownloadException, e:
+            logging.exception("Error while downloading %r", self.url)
+            idle_do(self.downloads.finishedmodel.append,
+                    (gtk.STOCK_DIALOG_ERROR, _("Error: ") + self.url,))
+            idle_do(show_error, _("Error while downloading %r%s") %
+                    (self.url, e and ":\r\n" + e.message or ""))
+
+    def clear(self):
+        """reset progressbar"""
+        idle_do(self.downloads.url_label.set_label,
+                _(self.downloads.inactive))
+        idle_do(self.downloads.progress.set_fraction, 0.0)
+        idle_do(self.downloads.progress.set_text, "")
+        idle_do(self.downloads.toggle_download_state)
+
+
+class URLView(gtk.ScrolledWindow):
+    """The treeview used in the browser and search tab"""
+
+    def set_icon_size(self):
+        if self.url:
+            self.set_url(self.url)
+        self.view.set_item_width(config.GUI_ICON_SIZE*2+8)
+
+    def __init__(self, browser, downloads):
+        gtk.ScrolledWindow.__init__(self)
+        self.browser = browser
+        self.downloads = downloads
+        self.set_shadow_type(gtk.SHADOW_IN)
+        self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.view = gtk.IconView()
+        self.view.props.selection_mode = gtk.SELECTION_MULTIPLE
+        # name, icon, url, size
+        self.model = gtk.ListStore(str, gtk.gdk.Pixbuf, str, object)
+        self.model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.view.set_model(self.model)
+        self.view.set_text_column(0)
+        self.view.set_pixbuf_column(1)
+        targets = []
+        for i, target in enumerate(["text/uri-list", "text/plain", "TEXT",
+            "STRING"]):
+            targets.append((target, 0, i))
+        self.view.enable_model_drag_source(gtk.gdk.BUTTON1_MASK,
+                targets,
+                gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
+        self.view.connect("drag_data_get", self.drag_get_data)
+        self.add(self.view)
+        self.view.connect("button-press-event", self.on_button_press)
+        self.view.connect("item-activated", self.on_activate)
+        self.view.connect("selection-changed", self.selected)
+        self.url = None
+        config.connect("GUI_ICON_SIZE", self.set_icon_size)
+        self.set_icon_size()
+
+    def drag_get_data(self, iconview, context, selection, target_id, etime):
+        """make drag and drop data avaible as text/uri-list"""
+        uri_list = []
+        for path in iconview.get_selected_items():
+            treeiter = self.model.get_iter(path)
+            uri_list.append(self.model.get_value(treeiter, 2))
+        selection.set(selection.target, 8, "\r\n".join(uri_list))
+
+    def on_button_press(self, widget, event):
+        if event.button == 3:
+            path = self.view.get_path_at_pos(int(event.x), int(event.y))
+            if path:
+                treeiter = self.model.get_iter(path)
+                self.view.grab_focus()
+                self.view.select_path(path)
+                self.view.set_cursor(path)
+            urls = []
+            for path in self.view.get_selected_items():
+                treeiter = self.model.get_iter(path)
+                urls.append(self.model.get_value(treeiter, 2))
+            menu = URLContextMenu(self, urls)
+            menu.popup(None, None, None, event.button, event.time)
+
+    def selected(self, widget):
+        paths = self.view.get_selected_items()
+        # ugly usage of global mainwindow...
+        mainwindow.status.pop(hash("urlview"))
+        if len(paths) == 0:
+            return
+        elif len(paths) == 1:
+            treeiter = self.model.get_iter(paths[0])
+            url = self.model.get_value(treeiter, 2)
+            size = self.model.get_value(treeiter, 3)
+            if url.endswith("/"):
+                mainwindow.status.push(hash("urlview"),
+                        _("%s - %i Folders %i Files") % (url, size[0], size[1]))
+            else:
+                mainwindow.status.push(hash("urlview"), "%s - %s" % (url,
+                    lib.byteformat(size)))
+        else:
+            size = 0
+            files = 0
+            folders = 0
+            for path in paths:
+                treeiter = self.model.get_iter(path)
+                url = self.model.get_value(treeiter, 2)
+                if url.endswith("/"):
+                    folders += 1
+                else:
+                    size += self.model.get_value(treeiter, 3)
+                    files += 1
+            mainwindow.status.push(hash("urlview"),
+                    _("%i files total %s - %i folders") %
+                    (files, lib.byteformat(size), folders))
+
+    def on_activate(self, view, path):
+        treeiter = self.model.get_iter(path)
+        url = self.model.get_value(treeiter, 2)
+        if url.endswith("/"):
+            self.browser.set_url(url)
+            self.browser.grab_focus()
+        else:
+            self.downloads.add_url(url)
+
+    def clear(self):
+        self.model.clear()
+        # we have to force the garbage collector to clean up the mess
+        # because he doesn't know the dimensions of the mess
+        gc.collect()
+
+    def add_item(self, url, size, icon):
+        # work arroung gnome bug #404541
+        self.view.props.selection_mode = gtk.SELECTION_SINGLE
+        if icon:
+            pbl = gtk.gdk.PixbufLoader()
+            try:
+                data = lib.get_url(icon)
+                pbl.write(data)
+                icon = pbl.get_pixbuf().scale_simple(config.GUI_ICON_SIZE,
+                        config.GUI_ICON_SIZE, gtk.gdk.INTERP_BILINEAR)
+            except AttributeError, e:
+                logging.debug(e)
+                icon = iconfactory.guess_icon(url, config.GUI_ICON_SIZE)
+            finally:
+                try:
+                    pbl.close()
+                except gobject.GError:
+                    pass
+        else:
+            icon = iconfactory.guess_icon(url, config.GUI_ICON_SIZE)
+        name = urllib2.unquote(url[url.rindex("/", 0, -1)+1:]).decode('utf-8')
+        try:
+            self.model.append((name.encode(config.SYS_ENCODING, 'replace'),
+                icon, url, size))
+        except UnicodeError, e:
+            if config.DEBUG:
+                logging.exception("Exception in add_item url=%r", url)
+        # work arroung gnome bug #404541
+        def reset():
+                self.view.props.selection_mode = gtk.SELECTION_MULTIPLE
+        gobject.idle_add(reset)
+
+    def set_url(self, url):
+        self.url = url
+        self.clear()
+        try:
+            contents = lib.ls_l(url)
+        except urllib2.HTTPError:
+            raise SetURLException()
+        for url, size, icon in contents:
+            if icon:
+                # this should really be mutlithreaded!
+                gobject.idle_add(self.add_item, url, size, icon)
+            else:
+                self.add_item(url, size, icon)
+
+    def add_url(self, url):
+        pardir = url[:url.rindex("/", 0, -1)]
+        for itemurl, size, icon in lib.ls_l(pardir):
+            if itemurl == url:
+                self.add_item(url, size, icon)
+                return
+        self.add_item(url, 0, None)
+
+
+class URLContextMenu(gtk.Menu):
+    """The context menu of the urlview"""
+    def __init__(self, urlview, urls):
+        gtk.Menu.__init__(self)
+        self.urls = urls
+        self.urlview = urlview
+        items = []
+
+        if len(urls) == 1:
+            if urls[0].endswith("/"):
+                open_ = gtk.ImageMenuItem(stock_id=gtk.STOCK_OPEN)
+                open_.connect("activate", self.open)
+                items.append(open_)
+            else:
+                ending = urls[0][urls[0].rindex(".")+1:].lower()
+                for filetype, icon, endings, viewer in FILETYPES:
+                    if not viewer is None and ending in endings:
+                        preview = gtk.MenuItem(_("Preview"))
+                        preview.connect("activate", self.preview)
+                        items.append(preview)
+                        self.viewer = viewer
+                        break
+        if urls:
+            download = gtk.MenuItem(_("Download"))
+            download.connect("activate", self.download)
+            items.append(download)
+
+        refresh = gtk.ImageMenuItem(stock_id=gtk.STOCK_REFRESH)
+        refresh.connect("activate", self.refresh)
+        items.append(refresh)
+        icon_item = gtk.MenuItem(_("Icon Size"))
+        icon_menu = gtk.Menu()
+        icon_item.set_submenu(icon_menu)
+        icon_size_item = None
+        for icon_size in (32, 48, 64, 96):
+            icon_size_item = gtk.RadioMenuItem(group=icon_size_item,
+                    label=str(icon_size))
+            if icon_size == config.GUI_ICON_SIZE:
+                icon_size_item.select()
+            else:
+                icon_size_item.connect("activate", self.set_size, icon_size)
+            icon_menu.append(icon_size_item)
+            icon_size_item.show()
+        items.append(icon_item)
+        for item in items:
+            self.append(item)
+            item.show()
+
+    def set_size(self, evt, icon_size):
+        config.GUI_ICON_SIZE = icon_size
+        config.save()
+
+    def open(self, evt):
+        self.urlview.browser.url = self.urls[0]
+        self.urlview.browser.grab_focus()
+
+    def download(self, evt):
+        for url in self.urls:
+            self.urlview.downloads.add_url(url)
+
+    def refresh(self, evt):
+        self.urlview.browser.refresh(evt)
+
+    def preview(self, evt):
+        if self.viewer:
+            if self.viewer == "browser":
+                webbrowser.open(self.urls[0])
+            else:
+                viewer = self.viewer % self.urls[0]
+                # dont ask me why but without this it freezes
+                os.system(viewer + " &")
+        else:
+            if sys.platform.startswith("win"):
+                show_error(_("Please install vlc from "
+                    "http://videolan.org/vlc/ to use this feature"))
+            else:
+                # I guess this message won't be read :P
+                show_error(_("Could not find a suitable mediaplayer on your "
+                        "system. Please configure one manually."
+                        "The path to the config file is %s.") % config.path)
+
+
+class DownloadContextMenu(gtk.Menu):
+    """The context menu of the download treeviews"""
+    def __init__(self, view):
+        gtk.Menu.__init__(self)
+        self.view = view
+        self.model = view.get_model()
+        remove = gtk.ImageMenuItem(stock_id=gtk.STOCK_REMOVE)
+        remove.connect("activate", self.remove)
+        clear = gtk.ImageMenuItem(stock_id=gtk.STOCK_CLEAR)
+        clear.connect("activate", self.clear)
+        for icon in (remove, clear):
+            self.append(icon)
+            icon.show()
+
+    def remove(self, e):
+        selection = self.view.get_selection()
+        model, selected = selection.get_selected_rows()
+        iters = [model.get_iter(path) for path in selected]
+        for iter in iters:
+             model.remove(iter)
+
+    def clear(self, e):
+        self.model.clear()
+
+
+class ConfigDialog(gtk.Dialog):
+    """An atomic bomb"""
+    def __init__(self):
+        gtk.Dialog.__init__(self, _("%s Configuration" % NAME))
+        self.set_border_width(4)
+        self.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        self.add_button(gtk.STOCK_APPLY, gtk.RESPONSE_APPLY)
+        self.vbox.pack_start(gtk.Label(_("Configuration")))
+
+        basic = []
+
+        self.hostname = gtk.Entry()
+        self.hostname.set_text(config.HOSTNAME)
+        basic.append((_("Hostname"), self.hostname))
+
+        self.sharepath = gtk.FileChooserButton(_("Select the share path"))
+        self.sharepath.set_action(gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
+        self.sharepath.set_filename(os.path.abspath(config.SHARE_PATH))
+        basic.append((_("Share Path"), self.sharepath))
+
+        self.incomingpath = gtk.FileChooserButton(_("Select the incoming path"))
+        self.incomingpath.set_action(gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
+        self.incomingpath.set_filename(os.path.abspath(config.INCOMING_PATH))
+        basic.append((_("Incoming Path"), self.incomingpath))
+
+        self.autostart = gtk.CheckButton()
+        self.autostart.set_active(autostart.exists("lanshark"))
+        basic.append((_("Autostart"), self.autostart))
+
+        advanced = []
+        self.hello = gtk.Entry()
+        self.hello.set_text(config.HELLO)
+        advanced.append((_("Hello Message"), self.hello))
+        self.broadcast = gtk.Entry()
+        self.broadcast.set_text(config.BROADCAST_IP)
+        advanced.append((_("Broadcast Address"), self.broadcast))
+        self.port = gtk.Entry()
+        self.port.set_text(str(config.PORT))
+        advanced.append((_("Port"), self.port))
+
+        def make_label((label, widget)):
+            label = gtk.Label(label)
+            label.set_alignment(0.0, 0.5)
+            return (label, widget)
+
+        notebook = gtk.Notebook()
+        pages = map(make_label, (
+            (_("Basic"), basic),
+            (_("Advanced"), advanced)))
+        for label, widgets in pages:
+            notebook.append_page(make_table(map(make_label, widgets)), label)
+        notebook.append_page(
+                gtk.Label(_("For more advanced configuration please\n"
+                    "take a look at lansharks config file:\n"
+                    "%s") % config.path),
+                gtk.Label(_("More")))
+        self.vbox.pack_start(notebook, True, True, 4)
+        self.show_all()
+        self.connect("response", self.save)
+
+    def save(self, dialog, response):
+        if response == gtk.RESPONSE_APPLY:
+            config.SHARE_PATH = self.sharepath.get_filename()
+            config.INCOMING_PATH = self.incomingpath.get_filename()
+            config.PORT = int(self.port.get_text())
+            config.BROADCAST_IP = self.broadcast.get_text()
+            config.HELLO = self.hello.get_text()
+            config.HOSTNAME = self.hostname.get_text()
+            try:
+                app = os.path.abspath(__file__) + " autostart"
+            except NameError: # frozen
+                app = '"%s" autostart' % os.path.abspath(
+                        os.path.join(config.PREFIX, "lanshark.exe"))
+            if self.autostart.get_active() != autostart.exists("lanshark"):
+                if self.autostart.get_active():
+                    autostart.add("lanshark", app)
+                else:
+                    autostart.remove("lanshark")
+            config.save()
+
+
+class StatusIcon(gtk.StatusIcon):
+    def __init__(self):
+        gtk.StatusIcon.__init__(self)
+        self.set_from_icon_name("lanshark")
+        self.connect("activate", lambda x: mainwindow.toggle_visibility())
+
+
+if __name__ == "__main__":
+    if not os.path.exists(config.SHARE_PATH)\
+        or not os.path.exists(config.INCOMING_PATH):
+        dialog = ConfigDialog()
+        dialog.run()
+        dialog.destroy()
+    if config.DAEMON_IN_GUI:
+        import lanshark.daemon
+        try:
+            lanshark.daemon.Daemon().start()
+        except socket.error, e:
+            # if the daemon is already running thats just fine
+            # its probably ours ;)
+            if e.args[0] != errno.EADDRINUSE:
+                raise
+    if sys.platform == "win32":
+        def release_gil_on_stupid_operating_system():
+            time.sleep(0.001)
+            return True
+        gobject.idle_add(release_gil_on_stupid_operating_system)
+    else:
+        gtk.gdk.threads_init()
+    mainwindow = MainWindow()
+    mainwindow.show_all()
+    if len(sys.argv) > 1 and sys.argv[1] == "autostart" and config.STATUSICON:
+        mainwindow.toggle_visibility()
+    gtk.main()
+    if config.DEBUG:
+        logging.debug("get_url cache hits: %i", lib.get_url.hits)
+        logging.debug("get_url cache misses: %i", lib.get_url.misses)
+        logging.debug("get_json cache hits: %i", lib.get_json.hits)
+        logging.debug("get_json cache misses: %i", lib.get_json.misses)
+        logging.debug("getaddrinfo cache hits: %i", socket.getaddrinfo.hits)
+        logging.debug("getaddrinfo cache misses: %i", socket.getaddrinfo.misses)
