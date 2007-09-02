@@ -12,8 +12,8 @@ irc://irc.freenode.net/#lanshark
 -
 *Getting started
 -
-1: get the source code from my bazaar repository
-   $ git clone ...
+1: get the source code from my git repository
+   $ git clone http://29a.ch/git/lanshark.git/
 
 2: Search for a ticket that covers the work you are planning to do.
    In case you cannot find one, just create a new one.
