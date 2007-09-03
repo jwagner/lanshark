@@ -3,7 +3,7 @@
 from __future__ import division
 from __future__ import with_statement
 """The lanshark lib encapsulates the client logic"""
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 copyright = \
 """Lanshark %s - A LAN filesharing tool
 Copyright (C) 2007 Jonas Wagner

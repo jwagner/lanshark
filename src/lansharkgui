@@ -25,9 +25,7 @@ from lanshark import autostart
 import logging
 try:
     appdir = os.path.dirname(__file__)
-    print appdir
     config.set_prefix(os.path.abspath(os.path.join(appdir, os.pardir)))
-    print config.DATA_PATH
 except NameError:
     # frozen
     appdir = os.path.dirname(sys.argv[0])
@@ -46,7 +44,7 @@ gettext.textdomain('lanshark')
 _ = gettext.gettext
 
 NAME = "Lanshark"
-VERSION = "0.0.0"
+VERSION = lib.__version__
 
 # this mighty thingy maps fileendings to File Categories, Icons and
 # preview applications, could be done nicer as a class
@@ -77,7 +75,7 @@ if icon_theme:
     iconpath = os.path.join(config.DATA_PATH, "icons/32x32/")
     icon_theme.append_search_path(iconpath)
 
-def iter_idle(obj, func, list_mode=False, interval=0):
+def iter_idle(obj, func, list_mode=False, interval=0, stop=None):
     """iterate func(element) over object using gobject.idle_add
        in list mode func does get called with a list of all elements
        until there is a None"""
@@ -94,6 +92,8 @@ def iter_idle(obj, func, list_mode=False, interval=0):
                 arg = i.next()
             func(arg)
         except StopIteration:
+            if stop:
+                stop()
             return False
         return True
     if interval:
@@ -153,6 +153,8 @@ def bind_context_menu(view, menu):
 
 def open_url(d, link, data):
     webbrowser.open(link)
+webbrowser.register("xdg-open", None, webbrowser.GenericBrowser('xdg-open'),
+        update_tryorder=-1)
 gtk.about_dialog_set_url_hook(open_url, None)
 
 
@@ -333,14 +335,12 @@ class MainWindow(gtk.Window):
             self.show()
 
     def close(self, minimize=True):
-        print "close"
         self.hide()
         if config.STATUSICON and minimize:
             # just hide
             return True
 
     def destroy(self, event=None):
-        print "destroy"
         self.downloads.save()
         gtk.main_quit()
 
@@ -444,7 +444,7 @@ class Browser(gtk.Frame):
                     _treeiter = treeiter
                     treeiter = self.treemodel.iter_next(treeiter)
                     self.treemodel.remove(_treeiter)
-                self.treemodel.append(hostiter, (None, None, None))
+                self.treemodel.append(hostiter, (None, None, None, 0))
                 hostiter = self.treemodel.iter_next(hostiter)
             for treeiter in delete:
                 self.treemodel.remove(treeiter)
@@ -458,8 +458,8 @@ class Browser(gtk.Frame):
             self.button_back.set_sensitive(True)
 
     def create_tree_model(self):
-        # icon, name, url
-        self.treemodel = gtk.TreeStore(gtk.gdk.Pixbuf, str, str)
+        # icon, name, url, last sing of live
+        self.treemodel = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, int)
         self.treemodel.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.tree.set_model(self.treemodel)
         self.treemodel.clear()
@@ -472,9 +472,16 @@ class Browser(gtk.Frame):
                 if not peer in [r[2] for r in self.treemodel]:
                     peericon = iconfactory.get_icon("computer", 16)
                     treeiter = self.treemodel.append(None,
-                            (peericon, name, peer))
-                    self.treemodel.append(treeiter, (None, None, None))
-        iter_idle(lib.discover(True), func, True, 100)
+                            (peericon, name, peer, int(time.time())))
+                    self.treemodel.append(treeiter, (None, None, None, 0))
+        def clean_up():
+            t = (config.DISCOVER_INTERVAL + config.DISCOVER_TIMEOUT) * 3
+            for row in self.treemodel:
+                # timeout
+                if row[3] + t < int(time.time()):
+                    self.treemodel.remove(row.iter)
+
+        iter_idle(lib.discover(True), func, True, 100, clean_up)
         return True
 
     def tree_selected(self, tree):
@@ -509,9 +516,9 @@ class Browser(gtk.Frame):
                                 name)
                 name = name.encode(config.SYS_ENCODING, "replace")
                 parent = self.treemodel.append(treeiter, (folder_icon,
-                    name, url))
+                    name, url, 0))
                 if size[0]:
-                    self.treemodel.append(parent, (None, None, None))
+                    self.treemodel.append(parent, (None, None, None, 0))
 
     def grab_focus(self):
         gtk.Frame.grab_focus(self)
