@@ -153,8 +153,9 @@ def bind_context_menu(view, menu):
 
 def open_url(d, link, data):
     webbrowser.open(link)
-webbrowser.register("xdg-open", None, webbrowser.GenericBrowser('xdg-open'),
-        update_tryorder=-1)
+if sys.platform.startswith("linux"):
+    webbrowser.register("xdg-open", None, webbrowser.GenericBrowser('xdg-open'),
+            update_tryorder=-1)
 gtk.about_dialog_set_url_hook(open_url, None)
 
 
