@@ -19,7 +19,7 @@ def ls_r(dir):
 options = []
 
 setup(name='lanshark',
-      version='0.0.0',
+      version='0.0.1',
       description='Filesharing tool for local area networks',
       author='Jonas Wagner',
       author_email='veers@gmx.ch',

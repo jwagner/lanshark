@@ -1,6 +1,12 @@
 include: HEADER
 -
-Lanshark 0.0.0 ( 2 Sep 2007)
+Lanshark 0.0.1 ( 3 Sep 2007 )
+* Fixes issues with icon themes which aren't conforming to the icon naming
+  spec.
+* Remove dead peers from the tree in the gui
+* Open links using xdg-open if possible
+-
+Lanshark 0.0.0 ( 1 Sep 2007 )
  * Initial release of lanshark
 -
 For a detailed changelog use the source controll system
