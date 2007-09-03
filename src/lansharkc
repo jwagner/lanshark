@@ -17,18 +17,16 @@ config.set_prefix(os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.pardir)))
 from lanshark import lib
 
-__version__ = "0.0.0"
-
 def daemonize():
     """daemonize process, really minimal implementation"""
-    pid = os.fork() 
+    pid = os.fork()
     if pid > 0:
         sys.exit(0)
     # clear environment
     os.chdir("/")
     os.setsid()
     os.umask(0)
-    pid = os.fork() 
+    pid = os.fork()
     if pid > 0:
         sys.exit(0)
     si = file('/dev/null', 'r')
