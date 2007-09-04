@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-26 00:26+0200\n"
+"POT-Creation-Date: 2007-09-05 00:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,240 +16,240 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/lansharkgui:48
+#: ../src/lansharkgui:52
 msgid "Archive"
 msgstr ""
 
-#: ../src/lansharkgui:50
+#: ../src/lansharkgui:54
 msgid "Audio"
 msgstr ""
 
-#: ../src/lansharkgui:53
+#: ../src/lansharkgui:57
 msgid "Executable"
 msgstr ""
 
-#: ../src/lansharkgui:55
+#: ../src/lansharkgui:59
 msgid "Folder"
 msgstr ""
 
-#: ../src/lansharkgui:56
+#: ../src/lansharkgui:60
 msgid "Image"
 msgstr ""
 
-#: ../src/lansharkgui:59
+#: ../src/lansharkgui:63
 msgid "Office"
 msgstr ""
 
-#: ../src/lansharkgui:61
+#: ../src/lansharkgui:65
 msgid "Text"
 msgstr ""
 
-#: ../src/lansharkgui:63
+#: ../src/lansharkgui:67
 msgid "Video"
 msgstr ""
 
-#: ../src/lansharkgui:102
+#: ../src/lansharkgui:108
 msgid "Error"
 msgstr ""
 
-#: ../src/lansharkgui:225
+#: ../src/lansharkgui:242
 msgid "Open Web Interface"
 msgstr ""
 
-#: ../src/lansharkgui:232
+#: ../src/lansharkgui:249
 msgid "Edit"
 msgstr ""
 
-#: ../src/lansharkgui:239
+#: ../src/lansharkgui:256
 msgid "Help"
 msgstr ""
 
-#: ../src/lansharkgui:258
+#: ../src/lansharkgui:275
 msgid "Browser"
 msgstr ""
 
-#: ../src/lansharkgui:260
+#: ../src/lansharkgui:281
 msgid "Search"
 msgstr ""
 
-#: ../src/lansharkgui:262
+#: ../src/lansharkgui:283
 msgid "Download Queue"
 msgstr ""
 
-#: ../src/lansharkgui:289
+#: ../src/lansharkgui:310
 msgid "A filesharing application for local area networks"
 msgstr ""
 
-#: ../src/lansharkgui:339
+#: ../src/lansharkgui:356
 msgid "Peers"
 msgstr ""
 
-#: ../src/lansharkgui:532
+#: ../src/lansharkgui:566
 #, python-format
 msgid "%s could not be found"
 msgstr ""
 
-#: ../src/lansharkgui:558
+#: ../src/lansharkgui:592
 msgid "All"
 msgstr ""
 
-#: ../src/lansharkgui:559
+#: ../src/lansharkgui:593
 msgid "Regex"
 msgstr ""
 
-#: ../src/lansharkgui:605
+#: ../src/lansharkgui:639
 #, python-format
 msgid ""
 "Invalid Regex:\n"
 "%s"
 msgstr ""
 
-#: ../src/lansharkgui:613
+#: ../src/lansharkgui:647
 msgid "No active download"
 msgstr ""
 
-#: ../src/lansharkgui:632
+#: ../src/lansharkgui:666
 msgid "Downloads"
 msgstr ""
 
-#: ../src/lansharkgui:657
+#: ../src/lansharkgui:691
 msgid "Finished downloads"
 msgstr ""
 
-#: ../src/lansharkgui:713
+#: ../src/lansharkgui:747
 msgid "Drag and Drop only works for http!"
 msgstr ""
 
-#: ../src/lansharkgui:723
+#: ../src/lansharkgui:757
 msgid "Could not add url"
 msgstr ""
 
-#: ../src/lansharkgui:752
+#: ../src/lansharkgui:786
 msgid "Download paused"
 msgstr ""
 
-#: ../src/lansharkgui:755
+#: ../src/lansharkgui:789
 msgid "Downloading..."
 msgstr ""
 
-#: ../src/lansharkgui:760
+#: ../src/lansharkgui:794
 msgid "Download complete"
 msgstr ""
 
-#: ../src/lansharkgui:771
+#: ../src/lansharkgui:805
 #, python-format
-msgid "%s left %s/s"
+msgid "%s left - %s/s"
 msgstr ""
 
-#: ../src/lansharkgui:814
+#: ../src/lansharkgui:850
 #, python-format
-msgid "An unhandled error occured whiledownloading %r"
+msgid "An unhandled error occured while downloading %r"
 msgstr ""
 
-#: ../src/lansharkgui:830 ../src/lansharkgui:843
+#: ../src/lansharkgui:866 ../src/lansharkgui:879
 msgid "Starting download"
 msgstr ""
 
-#: ../src/lansharkgui:871
+#: ../src/lansharkgui:907
 msgid "Skipped: "
 msgstr ""
 
-#: ../src/lansharkgui:875
+#: ../src/lansharkgui:911
 msgid "Error: "
 msgstr ""
 
-#: ../src/lansharkgui:876
+#: ../src/lansharkgui:912
 #, python-format
 msgid "Error while downloading %r%s"
 msgstr ""
 
-#: ../src/lansharkgui:961
+#: ../src/lansharkgui:997
 #, python-format
 msgid "%s - %i Folders %i Files"
 msgstr ""
 
-#: ../src/lansharkgui:978
+#: ../src/lansharkgui:1014
 #, python-format
 msgid "%i files total %s - %i folders"
 msgstr ""
 
-#: ../src/lansharkgui:1063
+#: ../src/lansharkgui:1104
 msgid "Preview"
 msgstr ""
 
-#: ../src/lansharkgui:1069
+#: ../src/lansharkgui:1110
 msgid "Download"
 msgstr ""
 
-#: ../src/lansharkgui:1076
+#: ../src/lansharkgui:1117
 msgid "Icon Size"
 msgstr ""
 
-#: ../src/lansharkgui:1119
+#: ../src/lansharkgui:1160
 msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
 msgstr ""
 
-#: ../src/lansharkgui:1123
+#: ../src/lansharkgui:1164
 #, python-format
 msgid ""
 "Could not find a suitable mediaplayer on your system. Please configure one "
-"manually.The path to the config file is %s."
+"manually. The path to the config file is %s."
 msgstr ""
 
-#: ../src/lansharkgui:1156
+#: ../src/lansharkgui:1197
 #, python-format
 msgid "%s Configuration"
 msgstr ""
 
-#: ../src/lansharkgui:1160
+#: ../src/lansharkgui:1201
 msgid "Configuration"
 msgstr ""
 
-#: ../src/lansharkgui:1166
+#: ../src/lansharkgui:1207
 msgid "Hostname"
 msgstr ""
 
-#: ../src/lansharkgui:1168
+#: ../src/lansharkgui:1209
 msgid "Select the share path"
 msgstr ""
 
-#: ../src/lansharkgui:1171
+#: ../src/lansharkgui:1212
 msgid "Share Path"
 msgstr ""
 
-#: ../src/lansharkgui:1173
+#: ../src/lansharkgui:1214
 msgid "Select the incoming path"
 msgstr ""
 
-#: ../src/lansharkgui:1176
+#: ../src/lansharkgui:1217
 msgid "Incoming Path"
 msgstr ""
 
-#: ../src/lansharkgui:1180
+#: ../src/lansharkgui:1221
 msgid "Autostart"
 msgstr ""
 
-#: ../src/lansharkgui:1185
+#: ../src/lansharkgui:1226
 msgid "Hello Message"
 msgstr ""
 
-#: ../src/lansharkgui:1188
+#: ../src/lansharkgui:1229
 msgid "Broadcast Address"
 msgstr ""
 
-#: ../src/lansharkgui:1191
+#: ../src/lansharkgui:1232
 msgid "Port"
 msgstr ""
 
-#: ../src/lansharkgui:1200
+#: ../src/lansharkgui:1241
 msgid "Basic"
 msgstr ""
 
-#: ../src/lansharkgui:1201
+#: ../src/lansharkgui:1242
 msgid "Advanced"
 msgstr ""
 
-#: ../src/lansharkgui:1205
+#: ../src/lansharkgui:1246
 #, python-format
 msgid ""
 "For more advanced configuration please\n"
@@ -257,6 +257,6 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../src/lansharkgui:1208
+#: ../src/lansharkgui:1249
 msgid "More"
 msgstr ""

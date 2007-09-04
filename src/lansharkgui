@@ -179,8 +179,6 @@ class GtkIconFactory(icons.IconFactory):
                         "convention. You might want to try the tango icon "
                         "theme", name)
                 return None
-                self.cache[(name, size)] = self.icon_theme.load_icon(
-                        "error", size, 0)
         return self.cache[(name, size)]
 
     def get_image(self, name, size):
@@ -804,7 +802,7 @@ class Downloads(gtk.Frame):
 class Downloader(threading.Thread):
     """The downloader downloads all the items in the "downloads" model"""
     # this is for optimization only
-    msg_left = _("%s left %s/s")
+    msg_left = _("%s left - %s/s")
     def __init__(self, downloads):
         threading.Thread.__init__(self)
         self.event = threading.Event()
@@ -847,7 +845,9 @@ class Downloader(threading.Thread):
                 except:
                     logging.exception("Exception while downloading %r",
                             self.url)
-                    idle_do(show_error, _("An unhandled error occured while"
+                    # does the user really care about the difference between
+                    # an unhandled and a handled exception? ;)
+                    idle_do(show_error, _("An unhandled error occured while "
                             "downloading %r") % self.url)
                     self.clear()
                     self.event.clear()
@@ -1162,7 +1162,7 @@ class URLContextMenu(gtk.Menu):
             else:
                 # I guess this message won't be read :P
                 show_error(_("Could not find a suitable mediaplayer on your "
-                        "system. Please configure one manually."
+                        "system. Please configure one manually. "
                         "The path to the config file is %s.") % config.path)
 
 
