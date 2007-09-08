@@ -1328,7 +1328,12 @@ if __name__ == "__main__":
     mainwindow.show_all()
     if len(sys.argv) > 1 and sys.argv[1] == "autostart" and config.STATUSICON:
         mainwindow.toggle_visibility()
-    gtk.main()
+    try:
+        gtk.main()
+    except KeyboardInterrupt:
+        print "interrupted"
+        gobject.idle_add(mainwindow.destroy)
+        gtk.main()
     if config.DEBUG:
         logging.debug("get_url cache hits: %i", lib.get_url.hits)
         logging.debug("get_url cache misses: %i", lib.get_url.misses)
