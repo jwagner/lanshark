@@ -143,6 +143,13 @@ class LibTestCase(unittest.TestCase):
                  ("incoming/", [0, 0], None))])
         self.assertEqual(sorted(lib.ls_l(self.url)), expected)
 
+    def test_statichosts(self):
+        hosts = ["127.0.0.1:31337", "example.com:31337"]
+        map(config.STATICHOSTS.append, hosts)
+        discovered = list(lib.discover())
+        for host in hosts:
+            self.assert_((host, host) in discovered)
+
     def tearDown(self):
         for file in os.listdir(config.SHARE_PATH):
             rm_r(os.path.join(config.SHARE_PATH, file))

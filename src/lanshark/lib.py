@@ -97,12 +97,16 @@ def resolve(addr):
 
 def discover(async=False):
     """Discover other hosts in the network"""
+    for item in config.STATICHOSTS:
+        yield (item, item)
     s = get_socket()
     hello = config.HELLO.encode('utf-8')
     s.sendto(hello, (config.BROADCAST_IP, config.PORT))
     for data in recv(s, config.DISCOVER_TIMEOUT, async):
         if data:
             msg, (addr, port) = data
+            if config.STATICHOSTS and "%s:%i" % (addr, port) in config.STATICHOSTS:
+                continue
             if msg.startswith(hello):
                 name = msg[len(hello)+1:]
                 url = "http://%s:%i/" % (resolve(addr), port)
