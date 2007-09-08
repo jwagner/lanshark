@@ -194,9 +194,9 @@ iconfactory = GtkIconFactory(icon_theme)
 
 
 class IconLabel(gtk.HBox):
-    def __init__(self, label, icon):
+    def __init__(self, label, icon, size=25):
         gtk.HBox.__init__(self, False, 0)
-        img = iconfactory.get_image(icon, 24)
+        img = iconfactory.get_image(icon, size)
         self.pack_start(img, 0)
         lbl = gtk.Label(label)
         self.pack_start(lbl, 0)
@@ -220,6 +220,13 @@ class IconButton(gtk.Button):
     icon = property(lambda self: self._icon, set_icon)
 
 
+class IconMenuItem(gtk.ImageMenuItem):
+    icon_size = gtk.icon_size_lookup(gtk.ICON_SIZE_MENU)[0]
+    def __init__(self, icon, label):
+        gtk.ImageMenuItem.__init__(self)
+        self.set_image(iconfactory.get_image(icon, self.icon_size))
+        self.add(gtk.Label(label))
+
 class SetURLException(Exception):
     pass
 
@@ -239,7 +246,7 @@ class MainWindow(gtk.Window):
         main_menu = gtk.Menu()
         main_item.set_submenu(main_menu)
         if not config.DISABLE_WEBINTERFACE:
-            web_item = gtk.MenuItem(_("Open Web Interface"))
+            web_item = IconMenuItem("applications-internet", _("Open Web Interface"))
             web_item.connect("activate", self.open_webinterface)
             main_menu.append(web_item)
         quit_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_QUIT)
@@ -250,7 +257,7 @@ class MainWindow(gtk.Window):
         tools_menu = gtk.Menu()
         tools_item.set_submenu(tools_menu)
         settings_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_PROPERTIES)
-        settings_item.connect("activate", self.settings)
+        settings_item.connect("activate", self.show_settings)
         tools_menu.append(settings_item)
         self.menubar.append(tools_item)
         help_item = gtk.MenuItem(_("Help"))
@@ -292,7 +299,7 @@ class MainWindow(gtk.Window):
         self.show_all()
 
         if config.STATUSICON:
-            self.status_icon = StatusIcon()
+            self.status_icon = StatusIcon(self)
 
     def debug(self, event):
         try:
@@ -322,7 +329,7 @@ class MainWindow(gtk.Window):
     def open_webinterface(self, event):
         webbrowser.open("http://%s:%i/" % (lib.guess_ip(), config.PORT))
 
-    def settings(self, event):
+    def show_settings(self, event):
         dialog = ConfigDialog()
         dialog.run()
         dialog.destroy()
@@ -1273,10 +1280,26 @@ class ConfigDialog(gtk.Dialog):
 
 
 class StatusIcon(gtk.StatusIcon):
-    def __init__(self):
+    def __init__(self, mainwindow):
         gtk.StatusIcon.__init__(self)
         self.set_from_icon_name("lanshark")
         self.connect("activate", lambda x: mainwindow.toggle_visibility())
+        self.connect("popup-menu", self.show_menu)
+        self.menu = gtk.Menu()
+        if not config.DISABLE_WEBINTERFACE:
+            web_item = IconMenuItem("applications-internet", _("Open Web Interface"))
+            web_item.connect("activate", mainwindow.open_webinterface)
+            self.menu.append(web_item)
+        settings_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_PROPERTIES)
+        settings_item.connect("activate", mainwindow.show_settings)
+        self.menu.append(settings_item)
+        quit_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_QUIT)
+        quit_item.connect("activate", mainwindow.destroy)
+        self.menu.append(quit_item)
+
+    def show_menu(self, icon, button, time):
+        self.menu.show_all()
+        self.menu.popup(None, None, None, button, time)
 
 
 if __name__ == "__main__":
