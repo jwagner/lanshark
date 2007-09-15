@@ -231,6 +231,9 @@ def download(url, relpath=None, bs=config.DOWNLOAD_BS):
             os.mkdir(current)
         elif not os.path.isdir(current):
             raise DownloadExistsException("%s is not a directory" % current)
+    return download_file(url, downloadpath, localpath, resume)
+
+def download_file(url, downloadpath, localpath, resume):
     # download it
     try:
         req = urllib2.Request(url)
@@ -245,15 +248,23 @@ def download(url, relpath=None, bs=config.DOWNLOAD_BS):
         with f:
             u = urllib2.urlopen(req)
             yield (localpath, int(u.headers.get("Content-Length")) + f.tell())
-            if resume:
-                yield f.tell()
-            else:
-                yield 0
-            data = u.read(bs)
-            while data:
-                f.write(data)
-                yield len(data)
-                data = u.read(bs)
+            # retry 3 times
+            for i in range(3):
+                try:
+                    if resume:
+                        yield f.tell()
+                    else:
+                        yield 0
+                    data = u.read(config.DOWNLOAD_BS)
+                    while data:
+                        f.write(data)
+                        yield len(data)
+                        data = u.read(config.DOWNLOAD_BS)
+                    break
+                except socket.error:
+                    # retry every 10 seconds
+                    time.sleep(10)
+                    u = urllib2.urlopen(req)
     except urllib2.HTTPError, e:
         logging.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
@@ -272,3 +283,4 @@ def byteformat(n, units=('B', 'KiB', 'MiB', 'GiB', 'TiB')):
         i = len(units)-1
     n /= 1024.0**i
     return "%.2f %s" % (n, units[i])
+

@@ -56,7 +56,7 @@ class Config(configuration.Config):
     PORT = Integer(31337, "Port to use for both UDP and TCP")
     SEARCH_TIMEOUT = Integer(5,
             "Time to wait for search results in seconds")
-    DISCOVER_TIMEOUT = Integer(1,
+    DISCOVER_TIMEOUT = Integer(5,
             "Time to wait for new hosts to answer in seconds")
     DISCOVER_INTERVAL = Integer(60,
             "Interval to search for new computers in seconds")
@@ -74,7 +74,7 @@ class Config(configuration.Config):
                          r"albumart.*?large\.jpg$",
                          r"albumart.*?\.jpg"],
             "regexps to match the folder images/covers")
-    MAX_IMAGE_SIZE = Integer(1000000,
+    MAX_IMAGE_SIZE = Integer(250000,
             "Maximal size of preview images/covers to use")
     DAEMON_IN_GUI = Boolean(True,
             "Integrates daemon in the gui process")
@@ -87,14 +87,14 @@ class Config(configuration.Config):
             "Location of the pid file")
     SOCKET_TIMEOUT = Integer(5000, "The timeout of tcp sockets in ms")
     VIDEO_PLAYER = String(get_mediaplayer(),
-            "Command to play video files %s gets replaced with"
+            "Command to play video files %s gets replaced with "
             "the url to the video")
     AUDIO_PLAYER = String(get_mediaplayer(),
             "Command to play audio files %s gets replaced with"
-            "the url to the audio file")
+            "the url to the audio file ")
     IMAGE_VIEWER = String(get_imageviewer(),
             "Command to view images files %s gets replaced with"
-            "the url to the image")
+            "the url to the image ")
     DISABLE_WEBINTERFACE = Boolean(False, "Do not show html interface")
     FS_ENCODING = String(sys.getfilesystemencoding(), "Filesystem encoding")
     SYS_ENCODING = String(get_sys_encoding(), 'System Encoding')

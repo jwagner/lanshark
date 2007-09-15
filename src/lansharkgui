@@ -662,7 +662,7 @@ class Downloads(gtk.Frame):
         hbox = gtk.HBox()
         self.progress = gtk.ProgressBar()
         hbox.pack_start(self.progress, True, True)
-        self.toggle = IconButton("media-playback-stop", 22)
+        self.toggle = IconButton("media-playback-pause", 22)
         self.toggle.set_sensitive(False)
         self.toggle.connect("clicked", self.toggle_download)
         hbox.pack_start(self.toggle, False, False)
