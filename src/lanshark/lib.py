@@ -200,24 +200,23 @@ class DownloadException(Exception):
     def __repr__(self):
         return Exception.__repr__(self) + repr(self.__cause__)
 
-class DownloadExistsException(DownloadException):
-    pass
+class DownloadExistsException(DownloadException): pass
 
-def download(url, relpath=None, bs=config.DOWNLOAD_BS):
+def download(url, relpath=None, incoming=config.INCOMING_PATH):
     """Download url into folder preserving the path in the url"""
-    # urgs thats ugly Oo
-    incoming = config.INCOMING_PATH
     if relpath:
         path = urllib2.unquote(url[len(relpath):])
     else:
         path = urllib2.unquote(urllib2.urlparse.urlparse(url)[2][1:])
     path.decode('utf8').encode(config.FS_ENCODING)
-    if os.path.pardir in path.split(os.path.sep):
-        raise DownloadException("Someone tired to h4x0r you?!")
     parts = path.split("/")
+    # sanity checks
+    if os.path.pardir in parts:
+        raise DownloadException("Someone tired to h4x0r you?!")
     localpath = os.path.abspath(os.path.join(incoming, os.path.sep.join(parts)))
-    while os.path.exists(localpath):
+    if os.path.exists(localpath):
         raise DownloadExistsException("%s already exists" % localpath)
+    # resuming
     downloadpath = localpath + ".part"
     if os.path.exists(downloadpath):
         resume = True
@@ -231,9 +230,10 @@ def download(url, relpath=None, bs=config.DOWNLOAD_BS):
             os.mkdir(current)
         elif not os.path.isdir(current):
             raise DownloadExistsException("%s is not a directory" % current)
-    return download_file(url, downloadpath, localpath, resume)
+    return do_download(url, downloadpath, localpath, resume)
 
-def download_file(url, downloadpath, localpath, resume):
+def do_download(url, downloadpath, localpath, resume):
+    """do_download does the dirty work"""
     # download it
     try:
         req = urllib2.Request(url)
