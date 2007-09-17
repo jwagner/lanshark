@@ -156,7 +156,7 @@ else:
     xdg_config_home = os.path.expanduser(xdg_config_home)
     if not os.path.exists(xdg_config_home):
         try:
-            os.path.mkdir(xdg_config_home)
+            os.mkdir(xdg_config_home)
         except os.error, e:
             xdg_config_home = os.path.expanduser("~")
     config_dir = os.path.join(xdg_config_home, "lanshark")
@@ -168,5 +168,5 @@ config = Config(config_path)
 
 import logging
 LOGLEVEL = config.DEBUG and logging.DEBUG or config.VERBOSE and\
-           logging.INFO or logging.WARN
+           logging.INFO or logging.ERROR
 logging.basicConfig(level=LOGLEVEL)
