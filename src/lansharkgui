@@ -304,6 +304,8 @@ class MainWindow(gtk.Window):
 
         if config.STATUSICON:
             self.status_icon = StatusIcon(self)
+        else:
+            self.status_icon = None
 
     def debug(self, event):
         try:
@@ -814,8 +816,9 @@ class Downloads(gtk.Frame):
 
 class Downloader(threading.Thread):
     """The downloader downloads all the items in the "downloads" model"""
-    # this is for optimization only
+    # these are declared here for optimization only
     msg_left = _("%s left - %s/s")
+    msg_queue = _("%i items in the download queue - ")
     def __init__(self, downloads):
         threading.Thread.__init__(self)
         self.event = threading.Event()
@@ -870,7 +873,6 @@ class Downloader(threading.Thread):
 
     def download(self, treeiter):
         """download the top item"""
-        #import pdb;pdb.set_trace()
         if sys.platform.startswith("win"):
             # refactor this?!
             self.url = self.model.get_value(treeiter, 0)
@@ -881,7 +883,6 @@ class Downloader(threading.Thread):
                     _("Starting download"))
             # HACK: wait a little bit so gtk has time to remove
             # the tree iter
-            maincontext = gobject.main_context_default()
             idle_do(self.model.remove, treeiter)
             time.sleep(0.1)
         else:
@@ -902,19 +903,28 @@ class Downloader(threading.Thread):
             downloaded = 0
             fact = length and (1.0/length) or 0
             start = time.time()
+            t = time.time()
             for bytes in download:
                 if self.paused or self.killed:
                     break
                 downloaded += bytes
+                tt = time.time()
+                # only update every 0.25 seconds
+                if tt < t + 0.1:
+                    continue
+                t = tt
                 idle_do(self.downloads.progress.set_fraction,
                         (downloaded+resume)*fact)
-                idle_do(self.downloads.progress.set_text,
-                        self.msg_left
-                        % (lib.byteformat(length - downloaded - resume),
+                msg = (self.msg_left %
+                        (lib.byteformat(length - downloaded - resume),
                             lib.byteformat(int(downloaded /
                                 ((time.time()-start) or 0.1)))
                           )
                         )
+                idle_do(self.downloads.progress.set_text, msg)
+                if mainwindow.status_icon:
+                    queue_msg = self.msg_queue % len(self.model)
+                    idle_do(mainwindow.status_icon.set_tooltip, queue_msg + msg)
             else:
                 idle_do(self.downloads.finishedmodel.append,
                         (gtk.STOCK_HARDDISK, self.url,))
@@ -934,6 +944,7 @@ class Downloader(threading.Thread):
                 _(self.downloads.inactive))
         idle_do(self.downloads.progress.set_fraction, 0.0)
         idle_do(self.downloads.progress.set_text, "")
+        idle_do(mainwindow.status_icon.set_tooltip, "")
         idle_do(self.downloads.toggle_download_state)
 
 
@@ -1316,7 +1327,8 @@ class StatusIcon(gtk.StatusIcon):
         self.connect("popup-menu", self.show_menu)
         self.menu = gtk.Menu()
         if not config.DISABLE_WEBINTERFACE:
-            web_item = IconMenuItem("applications-internet", _("Open Web Interface"))
+            web_item = IconMenuItem("applications-internet",
+                    _("Open Web Interface"))
             web_item.connect("activate", mainwindow.open_webinterface)
             self.menu.append(web_item)
         settings_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_PROPERTIES)
