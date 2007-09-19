@@ -200,7 +200,10 @@ class DownloadException(Exception):
     def __repr__(self):
         return Exception.__repr__(self) + repr(self.__cause__)
 
-class DownloadExistsException(DownloadException): pass
+class DownloadExistsException(DownloadException):
+    def __init__(self, message, file):
+        DownloadException.__init__(self, message)
+        self.file = file
 
 def download(url, relpath=None, incoming=config.INCOMING_PATH):
     """Download url into folder preserving the path in the url"""
@@ -215,7 +218,8 @@ def download(url, relpath=None, incoming=config.INCOMING_PATH):
         raise DownloadException("Someone tired to h4x0r you?!")
     localpath = os.path.abspath(os.path.join(incoming, os.path.sep.join(parts)))
     if os.path.exists(localpath):
-        raise DownloadExistsException("%s already exists" % localpath)
+        raise DownloadExistsException("%s already exists" % localpath,
+                file=localpath)
     # resuming
     downloadpath = localpath + ".part"
     if os.path.exists(downloadpath):
@@ -229,7 +233,7 @@ def download(url, relpath=None, incoming=config.INCOMING_PATH):
         if not os.path.exists(current):
             os.mkdir(current)
         elif not os.path.isdir(current):
-            raise DownloadExistsException("%s is not a directory" % current)
+            raise DownloadException("%s is not a directory" % current)
     return do_download(url, downloadpath, localpath, resume)
 
 def do_download(url, downloadpath, localpath, resume):

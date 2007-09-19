@@ -41,6 +41,12 @@ def get_imageviewer():
     return sys.platform.startswith("win") and "browser" or select_app(
             "kuickshow", "display") + " %s" or "browser"
 
+def get_openfile():
+    if sys.platform == "darwin":
+        return "open"
+    else:
+        return select_app("xdg-open", "exo-open", "gnome-open") or ""
+
 def get_sys_encoding():
     try:
         return sys.stdout.encoding
@@ -104,13 +110,15 @@ class Config(configuration.Config):
     INVISIBLE = Boolean(False, "Do not answer to discovery or search requests")
     STATUSICON = Boolean(True, "Show icon in statusbar")
     STATICHOSTS = StringList([], "Static peer entries for networks where udp"
-            "broadcasts are not avaible. Exmaple: example.com:31337, 192.168.1.2:31337")
+            "broadcasts are not avaible. "
+            "Exmaple: example.com:31337, 192.168.1.2:31337")
     HIDDEN_FILES = StringList([r"\..*", r"Thumbs\.db"],
             "Regexps to match hidden files")
     PSYCO = Boolean(False, "Enable psyco JIT")
+    OPENFILE = String(get_openfile(), "The application used to start/open files")
     # static variables
     WEBSITE = "http://lanshark.29a.ch/"
-    VERSION = Integer(2, "Version of the config file")
+    VERSION = Integer(3, "Version of the config file")
     DOWNLOAD_BS = 65536
     VERSION.comment_out_default = False
 

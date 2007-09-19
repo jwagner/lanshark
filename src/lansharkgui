@@ -9,6 +9,7 @@ import re
 import sys
 import socket
 import math
+import subprocess
 import time
 import threading
 import urllib2
@@ -189,6 +190,17 @@ class GtkIconFactory(icons.IconFactory):
 
     def has_icon(self, name):
         return self.icon_theme.has_icon(name)
+
+if sys.platform.startswith("win"):
+    startfile = os.startfile
+elif config.OPENFILE:
+    startfile = lambda path: subprocess.Popen([config.OPENFILE, path])
+else:
+    startfile = lambda path: show_error(_("Lanshark was unable to find an "
+        "application to open files. Please install the xdg-utils from "
+        "http://portland.freedesktop.org/ or configure your prefered tool "
+        "as openfile command in the config file %s." % config.path))
+
 
 iconfactory = GtkIconFactory(icon_theme)
 
@@ -701,8 +713,8 @@ class Downloads(gtk.Frame):
         win.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         win.add(self.list)
         vbox.pack_start(win)
-        # icon, url
-        self.finishedmodel = gtk.ListStore(str, str)
+        # icon, url, localpath
+        self.finishedmodel = gtk.ListStore(str, str, str)
         self.finishedview = gtk.TreeView(self.finishedmodel)
         tvcolumn = gtk.TreeViewColumn(_('Finished downloads'))
         icon_cell = gtk.CellRendererPixbuf()
@@ -715,7 +727,7 @@ class Downloads(gtk.Frame):
         tvcolumn.add_attribute(url_cell, 'text', 1)
         self.finishedview.append_column(tvcolumn)
         self.finishedview.set_enable_search(True)
-        bind_context_menu(self.finishedview, DownloadContextMenu)
+        bind_context_menu(self.finishedview, FinishedContextMenu)
         win = gtk.ScrolledWindow()
         win.set_shadow_type(gtk.SHADOW_IN)
         win.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -929,12 +941,12 @@ class Downloader(threading.Thread):
                     idle_do(mainwindow.status_icon.set_tooltip, queue_msg + msg)
             else:
                 idle_do(self.downloads.finishedmodel.append,
-                        (gtk.STOCK_HARDDISK, self.url,))
+                        (gtk.STOCK_HARDDISK, self.url, localpath))
         except lib.DownloadExistsException, e:
             idle_do(self.downloads.finishedmodel.append,
-                    (gtk.STOCK_MEDIA_NEXT, _("Skipped: ") + self.url,))
+                    (gtk.STOCK_MEDIA_NEXT, _("Skipped: ") + self.url, e.file))
         except lib.DownloadException, e:
-            logging.exception("Error while downloading %r", self.url)
+            logging.exception("Error while downloading %r", self.url, None)
             idle_do(self.downloads.finishedmodel.append,
                     (gtk.STOCK_DIALOG_ERROR, _("Error: ") + self.url,))
             idle_do(show_error, _("Error while downloading %r%s") %
@@ -1238,6 +1250,35 @@ class DownloadContextMenu(gtk.Menu):
 
     def clear(self, e):
         self.model.clear()
+
+
+class FinishedContextMenu(DownloadContextMenu):
+    """The context menu for the finished downloads list"""
+    def __init__(self, view):
+        DownloadContextMenu.__init__(self, view)
+        self.path = self.get_path()
+        if self.path:
+            openfolder = IconMenuItem("folder-open", _("Open folder"))
+            openfolder.connect("activate", self.openfolder)
+            self.prepend(openfolder)
+            openfolder.show()
+            open_ = gtk.ImageMenuItem(stock_id=gtk.STOCK_OPEN)
+            open_.connect("activate", self.open)
+            self.prepend(open_)
+            open_.show()
+
+    def get_path(self):
+        selection = self.view.get_selection()
+        model, selected = selection.get_selected_rows()
+        if selected:
+            iter = model.get_iter(selected[0])
+            return model.get_value(iter, 2)
+
+    def open(self, e):
+        startfile(self.path)
+
+    def openfolder(self, e):
+        startfile(os.path.abspath(os.path.join(self.path, os.pardir)))
 
 
 class ConfigDialog(gtk.Dialog):
