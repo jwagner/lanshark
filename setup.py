@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #from distutils.core import setup
 import sys
-sys.path += "src"
+sys.path += ("src",)
 import lanshark.lib
 from distutils.core import setup
 import os
@@ -18,7 +18,7 @@ def ls_r(dir):
 kwargs = {
       'name': 'Lanshark',
       'version': lanshark.lib.__version__,
-      'description': 'Filesharing tool for local area networks',
+      'description': 'A P2P Filesharing tool for local area networks',
       'author': 'Jonas Wagner',
       'author_email': 'veers@gmx.ch',
       'url': 'http://lanshark.29a.ch',
@@ -43,9 +43,8 @@ kwargs = {
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Natural Language :: English',
         'Natural Language :: German',
-        'Operating System :: MacOS :: MacOS X',
-        'Operating System :: Microsoft',
         'Operating System :: POSIX',
+        'Operating System :: Microsoft',
         'Programming Language :: Python',
         'Topic :: Communications :: File Sharing']
 }

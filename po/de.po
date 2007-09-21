@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-20 00:23+0200\n"
-"PO-Revision-Date: 2007-09-04 22:35+0000\n"
+"POT-Creation-Date: 2007-09-20 01:23+0200\n"
+"PO-Revision-Date: 2007-09-20 16:12+0000\n"
 "Last-Translator: Jonas Wagner <veers@gmx.ch>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Export-Date: 2007-09-04 22:38:07+0000\n"
+"X-Rosetta-Export-Date: 2007-09-20 16:18:11+0000\n"
 
 #: ../src/lansharkgui:53
 msgid "Archive"
@@ -60,10 +60,14 @@ msgid ""
 "xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
 "tool as openfile command in the config file %s."
 msgstr ""
+"Lanshark konnte keine Anwendung zum öffnen von Dateien finden. Bitte "
+"installiere die xdg-utils von http://portland.freedesktop.org/ oder "
+"Konfiguriere dein bevorzugtes Tool als \"openfile\" in der "
+"Konfigurationsdatei %s"
 
-#: ../src/lansharkgui:267 ../src/lansharkgui:1374
+#: ../src/lansharkgui:267 ../src/lansharkgui:1375
 msgid "Open Web Interface"
-msgstr "Webinterface oeffnen"
+msgstr "Webinterface öffnen"
 
 #: ../src/lansharkgui:274
 msgid "Edit"
@@ -83,30 +87,38 @@ msgstr "Suchen"
 
 #: ../src/lansharkgui:308
 msgid "Download Queue"
-msgstr "Downloads"
+msgstr "Download Liste"
 
 #: ../src/lansharkgui:337
 msgid "A filesharing application for local area networks"
 msgstr "Eine Filesharing Anwendung fuer Lokale Netzwerke"
 
-#: ../src/lansharkgui:383
+#: ../src/lansharkgui:346
+msgid "translator-credits"
+msgstr ""
+"Jonas Wagner\n"
+"\n"
+"Launchpad Contributions:\n"
+"  Jonas Wagner <https://launchpad.net/~veers>"
+
+#: ../src/lansharkgui:384
 msgid "Peers"
 msgstr "Peers"
 
-#: ../src/lansharkgui:596
+#: ../src/lansharkgui:597
 #, python-format
 msgid "%s could not be found"
 msgstr "%s konnte nicht gefunden werden"
 
-#: ../src/lansharkgui:622
+#: ../src/lansharkgui:623
 msgid "All"
 msgstr "Alle"
 
-#: ../src/lansharkgui:623
+#: ../src/lansharkgui:624
 msgid "Regex"
 msgstr "Regex"
 
-#: ../src/lansharkgui:667
+#: ../src/lansharkgui:668
 #, python-format
 msgid ""
 "Invalid Regex:\n"
@@ -115,189 +127,188 @@ msgstr ""
 "Fehlerhafte Regex:\n"
 "%s"
 
-#: ../src/lansharkgui:675
+#: ../src/lansharkgui:676
 msgid "No active download"
 msgstr "Kein download aktiv"
 
-#: ../src/lansharkgui:694
+#: ../src/lansharkgui:695
 msgid "Downloads"
 msgstr "Downloads"
 
-#: ../src/lansharkgui:719
+#: ../src/lansharkgui:720
 msgid "Finished downloads"
 msgstr "Fertiggestellte Downloads"
 
-#: ../src/lansharkgui:775
+#: ../src/lansharkgui:776
 msgid "Drag and Drop only works for http!"
 msgstr "Drag and Drop funktioniert nur mit http uris!"
 
-#: ../src/lansharkgui:786
+#: ../src/lansharkgui:787
 msgid "Could not add url"
-msgstr "Url konnte nicht hinzugefuegt werden"
+msgstr "Url konnte nicht hinzugefügt werden"
 
-#: ../src/lansharkgui:815
+#: ../src/lansharkgui:816
 msgid "Download paused"
 msgstr "Download pausiert"
 
-#: ../src/lansharkgui:818
+#: ../src/lansharkgui:819
 msgid "Downloading..."
 msgstr "Downloaden..."
 
-#: ../src/lansharkgui:823
+#: ../src/lansharkgui:824
 msgid "Download complete"
 msgstr "Download abgeschlossen"
 
-#: ../src/lansharkgui:834
-#, fuzzy, python-format
+#: ../src/lansharkgui:835
+#, python-format
 msgid "%s left - %s/s"
 msgstr "%s verbleibend - %s/s"
 
-#: ../src/lansharkgui:835
+#: ../src/lansharkgui:836
 #, python-format
 msgid "%i items in the download queue - "
-msgstr ""
+msgstr "%i Downloads in der Liste - "
 
-#: ../src/lansharkgui:880
+#: ../src/lansharkgui:881
 #, python-format
 msgid "An unhandled error occured while downloading %r"
 msgstr "Unbehandelter Fehler beim downloaden von %r"
 
-#: ../src/lansharkgui:897 ../src/lansharkgui:910
+#: ../src/lansharkgui:898 ../src/lansharkgui:911
 msgid "Starting download"
 msgstr "Starte download"
 
-#: ../src/lansharkgui:947
+#: ../src/lansharkgui:948
 msgid "Skipped: "
-msgstr "Uebersprungen: "
+msgstr "Übersprungen: "
 
-#: ../src/lansharkgui:951
+#: ../src/lansharkgui:952
 msgid "Error: "
 msgstr "Fehler: "
 
-#: ../src/lansharkgui:952
+#: ../src/lansharkgui:953
 #, python-format
 msgid "Error while downloading %r%s"
 msgstr "Fehler beim downloaden von %r%s"
 
-#: ../src/lansharkgui:1038
+#: ../src/lansharkgui:1039
 #, python-format
 msgid "%s - %i Folders %i Files"
 msgstr "%s - %i Ordner %i Dateien"
 
-#: ../src/lansharkgui:1055
+#: ../src/lansharkgui:1056
 #, python-format
 msgid "%i files total %s - %i folders"
 msgstr "%i Dateien total %s - %i Ordner"
 
-#: ../src/lansharkgui:1145
+#: ../src/lansharkgui:1146
 msgid "Preview"
 msgstr "Vorschau"
 
-#: ../src/lansharkgui:1151 ../src/lansharkgui:1198
+#: ../src/lansharkgui:1152 ../src/lansharkgui:1199
 msgid "Download"
 msgstr "Downloaden"
 
-#: ../src/lansharkgui:1154 ../src/lansharkgui:1195
-#, fuzzy
+#: ../src/lansharkgui:1155 ../src/lansharkgui:1196
 msgid "Download to"
-msgstr "Downloaden"
+msgstr "Downloaden nach"
 
-#: ../src/lansharkgui:1158
+#: ../src/lansharkgui:1159
 msgid "Copy URL"
-msgstr ""
+msgstr "URL kopieren"
 
-#: ../src/lansharkgui:1164
+#: ../src/lansharkgui:1165
 msgid "Icon Size"
-msgstr "Icon groesse"
+msgstr "Icon grösse"
 
-#: ../src/lansharkgui:1197
+#: ../src/lansharkgui:1198
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
-#: ../src/lansharkgui:1221
+#: ../src/lansharkgui:1222
 msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
 msgstr ""
-"Bitte installiere vlc von http://videolan.org/vlc/ um dieses feature zu "
+"Bitte installiere vlc von http://videolan.org/vlc/ um dieses Feature zu "
 "benutzen"
 
-#: ../src/lansharkgui:1225
+#: ../src/lansharkgui:1226
 #, python-format
 msgid ""
 "Could not find a suitable mediaplayer on your system. Please configure one "
 "manually. The path to the config file is %s."
 msgstr ""
-"Es wurde kein brauchbarer Medienabspieler auf deinem system gefunden. Falls "
+"Es wurde kein brauchbarer Medienabspieler auf deinem System gefunden. Falls "
 "einer installiert sein sollte kannst du diesen Manuell unter %s "
 "konfigurieren."
 
-#: ../src/lansharkgui:1261
+#: ../src/lansharkgui:1262
 msgid "Open folder"
-msgstr ""
+msgstr "Ordner öffnen"
 
-#: ../src/lansharkgui:1287
+#: ../src/lansharkgui:1288
 #, python-format
 msgid "%s Configuration"
 msgstr "%s Konfiguration"
 
-#: ../src/lansharkgui:1291
+#: ../src/lansharkgui:1292
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: ../src/lansharkgui:1297
+#: ../src/lansharkgui:1298
 msgid "Hostname"
 msgstr "Hostname"
 
-#: ../src/lansharkgui:1299
+#: ../src/lansharkgui:1300
 msgid "Select the share path"
-msgstr "Freigabe Pfad auswaehlen"
+msgstr "Freigabe Pfad auswählen"
 
-#: ../src/lansharkgui:1302
+#: ../src/lansharkgui:1303
 msgid "Share Path"
 msgstr "Freigabe Pfad"
 
-#: ../src/lansharkgui:1304
+#: ../src/lansharkgui:1305
 msgid "Select the incoming path"
-msgstr "Einkommenden Pfad auswaehlen"
+msgstr "Einkommenden Pfad auswählen"
 
-#: ../src/lansharkgui:1307
+#: ../src/lansharkgui:1308
 msgid "Incoming Path"
 msgstr "Einkommender Pfad"
 
-#: ../src/lansharkgui:1311
+#: ../src/lansharkgui:1312
 msgid "Autostart"
 msgstr "Autostart"
 
-#: ../src/lansharkgui:1316
+#: ../src/lansharkgui:1317
 msgid "Hello Message"
 msgstr "Hallo Nachricht"
 
-#: ../src/lansharkgui:1319
+#: ../src/lansharkgui:1320
 msgid "Broadcast Address"
 msgstr "Broadcast Addresse"
 
-#: ../src/lansharkgui:1322
+#: ../src/lansharkgui:1323
 msgid "Port"
 msgstr "Port"
 
-#: ../src/lansharkgui:1331
+#: ../src/lansharkgui:1332
 msgid "Basic"
 msgstr "Einfach"
 
-#: ../src/lansharkgui:1332
+#: ../src/lansharkgui:1333
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ../src/lansharkgui:1336
+#: ../src/lansharkgui:1337
 #, python-format
 msgid ""
 "For more advanced configuration please\n"
 "take a look at lansharks config file:\n"
 "%s"
 msgstr ""
-"Fuer erweiterte Einstellungen koennen in\n"
-"der Konfigurations Datei vorgenommen werden:\n"
+"Für erweiterte Einstellungen können in\n"
+"der Konfigurationsdatei vorgenommen werden:\n"
 "%s"
 
-#: ../src/lansharkgui:1339
+#: ../src/lansharkgui:1340
 msgid "More"
 msgstr "Mehr"

@@ -3,7 +3,12 @@ import os, sys
 
 import configuration
 import socket
+
+import locale
+locale.setlocale(locale.LC_ALL, '')
+
 from configuration import Boolean, Integer, String, StringList
+
 
 def in_pathlist(file, pathlist = os.environ.get("PATH").split(os.pathsep)):
     for path in pathlist:
@@ -116,7 +121,9 @@ class Config(configuration.Config):
             "Regexps to match hidden files")
     PSYCO = Boolean(False, "Enable psyco JIT")
     OPENFILE = String(get_openfile(), "The application used to start/open files")
+    LANGUAGE = String(locale.getdefaultlocale()[0] or "", "The ui language")
     # static variables
+    LANGUAGES = [locale.getdefaultlocale()[0] or "en_US", "en_US"]
     WEBSITE = "http://lanshark.29a.ch/"
     VERSION = Integer(3, "Version of the config file")
     DOWNLOAD_BS = 65536

@@ -35,14 +35,11 @@ except NameError:
 # config.set_prefix(".") # useful for tracing
 from lanshark import lib, icons
 
-import locale
-locale.setlocale(locale.LC_ALL, '')
-
 import gettext
-#gettext.install('lanshark', config.LOCALE_PATH, unicode=1, codeset="ISO-8859-1")
 gettext.bindtextdomain('lanshark', config.LOCALE_PATH)
 gettext.textdomain('lanshark')
-_ = gettext.gettext
+gettext.translation('lanshark', config.LOCALE_PATH,
+        languages=[config.LANGUAGE, 'en_US'], fallback = True).install()
 
 NAME = "Lanshark"
 VERSION = lib.__version__
@@ -342,7 +339,8 @@ class MainWindow(gtk.Window):
         dialog.set_website_label(config.WEBSITE)
         dialog.set_authors(["Jonas 'veers' Wagner"])
         dialog.set_artists(["Jonas 'veers' Wagner",
-            "Tango project (http://tango.freedesktop.org/)"])
+            "Tango project ( http://tango.freedesktop.org/ )"])
+        dialog.set_translator_credits(_("translator-credits"))
         dialog.run()
         dialog.destroy()
 

@@ -5,7 +5,7 @@ from __future__ import with_statement
 """The lanshark lib encapsulates the client logic"""
 __version__ = "0.0.2"
 copyright = \
-"""Lanshark %s - A LAN filesharing tool
+"""Lanshark %s - A P2P filesharing tool for local area networks
 Copyright (C) 2007 Jonas Wagner
 
 This program is free software; you can redistribute it and/or modify
