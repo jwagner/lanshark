@@ -73,8 +73,8 @@ http://senderaddress:port/some/folder/foo.png.
 -
 The only thing you need to know about the http based protocol is how
 to get the directory listings as json and how to interpret them.
-There is one important thing about it, the Accept request header
-may not contain html. Otherwise you will get a HTML response
+There is one important thing about it, the accept request header
+must contain the word json. Otherwise you will get a HTML response
 rather than json. Another important thing is to include the
 trailing slash for directories.
 

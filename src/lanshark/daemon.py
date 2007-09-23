@@ -289,7 +289,7 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             logging.exception("Exception while listing %s", path)
             self.send_error(404, "File not found")
             return None
-        if "Accept" in self.headers and "html" in self.headers["Accept"]:
+        if "Accept" in self.headers and not "json" in self.headers["Accept"]:
             f = self.list_directory_html(files)
         else:
             f = self.list_directory_json(files)

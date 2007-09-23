@@ -1,25 +1,25 @@
-# German translations for PACKAGE package
-# German messages for PACKAGE.
-# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-#  <veers@gmx.ch>, 2007.
+# Spanish translation for lanshark
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the lanshark package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: lanshark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-23 18:23+0200\n"
-"PO-Revision-Date: 2007-09-20 16:12+0000\n"
-"Last-Translator: Jonas Wagner <veers@gmx.ch>\n"
-"Language-Team: German\n"
+"PO-Revision-Date: 2007-09-23 16:04+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Export-Date: 2007-09-20 16:18:11+0000\n"
+"X-Launchpad-Export-Date: 2007-09-23 16:08+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/lansharkgui:50
 msgid "Archive"
-msgstr "Archiv"
+msgstr "Archivo"
 
 #: ../src/lansharkgui:52
 msgid "Audio"
@@ -27,31 +27,31 @@ msgstr "Audio"
 
 #: ../src/lansharkgui:55
 msgid "Executable"
-msgstr "Anwendung"
+msgstr "Ejecutable"
 
 #: ../src/lansharkgui:57
 msgid "Folder"
-msgstr "Ordner"
+msgstr "Directorio"
 
 #: ../src/lansharkgui:58
 msgid "Image"
-msgstr "Bild"
+msgstr "Imagen"
 
 #: ../src/lansharkgui:61
 msgid "Office"
-msgstr "Office"
+msgstr "Oficina"
 
 #: ../src/lansharkgui:63
 msgid "Text"
-msgstr "Text"
+msgstr "Texto"
 
 #: ../src/lansharkgui:65
 msgid "Video"
-msgstr "Video"
+msgstr "Vídeo"
 
 #: ../src/lansharkgui:106
 msgid "Error"
-msgstr "Fehler"
+msgstr "Error"
 
 #: ../src/lansharkgui:196
 #, python-format
@@ -60,63 +60,62 @@ msgid ""
 "xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
 "tool as openfile command in the config file %s."
 msgstr ""
-"Lanshark konnte keine Anwendung zum öffnen von Dateien finden. Bitte "
-"installiere die xdg-utils von http://portland.freedesktop.org/ oder "
-"Konfiguriere dein bevorzugtes Tool als \"openfile\" in der "
-"Konfigurationsdatei %s"
+"Lanshark  no ha podido encontrar una aplicación para abrir el archivo. Por "
+"favor, instale xdg-utils desde http://portland.freedesktop.org/ o configure "
+"su herramienta preferida con el comando de apertura de archivos en el "
+"archivo de configuración %s."
 
 #: ../src/lansharkgui:264 ../src/lansharkgui:1372
 msgid "Open Web Interface"
-msgstr "Webinterface öffnen"
+msgstr "Abrir Interfaz Web"
 
 #: ../src/lansharkgui:271
 msgid "Edit"
-msgstr "Editieren"
+msgstr "Editar"
 
 #: ../src/lansharkgui:278
 msgid "Help"
-msgstr "Hilfe"
+msgstr "Ayuda"
 
 #: ../src/lansharkgui:297
 msgid "Browser"
-msgstr "Browser"
+msgstr "Navegador"
 
 #: ../src/lansharkgui:303
 msgid "Search"
-msgstr "Suchen"
+msgstr "Buscar"
 
 #: ../src/lansharkgui:305
 msgid "Download Queue"
-msgstr "Download Liste"
+msgstr "Cola de descarga"
 
 #: ../src/lansharkgui:334
 msgid "A filesharing application for local area networks"
-msgstr "Eine Filesharing Anwendung fuer Lokale Netzwerke"
+msgstr "Una aplicación para el intercambio de archivos en redes de área local."
 
 #: ../src/lansharkgui:343
 msgid "translator-credits"
 msgstr ""
-"Jonas Wagner\n"
-"\n"
 "Launchpad Contributions:\n"
-"  Jonas Wagner <https://launchpad.net/~veers>"
+"  Emilio Gomez Fernandez https://launchpad.net/~egofer\n"
+"  Jonas Wagner https://launchpad.net/~veers"
 
 #: ../src/lansharkgui:381
 msgid "Peers"
-msgstr "Peers"
+msgstr "Usuarios"
 
 #: ../src/lansharkgui:594
 #, python-format
 msgid "%s could not be found"
-msgstr "%s konnte nicht gefunden werden"
+msgstr "%s no pudo ser encontrado"
 
 #: ../src/lansharkgui:620
 msgid "All"
-msgstr "Alle"
+msgstr "Todo"
 
 #: ../src/lansharkgui:621
 msgid "Regex"
-msgstr "Regex"
+msgstr "RegEx"
 
 #: ../src/lansharkgui:665
 #, python-format
@@ -124,112 +123,112 @@ msgid ""
 "Invalid Regex:\n"
 "%s"
 msgstr ""
-"Fehlerhafte Regex:\n"
+"RegEx invalido:\n"
 "%s"
 
 #: ../src/lansharkgui:673
 msgid "No active download"
-msgstr "Kein download aktiv"
+msgstr "Descarga no activa"
 
 #: ../src/lansharkgui:692
 msgid "Downloads"
-msgstr "Downloads"
+msgstr "Descargas"
 
 #: ../src/lansharkgui:717
 msgid "Finished downloads"
-msgstr "Fertiggestellte Downloads"
+msgstr "Descargas finalizadas"
 
 #: ../src/lansharkgui:773
 msgid "Drag and Drop only works for http!"
-msgstr "Drag and Drop funktioniert nur mit http uris!"
+msgstr "Arrastrar y Soltar solo trabaja para http!"
 
 #: ../src/lansharkgui:784
 msgid "Could not add url"
-msgstr "Url konnte nicht hinzugefügt werden"
+msgstr "No se pudo añadir la url"
 
 #: ../src/lansharkgui:813
 msgid "Download paused"
-msgstr "Download pausiert"
+msgstr "Descarga pausada"
 
 #: ../src/lansharkgui:816
 msgid "Downloading..."
-msgstr "Downloaden..."
+msgstr "Descargando..."
 
 #: ../src/lansharkgui:821
 msgid "Download complete"
-msgstr "Download abgeschlossen"
+msgstr "Descarga completada"
 
 #: ../src/lansharkgui:832
-#, python-format
+#, fuzzy, python-format
 msgid "%s left - %s/s"
-msgstr "%s verbleibend - %s/s"
+msgstr "%s restante - %s/s"
 
 #: ../src/lansharkgui:833
 #, python-format
 msgid "%i items in the download queue - "
-msgstr "%i Downloads in der Liste - "
+msgstr "%i elementos en la cola de descarga - "
 
 #: ../src/lansharkgui:878
 #, python-format
 msgid "An unhandled error occured while downloading %r"
-msgstr "Unbehandelter Fehler beim downloaden von %r"
+msgstr ""
 
 #: ../src/lansharkgui:895 ../src/lansharkgui:908
 msgid "Starting download"
-msgstr "Starte download"
+msgstr "Iniciando descarga"
 
 #: ../src/lansharkgui:945
 msgid "Skipped: "
-msgstr "Übersprungen: "
+msgstr "Omitido: "
 
 #: ../src/lansharkgui:949
 msgid "Error: "
-msgstr "Fehler: "
+msgstr "Error: "
 
 #: ../src/lansharkgui:950
 #, python-format
 msgid "Error while downloading %r%s"
-msgstr "Fehler beim downloaden von %r%s"
+msgstr "Error mientras descargaba %r%s"
 
 #: ../src/lansharkgui:1036
 #, python-format
 msgid "%s - %i Folders %i Files"
-msgstr "%s - %i Ordner %i Dateien"
+msgstr "%s - %i Carpetas %i Archivos"
 
 #: ../src/lansharkgui:1053
 #, python-format
 msgid "%i files total %s - %i folders"
-msgstr "%i Dateien total %s - %i Ordner"
+msgstr "%i archivos totales %s - %i carpetas"
 
 #: ../src/lansharkgui:1143
 msgid "Preview"
-msgstr "Vorschau"
+msgstr "Previsualización"
 
 #: ../src/lansharkgui:1149 ../src/lansharkgui:1196
 msgid "Download"
-msgstr "Downloaden"
+msgstr "Descarga"
 
 #: ../src/lansharkgui:1152 ../src/lansharkgui:1193
 msgid "Download to"
-msgstr "Downloaden nach"
+msgstr "Descargar a"
 
 #: ../src/lansharkgui:1156
 msgid "Copy URL"
-msgstr "URL kopieren"
+msgstr "Copiar URL"
 
 #: ../src/lansharkgui:1162
 msgid "Icon Size"
-msgstr "Icon grösse"
+msgstr "Tamaño de icono"
 
 #: ../src/lansharkgui:1195
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Cancelar"
 
 #: ../src/lansharkgui:1219
 msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
 msgstr ""
-"Bitte installiere vlc von http://videolan.org/vlc/ um dieses Feature zu "
-"benutzen"
+"Por favor, instale VCL desde http://videolan.org/vlc/ para usar esta "
+"característica"
 
 #: ../src/lansharkgui:1223
 #, python-format
@@ -237,66 +236,67 @@ msgid ""
 "Could not find a suitable mediaplayer on your system. Please configure one "
 "manually. The path to the config file is %s."
 msgstr ""
-"Es wurde kein brauchbarer Medienabspieler auf deinem System gefunden. Falls "
-"einer installiert sein sollte kannst du diesen Manuell unter %s "
-"konfigurieren."
+"No se a podido encontrar un reproductor multimedia apropiado en su sistema. "
+"Por favor, configure uno manualmente. La ruta para el archivo de "
+"configuración es %s."
 
 #: ../src/lansharkgui:1259
 msgid "Open folder"
-msgstr "Ordner öffnen"
+msgstr "Abrir carpeta"
 
 #: ../src/lansharkgui:1285
 #, python-format
 msgid "%s Configuration"
-msgstr "%s Konfiguration"
+msgstr "%s Configuración"
 
 #: ../src/lansharkgui:1289
 msgid "Configuration"
-msgstr "Konfiguration"
+msgstr "Configuración"
 
 #: ../src/lansharkgui:1295
 msgid "Hostname"
-msgstr "Hostname"
+msgstr "Servidor"
 
 #: ../src/lansharkgui:1297
 msgid "Select the share path"
-msgstr "Freigabe Pfad auswählen"
+msgstr "Seleccionar el directorio compartido"
 
 #: ../src/lansharkgui:1300
 msgid "Share Path"
-msgstr "Freigabe Pfad"
+msgstr "Directorio compartido"
 
 #: ../src/lansharkgui:1302
 msgid "Select the incoming path"
-msgstr "Einkommenden Pfad auswählen"
+msgstr "Seleccionar el directorio de entrada"
 
 #: ../src/lansharkgui:1305
 msgid "Incoming Path"
-msgstr "Einkommender Pfad"
+msgstr "Directorio de entrada"
 
 #: ../src/lansharkgui:1309
 msgid "Autostart"
-msgstr "Autostart"
+msgstr "Autoiniciar"
 
 #: ../src/lansharkgui:1314
 msgid "Hello Message"
-msgstr "Hallo Nachricht"
+msgstr "Mensaje de bienvenida"
 
 #: ../src/lansharkgui:1317
+#, fuzzy
 msgid "Broadcast Address"
-msgstr "Broadcast Addresse"
+msgstr "Dirección de emisión"
 
 #: ../src/lansharkgui:1320
 msgid "Port"
-msgstr "Port"
+msgstr "Puerto"
 
 #: ../src/lansharkgui:1329
 msgid "Basic"
-msgstr "Einfach"
+msgstr "Básico"
 
 #: ../src/lansharkgui:1330
 msgid "Advanced"
-msgstr "Erweitert"
+msgstr "Avanzado"
 
 #: ../src/lansharkgui:1334
 #, python-format
@@ -305,10 +305,10 @@ msgid ""
 "take a look at lansharks config file:\n"
 "%s"
 msgstr ""
-"Für erweiterte Einstellungen können in\n"
-"der Konfigurationsdatei vorgenommen werden:\n"
+"Para más configuraciones avanzadas por favor\n"
+"eche un vistazo al archivo de configuración de lansharks\n"
 "%s"
 
 #: ../src/lansharkgui:1337
 msgid "More"
-msgstr "Mehr"
+msgstr "Más"

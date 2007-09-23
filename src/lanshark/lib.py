@@ -188,7 +188,8 @@ def get_url(url):
 @cached(config.CACHE_TIMEOUT, 2048, stats=config.DEBUG)
 def get_json(url):
     """return parsed json located at url"""
-    return simplejson.load(urllib2.urlopen(url))
+    req = urllib2.Request(url, None, {"Acccept": "application/json"})
+    return simplejson.load(urllib2.urlopen(req))
 
 class DownloadException(Exception):
     """Exceptions that happened while downloading"""
