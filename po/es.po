@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lanshark\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-23 18:23+0200\n"
-"PO-Revision-Date: 2007-09-23 16:04+0000\n"
+"POT-Creation-Date: 2007-09-25 23:01+0200\n"
+"PO-Revision-Date: 2007-09-24 07:52+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2007-09-23 16:08+0000\n"
+"X-Launchpad-Export-Date: 2007-09-25 20:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/lansharkgui:50
@@ -159,7 +159,7 @@ msgid "Download complete"
 msgstr "Descarga completada"
 
 #: ../src/lansharkgui:832
-#, fuzzy, python-format
+#, python-format
 msgid "%s left - %s/s"
 msgstr "%s restante - %s/s"
 
@@ -171,7 +171,7 @@ msgstr "%i elementos en la cola de descarga - "
 #: ../src/lansharkgui:878
 #, python-format
 msgid "An unhandled error occured while downloading %r"
-msgstr ""
+msgstr "Ocurrió un error no capturado mientras descargaba %r"
 
 #: ../src/lansharkgui:895 ../src/lansharkgui:908
 msgid "Starting download"
@@ -282,7 +282,6 @@ msgid "Hello Message"
 msgstr "Mensaje de bienvenida"
 
 #: ../src/lansharkgui:1317
-#, fuzzy
 msgid "Broadcast Address"
 msgstr "Dirección de emisión"
 

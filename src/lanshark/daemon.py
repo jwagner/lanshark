@@ -352,8 +352,8 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 even = not even
             except UnicodeError:
                 pass
-        f.write('<p><a href="' + config.WEBSITE +
-                '">powered by LanShark</a></p>')
+        f.write('</ul><p><a href="' + config.WEBSITE +
+                '">powered by Lanshark</a></p>')
         f.write("</body></html>")
         return f
 

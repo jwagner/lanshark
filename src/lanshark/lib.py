@@ -212,7 +212,10 @@ def download(url, relpath=None, incoming=config.INCOMING_PATH):
         path = urllib2.unquote(url[len(relpath):])
     else:
         path = urllib2.unquote(urllib2.urlparse.urlparse(url)[2][1:])
-    path.decode('utf8').encode(config.FS_ENCODING)
+    try:
+        path = path.decode('utf8').encode(config.FS_ENCODING)
+    except UnicodeError:
+        pass
     parts = path.split("/")
     # sanity checks
     if os.path.pardir in parts:

@@ -9,13 +9,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-09-23 18:23+0200\n"
-"PO-Revision-Date: 2007-09-20 16:12+0000\n"
+"PO-Revision-Date: 2007-09-23 00:53+0000\n"
 "Last-Translator: Jonas Wagner <veers@gmx.ch>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Rosetta-Export-Date: 2007-09-20 16:18:11+0000\n"
+"X-Launchpad-Export-Date: 2007-09-23 16:18+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/lansharkgui:50
 msgid "Archive"
@@ -91,7 +92,7 @@ msgstr "Download Liste"
 
 #: ../src/lansharkgui:334
 msgid "A filesharing application for local area networks"
-msgstr "Eine Filesharing Anwendung fuer Lokale Netzwerke"
+msgstr "Eine Filesharing Anwendung für Lokale Netzwerke"
 
 #: ../src/lansharkgui:343
 msgid "translator-credits"
@@ -99,7 +100,7 @@ msgstr ""
 "Jonas Wagner\n"
 "\n"
 "Launchpad Contributions:\n"
-"  Jonas Wagner <https://launchpad.net/~veers>"
+"  Jonas Wagner https://launchpad.net/~veers"
 
 #: ../src/lansharkgui:381
 msgid "Peers"
