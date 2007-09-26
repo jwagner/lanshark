@@ -33,6 +33,8 @@ import simplejson
 from config import config
 from cache import cached
 
+logger = logging.getLogger('lanshark')
+
 socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.DEBUG)(
         socket.getaddrinfo)
 
@@ -48,7 +50,7 @@ def guess_ip():
             proc.wait()
             data = proc.stdout.read()
         except OSError, e:
-            logging.info(e)
+            logger.info(e)
             return "127.0.0.1"
         try:
             return pattern.findall(data)[0][0]
@@ -92,7 +94,7 @@ def resolve(addr):
         try:
             return socket.gethostbyaddr(addr)[0]
         except socket.herror, e:
-            logging.info(e)
+            logger.info(e)
     return addr
 
 def discover(async=False):
@@ -168,7 +170,7 @@ def ls_r(url):
             try:
                 results += ls_r(url)
             except urllib2.HTTPError, e:
-                logging.debug(e)
+                logger.debug(e)
         else:
             results.append(url)
     return results
@@ -270,13 +272,13 @@ def do_download(url, downloadpath, localpath, resume):
                     time.sleep(10)
                     u = urllib2.urlopen(req)
     except urllib2.HTTPError, e:
-        logging.exception("Error while downloading %r", url)
+        logger.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
     except socket.error, e:
-        logging.exception("Error while downloading %r", url)
+        logger.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
     except os.error, e:
-        logging.exception("Error while downloading %r", url)
+        logger.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
     os.rename(downloadpath, localpath)
 
@@ -287,4 +289,3 @@ def byteformat(n, units=('B', 'KiB', 'MiB', 'GiB', 'TiB')):
         i = len(units)-1
     n /= 1024.0**i
     return "%.2f %s" % (n, units[i])
-
