@@ -141,10 +141,11 @@ class Enum(String):
         String.__init__(self, default, doc)
         self.values = values
 
-    def parse(self):
-        retval = String.parse(self)
+    def parse(self, value):
+        retval = String.parse(self, value)
         if retval not in self.values:
             raise ValueError('Invalid enum value %s' % retval)
+        return retval
 
 class List:
     """List mixin"""

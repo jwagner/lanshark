@@ -35,7 +35,7 @@ from cache import cached
 
 logger = logging.getLogger('lanshark')
 
-socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.DEBUG)(
+socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
         socket.getaddrinfo)
 
 @cached()
@@ -182,12 +182,12 @@ def reset_cache():
     socket.getaddrinfo(reset_cache=True)
     gc.collect()
 
-@cached(config.CACHE_TIMEOUT, 64, stats=config.DEBUG)
+@cached(config.CACHE_TIMEOUT, 64, stats=config.debug)
 def get_url(url):
     """return contents of url."""
     return urllib2.urlopen(url).read()
 
-@cached(config.CACHE_TIMEOUT, 2048, stats=config.DEBUG)
+@cached(config.CACHE_TIMEOUT, 2048, stats=config.debug)
 def get_json(url):
     """return parsed json located at url"""
     return simplejson.load(urllib2.urlopen(url))
