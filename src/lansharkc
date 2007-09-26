@@ -185,7 +185,7 @@ def main():
                 cmd(*sys.argv[2:])
                 return
             except Exception, e:
-                if config.DEBUG:
+                if config.debug:
                     import traceback
                     traceback.print_exc()
                 print e.message
