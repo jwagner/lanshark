@@ -17,84 +17,6 @@ config.set_prefix(os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.pardir)))
 from lanshark import lib
 
-def daemonize():
-    """daemonize process, really minimal implementation"""
-    pid = os.fork()
-    if pid > 0:
-        sys.exit(0)
-    # clear environment
-    os.chdir("/")
-    os.setsid()
-    os.umask(0)
-    pid = os.fork()
-    if pid > 0:
-        sys.exit(0)
-    si = file('/dev/null', 'r')
-    so = file('/dev/null', 'a+')
-    se = file('/dev/null', 'a+', 0)
-    #se = file('/tmp/lanshark_err.log', 'a+', 0)
-    os.dup2(si.fileno(), sys.stdin.fileno())
-    os.dup2(so.fileno(), sys.stdout.fileno())
-    os.dup2(se.fileno(), sys.stderr.fileno())
-
-def start(foreground=False):
-    """start the lanshark daemon foreground is optional"""
-    if os.path.exists(config.PID_FILE):
-        with open(config.PID_FILE, "r") as f:
-            pid = int(f.read())
-        try:
-            os.kill(pid, 0)
-            running = True
-        except OSError, e:
-            running = (e.errno == errno.EPERM)
-        if running:
-            raise SystemExit("already running with pid %i" % pid)
-        else:
-            os.remove(config.PID_FILE)
-    if not foreground:
-        with open(config.PID_FILE, "w") as f:
-            daemonize()
-            f.write(str(os.getpid()))
-        signal.signal(signal.SIGTERM, shutdown)
-    import lanshark.daemon
-    lanshark.daemon.Daemon().run()
-
-def status():
-    """show the status of the lanshark daemon"""
-    if os.path.exists(config.PID_FILE):
-        with open(config.PID_FILE, "r") as f:
-            pid = int(f.read())
-        try:
-            os.kill(pid, 0)
-            print "Running"
-        except OSError, e:
-            if e.errno == errno.EPERM:
-                print "Running with other user"
-            else:
-                print  "Not running"
-    else:
-        print "Not running"
-
-def shutdown(n, frame):
-    os.remove(config.PID_FILE)
-    sys.exit(0)
-
-def stop():
-    """stop the lanshark daemon"""
-    if os.path.exists(config.PID_FILE):
-        with open(config.PID_FILE, "r") as f:
-            pid = int(f.read())
-        os.kill(pid, signal.SIGTERM)
-        while os.path.exists(config.PID_FILE):
-            time.sleep(0.1)
-    else:
-        sys.exit("Not running")
-
-def restart():
-    """Restart the lanshark daemon"""
-    stop()
-    start()
-
 def discover():
     """Discover other hosts in the network"""
     for client in lib.discover():
@@ -172,8 +94,7 @@ def version():
     """output copyright information and exit"""
     print lib.copyright
 
-commands = (discover, download, usage, ls, search, start, stop, restart,
-        status, version)
+commands = (discover, download, usage, ls, search, version)
 
 def main():
     if len(sys.argv) < 2:

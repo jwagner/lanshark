@@ -37,6 +37,9 @@ class IconFactory:
             if mimetype in mime2icon:
                 if self.has_icon(mime2icon[mimetype]):
                     return mime2icon[mimetype]
+        if filename.lower().endswith(".ogg"):
+            # ogg files do mostly contain (only) audio
+            return "audio-x-generic"
         return "text-x-generic-template"
 
     def guess_icon(self, filename):
@@ -46,7 +49,7 @@ class IconFactory:
     def has_icon(self, name):
         """check if the icon is in the factory"""
         return not self.get_icon(name) is None
-        
+
     def get_icon(self, name):
         """Implement at least this method in the factory implementation"""
         pass

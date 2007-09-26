@@ -16,7 +16,7 @@ def ls_r(dir):
     return reduce(do_reduce, os.walk(dir), [])
 
 kwargs = {
-      'name': 'Lanshark',
+      'name': 'lanshark',
       'version': lanshark.lib.__version__,
       'description': 'A P2P Filesharing tool for local area networks',
       'author': 'Jonas Wagner',
@@ -24,7 +24,7 @@ kwargs = {
       'url': 'http://lanshark.29a.ch',
       'packages': ['lanshark'],
       'package_dir': {'lanshark': 'src/lanshark'},
-      'scripts': ['src/lansharkgui', 'src/lansharkc'],
+      'scripts': ['src/lansharkgui', 'src/lansharkc', 'src/lansharkd'],
       'options': {'py2exe':{
           'packages': 'encodings',
           'includes': 'cairo, pango, pangocairo, atk, gobject',

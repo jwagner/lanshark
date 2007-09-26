@@ -1,0 +1,134 @@
+#!/usr/bin/env python
+"""lansharkd - command line interface to the lanshark daemon"""
+from __future__ import with_statement
+import errno
+import os
+import sys
+import time
+
+try:
+    import signal
+except:
+    signal = None
+
+from lanshark.config import config
+config.set_prefix(os.path.abspath(os.path.join(
+    os.path.dirname(__file__), os.pardir)))
+from lanshark import lib
+
+def daemonize():
+    """daemonize process, really minimal implementation"""
+    pid = os.fork()
+    if pid > 0:
+        sys.exit(0)
+    # clear environment
+    os.chdir("/")
+    os.setsid()
+    os.umask(0)
+    pid = os.fork()
+    if pid > 0:
+        sys.exit(0)
+    si = file('/dev/null', 'r')
+    so = file('/dev/null', 'a+')
+    se = file('/dev/null', 'a+', 0)
+    #se = file('/tmp/lanshark_err.log', 'a+', 0)
+    os.dup2(si.fileno(), sys.stdin.fileno())
+    os.dup2(so.fileno(), sys.stdout.fileno())
+    os.dup2(se.fileno(), sys.stderr.fileno())
+
+def start(foreground=False):
+    """start the lanshark daemon foreground is optional"""
+    if os.path.exists(config.PID_FILE):
+        with open(config.PID_FILE, "r") as f:
+            pid = int(f.read())
+        try:
+            os.kill(pid, 0)
+            running = True
+        except OSError, e:
+            running = (e.errno == errno.EPERM)
+        if running:
+            raise SystemExit("already running with pid %i" % pid)
+        else:
+            os.remove(config.PID_FILE)
+    if not foreground:
+        with open(config.PID_FILE, "w") as f:
+            daemonize()
+            f.write(str(os.getpid()))
+        signal.signal(signal.SIGTERM, shutdown)
+    import lanshark.daemon
+    lanshark.daemon.Daemon().run()
+
+def status():
+    """show the status of the lanshark daemon"""
+    if os.path.exists(config.PID_FILE):
+        with open(config.PID_FILE, "r") as f:
+            pid = int(f.read())
+        try:
+            os.kill(pid, 0)
+            print "Running"
+        except OSError, e:
+            if e.errno == errno.EPERM:
+                print "Running with other user"
+            else:
+                print  "Not running"
+    else:
+        print "Not running"
+
+def shutdown(n, frame):
+    os.remove(config.PID_FILE)
+    sys.exit(0)
+
+def stop():
+    """stop the lanshark daemon"""
+    if os.path.exists(config.PID_FILE):
+        with open(config.PID_FILE, "r") as f:
+            pid = int(f.read())
+        os.kill(pid, signal.SIGTERM)
+        while os.path.exists(config.PID_FILE):
+            time.sleep(0.1)
+    else:
+        sys.exit("Not running")
+
+def restart():
+    """Restart the lanshark daemon"""
+    stop()
+    start()
+
+def usage():
+    """Show this help message"""
+    print __doc__
+    print "\nUsage: %s command [arguments...]" % sys.argv[0]
+    print "\nCommands:"
+    for cmd in commands:
+        print (cmd.func_name + " " + " ".join(
+                cmd.func_code.co_varnames[:cmd.func_code.co_argcount])).ljust(\
+                        25) + cmd.__doc__
+    print "\nConfig File:\n%s" % config.path
+    sys.exit(1)
+
+def version():
+    """output copyright information and exit"""
+    print lib.copyright
+
+commands = (start, stop, restart, status, version)
+
+def main():
+    if len(sys.argv) < 2:
+        usage()
+    command = None
+    for cmd in commands:
+        if cmd.func_name == sys.argv[1]:
+            try:
+                cmd(*sys.argv[2:])
+                return
+            except Exception, e:
+                if config.DEBUG:
+                    import traceback
+                    traceback.print_exc()
+                print e.message
+                usage()
+    print "Unknown command"
+    usage()
+
+if __name__ == "__main__":
+    main()

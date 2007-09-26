@@ -121,7 +121,6 @@ class Config(configuration.Config):
             "Regexps to match hidden files")
     PSYCO = Boolean(False, "Enable psyco JIT")
     OPENFILE = String(get_openfile(), "The application used to start/open files")
-    LANGUAGE = String(locale.getdefaultlocale()[0] or "", "The ui language")
     # static variables
     LANGUAGES = [locale.getdefaultlocale()[0] or "en_US", "en_US"]
     WEBSITE = "http://lanshark.29a.ch/"

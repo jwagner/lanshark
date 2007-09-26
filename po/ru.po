@@ -1,0 +1,310 @@
+# Russian translation for lanshark
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the lanshark package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: lanshark\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-09-25 23:01+0200\n"
+"PO-Revision-Date: 2007-09-24 06:56+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2007-09-25 20:38+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: ../src/lansharkgui:50
+msgid "Archive"
+msgstr "Архив"
+
+#: ../src/lansharkgui:52
+msgid "Audio"
+msgstr "Аудио"
+
+#: ../src/lansharkgui:55
+msgid "Executable"
+msgstr "Исполняемый"
+
+#: ../src/lansharkgui:57
+msgid "Folder"
+msgstr "Папка"
+
+#: ../src/lansharkgui:58
+msgid "Image"
+msgstr "Изображение"
+
+#: ../src/lansharkgui:61
+msgid "Office"
+msgstr "Офис"
+
+#: ../src/lansharkgui:63
+msgid "Text"
+msgstr "Текст"
+
+#: ../src/lansharkgui:65
+msgid "Video"
+msgstr "Видео"
+
+#: ../src/lansharkgui:106
+msgid "Error"
+msgstr "Ошибка"
+
+#: ../src/lansharkgui:196
+#, python-format
+msgid ""
+"Lanshark was unable to find an application to open files. Please install the "
+"xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
+"tool as openfile command in the config file %s."
+msgstr ""
+"Lanshark не нашла приложения для открытия файлов. Пожалуйста, установите xdg-"
+"utils с http://portland.freedesktop.org/ или настройте ваш любимый "
+"инструмент как команду openfile в файле конфигурации %s."
+
+#: ../src/lansharkgui:264 ../src/lansharkgui:1372
+msgid "Open Web Interface"
+msgstr "Открыть веб интерфейс"
+
+#: ../src/lansharkgui:271
+msgid "Edit"
+msgstr "Правка"
+
+#: ../src/lansharkgui:278
+msgid "Help"
+msgstr "Справка"
+
+#: ../src/lansharkgui:297
+msgid "Browser"
+msgstr "Браузер"
+
+#: ../src/lansharkgui:303
+msgid "Search"
+msgstr "Поиск"
+
+#: ../src/lansharkgui:305
+msgid "Download Queue"
+msgstr "Очередь закачек"
+
+#: ../src/lansharkgui:334
+#, fuzzy
+msgid "A filesharing application for local area networks"
+msgstr "Приложение файлового шаринга для локальных сетей"
+
+#: ../src/lansharkgui:343
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Nkolay Parukhin https://launchpad.net/~parukhin"
+
+#: ../src/lansharkgui:381
+msgid "Peers"
+msgstr "Клиенты"
+
+#: ../src/lansharkgui:594
+#, python-format
+msgid "%s could not be found"
+msgstr "Не удалось обнаружеть '%s'"
+
+#: ../src/lansharkgui:620
+msgid "All"
+msgstr "Все"
+
+#: ../src/lansharkgui:621
+msgid "Regex"
+msgstr "Регулярное выражение"
+
+#: ../src/lansharkgui:665
+#, python-format
+msgid ""
+"Invalid Regex:\n"
+"%s"
+msgstr ""
+"Неверное регулярное выражение:\n"
+"%s"
+
+#: ../src/lansharkgui:673
+msgid "No active download"
+msgstr "Нет активных закачек"
+
+#: ../src/lansharkgui:692
+msgid "Downloads"
+msgstr "Закачки"
+
+#: ../src/lansharkgui:717
+msgid "Finished downloads"
+msgstr "Завершенные закачки"
+
+#: ../src/lansharkgui:773
+msgid "Drag and Drop only works for http!"
+msgstr "Потянул и бросил работает только для http!"
+
+#: ../src/lansharkgui:784
+msgid "Could not add url"
+msgstr "Нельзя добавить url"
+
+#: ../src/lansharkgui:813
+msgid "Download paused"
+msgstr "Закачка приостановлена"
+
+#: ../src/lansharkgui:816
+msgid "Downloading..."
+msgstr "Принимается..."
+
+#: ../src/lansharkgui:821
+msgid "Download complete"
+msgstr "Закачка завершена"
+
+#: ../src/lansharkgui:832
+#, python-format
+msgid "%s left - %s/s"
+msgstr "%s осталось - %s/s"
+
+#: ../src/lansharkgui:833
+#, python-format
+msgid "%i items in the download queue - "
+msgstr "%i файлов в очереди закачек - "
+
+#: ../src/lansharkgui:878
+#, python-format
+msgid "An unhandled error occured while downloading %r"
+msgstr "Необрабатываемая ошибка произошла при скачивании %r"
+
+#: ../src/lansharkgui:895 ../src/lansharkgui:908
+msgid "Starting download"
+msgstr "Начата закачка"
+
+#: ../src/lansharkgui:945
+msgid "Skipped: "
+msgstr "Пропущено: "
+
+#: ../src/lansharkgui:949
+msgid "Error: "
+msgstr "Ошибка: "
+
+#: ../src/lansharkgui:950
+#, python-format
+msgid "Error while downloading %r%s"
+msgstr "Ошибка при загрузке %r%s"
+
+#: ../src/lansharkgui:1036
+#, python-format
+msgid "%s - %i Folders %i Files"
+msgstr "%s - %i папок %i файлов"
+
+#: ../src/lansharkgui:1053
+#, python-format
+msgid "%i files total %s - %i folders"
+msgstr "%i всего файлов %s - %i папок"
+
+#: ../src/lansharkgui:1143
+msgid "Preview"
+msgstr "Предв. просмотр"
+
+#: ../src/lansharkgui:1149 ../src/lansharkgui:1196
+msgid "Download"
+msgstr "Загрузить"
+
+#: ../src/lansharkgui:1152 ../src/lansharkgui:1193
+msgid "Download to"
+msgstr "Скачать в"
+
+#: ../src/lansharkgui:1156
+msgid "Copy URL"
+msgstr "Копировать URL"
+
+#: ../src/lansharkgui:1162
+msgid "Icon Size"
+msgstr "Размер иконки"
+
+#: ../src/lansharkgui:1195
+msgid "Cancel"
+msgstr "Отмена"
+
+#: ../src/lansharkgui:1219
+msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
+msgstr ""
+"Пожалуйста, установите vlc с http://videolan.org/vlc/ для использования этой "
+"возможности"
+
+#: ../src/lansharkgui:1223
+#, python-format
+msgid ""
+"Could not find a suitable mediaplayer on your system. Please configure one "
+"manually. The path to the config file is %s."
+msgstr ""
+"Не найден подходящий медиаплеер в вашей системе. Пожалуйста настройте его "
+"вручную.Путь к файлу конфигурации %s."
+
+#: ../src/lansharkgui:1259
+msgid "Open folder"
+msgstr "Открыть каталог"
+
+#: ../src/lansharkgui:1285
+#, python-format
+msgid "%s Configuration"
+msgstr "%s конфигурация"
+
+#: ../src/lansharkgui:1289
+msgid "Configuration"
+msgstr "Конфигурация"
+
+#: ../src/lansharkgui:1295
+msgid "Hostname"
+msgstr "Имя компьютера"
+
+#: ../src/lansharkgui:1297
+msgid "Select the share path"
+msgstr "Выберите путь к общим файлам"
+
+#: ../src/lansharkgui:1300
+msgid "Share Path"
+msgstr "Путь к общим файлам"
+
+#: ../src/lansharkgui:1302
+msgid "Select the incoming path"
+msgstr "Выберите путь для входящих"
+
+#: ../src/lansharkgui:1305
+msgid "Incoming Path"
+msgstr "Путь для входящих"
+
+#: ../src/lansharkgui:1309
+msgid "Autostart"
+msgstr "Автозапуск"
+
+#: ../src/lansharkgui:1314
+msgid "Hello Message"
+msgstr "Приветственное сообщение"
+
+#: ../src/lansharkgui:1317
+msgid "Broadcast Address"
+msgstr "Широковещательный адрес"
+
+#: ../src/lansharkgui:1320
+msgid "Port"
+msgstr "Порт"
+
+#: ../src/lansharkgui:1329
+msgid "Basic"
+msgstr "Базовая"
+
+#: ../src/lansharkgui:1330
+msgid "Advanced"
+msgstr "Расширенная"
+
+#: ../src/lansharkgui:1334
+#, python-format
+msgid ""
+"For more advanced configuration please\n"
+"take a look at lansharks config file:\n"
+"%s"
+msgstr ""
+"Для углубленной настройки, пожалуйста,\n"
+"посмотрите файл конфигурации lanshark:%s"
+
+#: ../src/lansharkgui:1337
+msgid "More"
+msgstr "Больше"
