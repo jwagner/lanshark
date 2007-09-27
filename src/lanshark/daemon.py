@@ -23,7 +23,7 @@ import logging
 import icons
 
 from cache import cached
-socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.DEBUG)(
+socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
         socket.getaddrinfo)
 
 iconpath = os.path.join(config.DATA_PATH, "icons", "32x32")
@@ -87,8 +87,8 @@ class FileIndex(threading.Thread):
                     ufile_name = file_name.decode(config.FS_ENCODING)
                     ufile_path = file_path.decode(config.FS_ENCODING)
                 except UnicodeDecodeError:
-                    if config.DEBUG:
-                        logging.exception("error while indexing file %r",
+                    if config.debug:
+                        logger.exception("error while indexing file %r",
                                 file_path)
                     continue
                 if ufile_name in index:
@@ -105,8 +105,8 @@ class FileIndex(threading.Thread):
                     else:
                         self.index(file_path, index, links)
             except OSError, e:
-                if config.DEBUG:
-                    logging.exception("Caught an OSError while indexing %s",
+                if config.debug:
+                    logger.exception("Caught an OSError while indexing %s",
                             path)
         return index
 
@@ -144,8 +144,8 @@ class UDPService(threading.Thread):
                     msg, addr)
 
     def process(self, msg, addr):
-        if config.DEBUG:
-            logging.debug("UDPService: " + repr((addr, msg)))
+        if config.debug:
+            logger.debug("UDPService: " + repr((addr, msg)))
         # cheap but at least I tried :)
         if addr[0] == config.BROADCAST_IP:
             logging.warn("got message from broadcast address")
@@ -279,8 +279,8 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                             icon = icon.decode(config.FS_ENCODING)
                         files.append((filename, size, icon))
                     except UnicodeError, e:
-                        if config.DEBUG:
-                            logging.exception("Could not decode filename %r "
+                        if config.debug:
+                            logger.exception("Could not decode filename %r "
                                     "maybe is the wrong FS_ENCODING", filename,
                                     config.FS_ENCODING)
                 except os.error, e:
@@ -380,7 +380,7 @@ class HTTPService(threading.Thread, SocketServer.ThreadingMixIn,
         SocketServer.TCPServer):
     """Some wrapper arround SocketServer"""
     allow_reuse_address = True
-    logRequests = config.DEBUG
+    logRequests = config.debug
     protocol_version = "HTTP/1.1"
     def __init__(self, docroot):
         threading.Thread.__init__(self)

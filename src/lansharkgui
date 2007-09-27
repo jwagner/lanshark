@@ -24,6 +24,7 @@ import gobject
 from lanshark.config import config
 from lanshark import autostart
 import logging
+logger = logging.getLogger('lanshark')
 try:
     appdir = os.path.dirname(__file__)
     config.set_prefix(os.path.abspath(os.path.join(appdir, os.pardir)))
@@ -32,6 +33,7 @@ except NameError:
     appdir = os.path.dirname(sys.argv[0])
     config.set_prefix(os.path.abspath(appdir))
     sys.stderr.write = lambda *x: None
+    logger.debug("frozen")
 # config.set_prefix(".") # useful for tracing
 from lanshark import lib, icons
 
@@ -172,7 +174,7 @@ class GtkIconFactory(icons.IconFactory):
                 self.cache[(name, size)] = self.icon_theme.load_icon(name,
                         size, 0)
             except gobject.GError, e:
-                logging.exception("Unable to load icon %r probably your "
+                logger.exception("Unable to load icon %r probably your "
                         "icon theme isn't conforming to the icon naming "
                         "convention. You might want to try the tango icon "
                         "theme", name)
@@ -252,7 +254,7 @@ class MainWindow(gtk.Window):
         try:
             self.set_icon_name("lanshark")
         except gobject.GError:
-            logging.exception("Could not load lanshark icon")
+            logger.exception("Could not load lanshark icon")
         self.vbox = gtk.VBox(False, 0)
 
         self.menubar = gtk.MenuBar()
@@ -281,7 +283,7 @@ class MainWindow(gtk.Window):
         about_item = gtk.ImageMenuItem(stock_id=gtk.STOCK_ABOUT)
         about_item.connect("activate", self.about)
         help_menu.append(about_item)
-        if config.DEBUG:
+        if config.debug:
             debug_item = gtk.MenuItem("Debug")
             debug_item.connect("activate", self.debug)
             help_menu.append(debug_item)
@@ -538,8 +540,8 @@ class Browser(gtk.Frame):
                 try:
                     name = name.decode("utf8")
                 except UnicodeError, e:
-                    if config.DEBUG:
-                        logging.exception("Exception in tree_load name=%r",
+                    if config.debug:
+                        logger.exception("Exception in tree_load name=%r",
                                 name)
                 name = name.encode(config.SYS_ENCODING, "replace")
                 parent = self.treemodel.append(treeiter, (folder_icon,
@@ -656,7 +658,7 @@ class Search(gtk.Frame):
                     try:
                         self.list.add_url(result)
                     except:
-                        logging.exception("Exception while searching for %r",
+                        logger.exception("Exception while searching for %r",
                                 search)
             iter_idle(lib.search(search, True), add, True, 100)
         except re.error, e:
@@ -769,7 +771,7 @@ class Downloads(gtk.Frame):
                 if context.action == gtk.gdk.ACTION_MOVE:
                     context.finish(True, True, t)
             else:
-                logging.info("Unsupported Url: %s" % repr(url))
+                logger.info("Unsupported Url: %s" % repr(url))
                 show_error(_("Drag and Drop only works for http!"))
 
     def add_url(self, url, relpath=None, append_cb=None,
@@ -780,7 +782,7 @@ class Downloads(gtk.Frame):
             try:
                 urls = lib.ls_r(url)
             except ValueError, e:
-                logging.debug(e)
+                logger.debug(e)
                 show_error(_("Could not add url"))
         else:
             urls = (url,)
@@ -871,7 +873,7 @@ class Downloader(threading.Thread):
                 try:
                     self.download(treeiter)
                 except:
-                    logging.exception("Exception while downloading %r",
+                    logger.exception("Exception while downloading %r",
                             self.url)
                     # does the user really care about the difference between
                     # an unhandled and a handled exception? ;)
@@ -944,7 +946,7 @@ class Downloader(threading.Thread):
             idle_do(self.downloads.finishedmodel.append,
                     (gtk.STOCK_MEDIA_NEXT, _("Skipped: ") + self.url, e.file))
         except lib.DownloadException, e:
-            logging.exception("Error while downloading %r", self.url, None)
+            logger.exception("Error while downloading %r", self.url, None)
             idle_do(self.downloads.finishedmodel.append,
                     (gtk.STOCK_DIALOG_ERROR, _("Error: ") + self.url,))
             idle_do(show_error, _("Error while downloading %r%s") %
@@ -1079,7 +1081,7 @@ class URLView(gtk.ScrolledWindow):
                 icon = pbl.get_pixbuf().scale_simple(config.GUI_ICON_SIZE,
                         config.GUI_ICON_SIZE, gtk.gdk.INTERP_BILINEAR)
             except AttributeError, e:
-                logging.debug(e)
+                logger.debug(e)
                 icon = iconfactory.guess_icon(url, config.GUI_ICON_SIZE)
             finally:
                 try:
@@ -1093,8 +1095,8 @@ class URLView(gtk.ScrolledWindow):
             self.model.append((name.encode(config.SYS_ENCODING, 'replace'),
                 icon, url, size))
         except UnicodeError, e:
-            if config.DEBUG:
-                logging.exception("Exception in add_item url=%r", url)
+            if config.debug:
+                logger.exception("Exception in add_item url=%r", url)
         # work arroung gnome bug #404541
         def reset():
                 self.view.props.selection_mode = gtk.SELECTION_MULTIPLE
@@ -1416,10 +1418,9 @@ if __name__ == "__main__":
         print "interrupted"
         gobject.idle_add(mainwindow.destroy)
         gtk.main()
-    if config.DEBUG:
-        logging.debug("get_url cache hits: %i", lib.get_url.hits)
-        logging.debug("get_url cache misses: %i", lib.get_url.misses)
-        logging.debug("get_json cache hits: %i", lib.get_json.hits)
-        logging.debug("get_json cache misses: %i", lib.get_json.misses)
-        logging.debug("getaddrinfo cache hits: %i", socket.getaddrinfo.hits)
-        logging.debug("getaddrinfo cache misses: %i", socket.getaddrinfo.misses)
+    logger.debug("get_url cache hits: %i", lib.get_url.hits)
+    logger.debug("get_url cache misses: %i", lib.get_url.misses)
+    logger.debug("get_json cache hits: %i", lib.get_json.hits)
+    logger.debug("get_json cache misses: %i", lib.get_json.misses)
+    logger.debug("getaddrinfo cache hits: %i", socket.getaddrinfo.hits)
+    logger.debug("getaddrinfo cache misses: %i", socket.getaddrinfo.misses)

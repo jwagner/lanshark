@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#from distutils.core import setup
+
 import sys
 sys.path.insert(0, "src")
 import lanshark.lib

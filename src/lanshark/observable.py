@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from collections import defaultdict
-class Observable:
+class Observable(object):
     def __init__(self):
         self.listeners = defaultdict(list)
 

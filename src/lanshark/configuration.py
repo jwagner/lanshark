@@ -133,6 +133,20 @@ class Boolean(Key):
     def parse(self, value):
         return (value.lower() != "false")
 
+class Enum(String):
+    """Represents an enum"""
+    def __init__(self, default, values, doc):
+        """Creates new instance. `values` is a tuple of all valid enum
+        values"""
+        String.__init__(self, default, doc)
+        self.values = values
+
+    def parse(self, value):
+        retval = String.parse(self, value)
+        if retval not in self.values:
+            raise ValueError('Invalid enum value %s' % retval)
+        return retval
+
 class List:
     """List mixin"""
     def parse(self, value):

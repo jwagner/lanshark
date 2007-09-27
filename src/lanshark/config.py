@@ -159,6 +159,10 @@ class Config(configuration.Config):
                 print "Psyco enabled but not installed"
         sys.path.append(os.path.dirname(__file__))
 
+    @property
+    def debug(self):
+        return self.LOG_LEVEL == 'DEBUG'
+
     def set_prefix(self, value):
         """Set the prexif for example /usr"""
         self.PREFIX = value
