@@ -7,7 +7,7 @@ import socket
 import locale
 locale.setlocale(locale.LC_ALL, '')
 
-from configuration import Boolean, Integer, String, StringList
+from configuration import Boolean, Integer, String, StringList, Enum
 
 
 def in_pathlist(file, pathlist = os.environ.get("PATH").split(os.pathsep)):
@@ -60,8 +60,15 @@ def get_sys_encoding():
         return 'cp1252'
 
 class Config(configuration.Config):
-    DEBUG = Boolean(False, "Show debugging information")
-    VERBOSE = Boolean(False, "Be more verbose")
+    LOG_LEVEL = Enum('ERROR',
+                     ('CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'),
+                     'Sets the verbosity of logging output')
+    LOG_TARGET = String('-',
+                        'Target of logging output. Set to - to log stderr')
+    LOG_FORMAT = String('%(levelname)s:%(name)s:%(message)s',
+                        'Format of logging output. '
+                        'See http://docs.python.org/lib/node422.html '
+                        'for format description')
     BROADCAST_IP = String("255.255.255.255",
             "IP to use for udp broadcasts")
     PORT = Integer(31337, "Port to use for both UDP and TCP")
@@ -181,6 +188,11 @@ config_path = os.path.join(config_dir, "lanshark.conf")
 config = Config(config_path)
 
 import logging
-LOGLEVEL = config.DEBUG and logging.DEBUG or config.VERBOSE and\
-           logging.INFO or logging.ERROR
-logging.basicConfig(level=LOGLEVEL)
+logger = logging.getLogger('lanshark')
+if config.LOG_TARGET == '-':
+    handler = logging.StreamHandler()
+else:
+    handler = logging.FileHandler(config.LOG_TARGET)
+handler.setFormatter(logging.Formatter(config.LOG_FORMAT))
+logger.addHandler(handler)
+logger.setLevel(getattr(logging, config.LOG_LEVEL))
