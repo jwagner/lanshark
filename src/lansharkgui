@@ -31,7 +31,7 @@ except NameError:
     # frozen
     appdir = os.path.dirname(sys.argv[0])
     config.set_prefix(os.path.abspath(appdir))
-    logging.debug("frozen")
+    sys.stderr.write = lambda *x: None
 # config.set_prefix(".") # useful for tracing
 from lanshark import lib, icons
 
