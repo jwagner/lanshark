@@ -41,7 +41,7 @@ import gettext
 gettext.bindtextdomain('lanshark', config.LOCALE_PATH)
 gettext.textdomain('lanshark')
 gettext.translation('lanshark', config.LOCALE_PATH,
-        languages=[config.LANGUAGE, 'en_US'], fallback = True).install()
+        languages=config.LANGUAGES, fallback = True).install()
 
 NAME = "Lanshark"
 VERSION = lib.__version__
@@ -1418,9 +1418,10 @@ if __name__ == "__main__":
         print "interrupted"
         gobject.idle_add(mainwindow.destroy)
         gtk.main()
-    logger.debug("get_url cache hits: %i", lib.get_url.hits)
-    logger.debug("get_url cache misses: %i", lib.get_url.misses)
-    logger.debug("get_json cache hits: %i", lib.get_json.hits)
-    logger.debug("get_json cache misses: %i", lib.get_json.misses)
-    logger.debug("getaddrinfo cache hits: %i", socket.getaddrinfo.hits)
-    logger.debug("getaddrinfo cache misses: %i", socket.getaddrinfo.misses)
+    if config.debug:
+        logger.debug("get_url cache hits: %i", lib.get_url.hits)
+        logger.debug("get_url cache misses: %i", lib.get_url.misses)
+        logger.debug("get_json cache hits: %i", lib.get_json.hits)
+        logger.debug("get_json cache misses: %i", lib.get_json.misses)
+        logger.debug("getaddrinfo cache hits: %i", socket.getaddrinfo.hits)
+        logger.debug("getaddrinfo cache misses: %i", socket.getaddrinfo.misses)

@@ -131,9 +131,9 @@ class Config(configuration.Config):
     # static variables
     LANGUAGES = [locale.getdefaultlocale()[0] or "en_US", "en_US"]
     WEBSITE = "http://lanshark.29a.ch/"
-    VERSION = Integer(3, "Version of the config file")
-    DOWNLOAD_BS = 65536
+    VERSION = Integer(4, "Version of the config file")
     VERSION.comment_out_default = False
+    DOWNLOAD_BS = 65536
 
     def __init__(self, path):
         configuration.Config.__init__(self)

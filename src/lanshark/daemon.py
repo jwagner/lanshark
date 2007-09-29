@@ -18,13 +18,16 @@ except ImportError:
 import simplejson
 
 from config import config
+
 import logging
+logger = logging.getLogger('lanshark')
 
 import icons
 
 from cache import cached
 socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
         socket.getaddrinfo)
+
 
 iconpath = os.path.join(config.DATA_PATH, "icons", "32x32")
 iconfactory = icons.URLIconFactory(iconpath, "/__data__/icons/32x32/", ".png")
@@ -56,10 +59,10 @@ class FileIndex(threading.Thread):
     def run(self):
         """updates the fileindex periodically"""
         while True:
-            logging.debug("updating file index")
+            logger.debug("updating file index")
             self.file_index = self.index(self.path, {})
             self.index_event.set()
-            logging.debug("file index updated")
+            logger.debug("file index updated")
             self.wait_event.wait(config.INDEX_INTERVAL)
             self.wait_event.clear()
 
@@ -140,7 +143,7 @@ class UDPService(threading.Thread):
             try:
                 self.process(msg, addr)
             except:
-                logging.exception("UDPService exception: msg=%r addr=%r",
+                logger.exception("UDPService exception: msg=%r addr=%r",
                     msg, addr)
 
     def process(self, msg, addr):
@@ -148,7 +151,7 @@ class UDPService(threading.Thread):
             logger.debug("UDPService: " + repr((addr, msg)))
         # cheap but at least I tried :)
         if addr[0] == config.BROADCAST_IP:
-            logging.warn("got message from broadcast address")
+            logger.warn("got message from broadcast address")
         #    continue
         if msg == config.HELLO:
             self.socket.sendto(msg + " " + config.HOSTNAME, addr)
@@ -157,7 +160,7 @@ class UDPService(threading.Thread):
             try:
                 what = uwhat.decode('utf8')
             except UnicodeError, e:
-                logging.debug('UDPService: what=%r e=%r', what, e)
+                logger.debug('UDPService: what=%r e=%r', what, e)
             try:
                 search = re.compile(what, re.IGNORECASE)
                 results = self.fileindex.search(search)
@@ -166,7 +169,7 @@ class UDPService(threading.Thread):
                     msg = uwhat + ":" + (result).encode("utf8")
                     self.socket.sendto(msg, addr)
             except re.error,e:
-                    logging.exception("Recieved an invalid regex from %s", addr)
+                    logger.exception("Recieved an invalid regex from %s", addr)
 
 class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     """The HTTPRequest handler serves the files/indexes, quite a mess"""
@@ -284,9 +287,9 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                                     "maybe is the wrong FS_ENCODING", filename,
                                     config.FS_ENCODING)
                 except os.error, e:
-                    logging.debug(e)
+                    logger.debug(e)
         except os.error, e:
-            logging.exception("Exception while listing %s", path)
+            logger.exception("Exception while listing %s", path)
             self.send_error(404, "File not found")
             return None
         if "Accept" in self.headers and not "json" in self.headers["Accept"]:
@@ -374,7 +377,7 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         return path
 
     def log_message(self, format, *args):
-        logging.info(format % args)
+        logger.info(format % args)
 
 class HTTPService(threading.Thread, SocketServer.ThreadingMixIn,
         SocketServer.TCPServer):
@@ -390,8 +393,8 @@ class HTTPService(threading.Thread, SocketServer.ThreadingMixIn,
         self.docroot = docroot
 
     def handle_error(self, request, client):
-        # todo: use logging
-        logging.exception("Exception occured while serving request "
+        # todo: use logger
+        logger.exception("Exception occured while serving request "
                 "for client %s", client)
 
     def run(self):
