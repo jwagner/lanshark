@@ -159,6 +159,18 @@ def ls_l(url):
         files.append((fileurl, size, icon))
     return files
 
+def stat(url):
+    """list url status returns (size, icon)"""
+    # unknown for root url
+    if url[:-1].count("/") < 3:
+        return (-1, None)
+    for itemurl, size, icon in ls_l(url[:url.rindex("/", 0, -1)]):
+            if itemurl == url:
+                return (size, icon)
+    # Probably a hidden file
+    return (-1, None)
+
+
 def ls_r(url):
     """list url contents recursive"""
     if not url.endswith("/"):

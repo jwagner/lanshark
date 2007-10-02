@@ -58,6 +58,16 @@ class LibTestCase(unittest.TestCase):
         self.assert_(discovered)
         self.assert_(config.HOSTNAME in  [host[0] for host in discovered])
 
+    def test_stat(self):
+        lib.stat(self.url)
+        size, icon = lib.stat(self.url + ".invisible")
+        self.assertEquals(size, -1) # size is not provided for invisible files
+        size, icon = lib.stat(self.url + "Foo/")
+        self.assert_(icon)
+        self.assertEquals(size, [1, 2])
+        size, icon = lib.stat(self.url + "huge")
+        self.assertEquals(size, self.huge_size)
+
     def test_search(self):
         daemon.fileindex.update()
         self.assertEquals(len(list(lib.search(u"fooö"))), 1)

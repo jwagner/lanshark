@@ -284,8 +284,8 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                     except UnicodeError, e:
                         if config.debug:
                             logger.exception("Could not decode filename %r "
-                                    "maybe is the wrong FS_ENCODING", filename,
-                                    config.FS_ENCODING)
+                                    "maybe %r is the wrong FS_ENCODING",
+                                    filename, config.FS_ENCODING)
                 except os.error, e:
                     logger.debug(e)
         except os.error, e:

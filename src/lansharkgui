@@ -1117,12 +1117,8 @@ class URLView(gtk.ScrolledWindow):
                 self.add_item(url, size, icon)
 
     def add_url(self, url):
-        pardir = url[:url.rindex("/", 0, -1)]
-        for itemurl, size, icon in lib.ls_l(pardir):
-            if itemurl == url:
-                self.add_item(url, size, icon)
-                return
-        self.add_item(url, 0, None)
+        size, icon = lib.stat(url)
+        self.add_item(url, size, icon)
 
 
 class URLContextMenu(gtk.Menu):
