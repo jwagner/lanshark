@@ -771,7 +771,7 @@ class Downloads(gtk.Frame):
                 if context.action == gtk.gdk.ACTION_MOVE:
                     context.finish(True, True, t)
             else:
-                logger.info("Unsupported Url: %s" % repr(url))
+                logger.info("Unsupported Url: %s", repr(url))
                 show_error(_("Drag and Drop only works for http!"))
 
     def add_url(self, url, relpath=None, append_cb=None,
@@ -946,7 +946,7 @@ class Downloader(threading.Thread):
             idle_do(self.downloads.finishedmodel.append,
                     (gtk.STOCK_MEDIA_NEXT, _("Skipped: ") + self.url, e.file))
         except lib.DownloadException, e:
-            logger.exception("Error while downloading %r", self.url, None)
+            logger.exception("Error while downloading %r", self.url)
             idle_do(self.downloads.finishedmodel.append,
                     (gtk.STOCK_DIALOG_ERROR, _("Error: ") + self.url,))
             idle_do(show_error, _("Error while downloading %r%s") %

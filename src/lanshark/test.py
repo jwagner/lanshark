@@ -90,24 +90,25 @@ class LibTestCase(unittest.TestCase):
 
     def test_download(self):
         path = "Foo/bar/huge"
-        gen = lib.download(self.url + path)
-        name, bytes = gen.next()
+        download = lib.download(self.url + path)
+        name, bytes = download.next()
         self.assertEquals(name,
                 os.path.join(config.INCOMING_PATH,
                     path.replace("/", os.path.sep)))
         self.assertEquals(bytes, self.huge_size)
-        list(gen)
+        self.assertEquals(sum(download), bytes)
         self.assert_(os.path.exists(name))
 
     def test_resume(self):
         path = "Foo/bar/huge"
         download = lib.download(self.url + path)
         name, bytes = download.next()
-        download.next()
+        n = download.next()
         del download
         download = lib.download(self.url + path)
         name, bytes = download.next()
-        list(download)
+        self.assertEquals(n, download.next())
+        self.assertEquals(sum(download) + n, bytes)
         shared = os.path.join(config.SHARE_PATH, path.replace("/", os.path.sep))
         shared_data = open(shared).read()
         downloaded_data = open(name).read()

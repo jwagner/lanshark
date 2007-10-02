@@ -94,7 +94,7 @@ def resolve(addr):
         try:
             return socket.gethostbyaddr(addr)[0]
         except socket.herror, e:
-            logging.info(e)
+            logger.debug(e)
     return addr
 
 def discover(async=False):
@@ -257,14 +257,13 @@ def do_download(url, downloadpath, localpath, resume):
             f = open(downloadpath, "wb")
         with f:
             u = urllib2.urlopen(req)
+            # the first yield is (localpath, filesize)
             yield (localpath, int(u.headers.get("Content-Length")) + f.tell())
+            # the second yield is amount already downloaded
+            yield f.tell()
             # retry 3 times
             for i in range(3):
                 try:
-                    if resume:
-                        yield f.tell()
-                    else:
-                        yield 0
                     data = u.read(config.DOWNLOAD_BS)
                     while data:
                         f.write(data)
@@ -273,16 +272,19 @@ def do_download(url, downloadpath, localpath, resume):
                     break
                 except socket.error:
                     # retry every 10 seconds
+                    print "retrying"
                     time.sleep(10)
+                    req = urllib2.Request(url)
+                    req.add_header("Range", "bytes=%i-" % f.tell())
                     u = urllib2.urlopen(req)
     except urllib2.HTTPError, e:
-        logging.exception("Error while downloading %r", url)
+        logger.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
     except socket.error, e:
-        logging.exception("Error while downloading %r", url)
+        logger.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
     except os.error, e:
-        logging.exception("Error while downloading %r", url)
+        logger.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
     os.rename(downloadpath, localpath)
 
