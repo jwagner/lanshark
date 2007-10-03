@@ -68,6 +68,9 @@ class LibTestCase(unittest.TestCase):
         size, icon = lib.stat(self.url + "huge")
         self.assertEquals(size, self.huge_size)
 
+    def test_guessip(self):
+        lib.guess_ip()
+
     def test_search(self):
         daemon.fileindex.update()
         self.assertEquals(len(list(lib.search(u"fooö"))), 1)

@@ -33,11 +33,8 @@ iconpath = os.path.join(config.DATA_PATH, "icons", "32x32")
 iconfactory = icons.URLIconFactory(iconpath, "/__data__/icons/32x32/", ".png")
 hidden_files = [re.compile(pattern) for pattern in config.HIDDEN_FILES]
 
-def matches_any(patterns, string):
-    for pattern in patterns:
-        match = pattern.match(string)
-        if match:
-            return match
+def hidden(filename):
+    return any(pattern.match(filename) for pattern in hidden_files)
 
 class FileIndex(threading.Thread):
     """
@@ -77,36 +74,36 @@ class FileIndex(threading.Thread):
             index = {}
         if not links:
             links = []
-        for file_name in os.listdir(path):
-            if matches_any(hidden_files, file_name):
+        for filename in os.listdir(path):
+            if hidden(filename):
                 continue
             try:
-                file_path = os.path.join(path, file_name)
-                if os.path.isdir(file_path):
-                    file_path += "/"
-                    file_name += "/"
+                filepath = os.path.join(path, filename)
+                if os.path.isdir(filepath):
+                    filepath += "/"
+                    filename += "/"
                 # we store the keys in unicode!
                 try:
-                    ufile_name = file_name.decode(config.FS_ENCODING)
-                    ufile_path = file_path.decode(config.FS_ENCODING)
+                    ufilename = filename.decode(config.FS_ENCODING)
+                    ufilepath = filepath.decode(config.FS_ENCODING)
                 except UnicodeDecodeError:
                     if config.debug:
                         logger.exception("error while indexing file %r",
-                                file_path)
+                                filepath)
                     continue
-                if ufile_name in index:
-                    index[ufile_name].append(ufile_path)
+                if ufilename in index:
+                    index[ufilename].append(ufilepath)
                 else:
-                    index[ufile_name] = [ufile_path]
+                    index[ufilename] = [ufilepath]
 
-                if file_name[-1] == "/":
-                    real_path = os.path.realpath(file_path)
-                    if real_path != file_path:
+                if filename[-1] == "/":
+                    real_path = os.path.realpath(filepath)
+                    if real_path != filepath:
                         if not real_path in links:
                             links.append(real_path)
-                            self.index(file_path, index, links)
+                            self.index(filepath, index, links)
                     else:
-                        self.index(file_path, index, links)
+                        self.index(filepath, index, links)
             except OSError, e:
                 if config.debug:
                     logger.exception("Caught an OSError while indexing %s",
@@ -260,7 +257,7 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         try:
             files = []
             for filename in os.listdir(path):
-                if matches_any(hidden_files, filename):
+                if hidden(filename):
                     continue
                 filepath = os.path.join(path, filename)
                 stats = os.stat(filepath)
