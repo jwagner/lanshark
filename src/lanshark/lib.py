@@ -81,8 +81,12 @@ def recv(sock, timeout, async):
                 maxwait = timeout - time.time() + start
             rwxlist = select.select((sock, ), (), (), maxwait)
             if rwxlist[0]:
-                data, addr = sock.recvfrom(1024)
-                yield (data.decode('utf8'), addr)
+                try:
+                    data, addr = sock.recvfrom(1024)
+                except socket.error, e: # handle udp instability
+                    logger.debug("socket.error in recv(): %r", e)
+                else:
+                    yield (data.decode('utf8'), addr)
                 continue
             if async:
                 yield None
