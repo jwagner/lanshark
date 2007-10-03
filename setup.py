@@ -53,7 +53,7 @@ try:
     import simplejson
 except ImportError:
 	packages += ["simplejson"]
-	package_dir['simplejson'] = 'src/lanshark/simplejson'
+	package_dir['simplejson'] = 'src/simplejson'
 
 try:
     import py2exe
