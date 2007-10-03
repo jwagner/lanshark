@@ -50,8 +50,8 @@ kwargs = {
 try:
     import simplejson
 except ImportError:
-	packages += ["simplejson"]
-	package_dir['simplejson'] = 'src/simplejson'
+	kwargs['packages'] += ["simplejson"]
+	kwargs['package_dir']['simplejson'] = 'src/simplejson'
 
 try:
     import py2exe
