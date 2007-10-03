@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 import sys
-sys.path.insert(0, "src")
-import lanshark.lib
 from distutils.core import setup
 import os
 
@@ -17,7 +15,7 @@ def ls_r(dir):
 
 kwargs = {
       'name': 'lanshark',
-      'version': lanshark.lib.__version__,
+      'version': "0.0.2",
       'description': 'A P2P Filesharing tool for local area networks',
       'author': 'Jonas Wagner',
       'author_email': 'veers@gmx.ch',
