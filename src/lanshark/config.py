@@ -54,7 +54,7 @@ def get_openfile():
 
 def get_sys_encoding():
     try:
-        return sys.stdout.encoding
+        return locale.getpreferredencoding()
     except AttributeError:
         # frozen or so
         return 'cp1252'
