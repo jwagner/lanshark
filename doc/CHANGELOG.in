@@ -1,10 +1,24 @@
 include: HEADER
 -
+Lanshark 0.0.2 ( 7 Oct 2007 )
+ * Added 'Download to' option to the browser context menu
+ * Added ability to open downloaded files to the context menu
+ * Added context menu and a tooltip to the status icon
+ * Various other usability improvments
+ * Increased stability on instable networks (WLAN etc.)
+ * New translation: Bulgarian - Thanks Vladimir Kolev
+ * New translation: Spanish - Thanks Emilio Gomez Fernandez
+ * New translation: Russian - Thanks Nikolay Parukhin
+ * Moved daemon code from lansharkc into a seperate script called lansharkd
+ * Fixed internationalization on windows
+ * Fixed a bug where hosts did disappear from the tree
+ * Fixed various other little bugs
+-
 Lanshark 0.0.1 ( 3 Sep 2007 )
-* Fixes issues with icon themes which aren't conforming to the icon naming
+ * Fixes issues with icon themes which aren't conforming to the icon naming
   spec.
-* Remove dead peers from the tree in the gui
-* Open links using xdg-open if possible
+ * Remove dead peers from the tree in the gui
+ * Open links using xdg-open if possible
 -
 Lanshark 0.0.0 ( 1 Sep 2007 )
  * Initial release of lanshark

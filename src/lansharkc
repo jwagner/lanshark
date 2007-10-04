@@ -42,7 +42,7 @@ def ls(url, recursive=False):
             else:
                 size = lib.byteformat(size)
             out.append((size, url))
-        maxsize = max([len(row[0]) for row in out])
+        maxsize = out and max([len(row[0]) for row in out]) or 0
         for row in out:
             print row[0].ljust(maxsize), row[1]
 
