@@ -87,7 +87,11 @@ def iter_idle(obj, func, list_mode=False, interval=0, stop=None):
                 item = i.next()
                 while item:
                     arg.append(item)
-                    item = i.next()
+                    try:
+                        item = i.next()
+                    except StopIteration:
+                        func(arg)
+                        raise
             else:
                 arg = i.next()
             func(arg)
@@ -619,14 +623,14 @@ class Search(gtk.Frame):
     def create_combo(self):
         model = gtk.ListStore(gtk.gdk.Pixbuf, str, str)
         model.set_sort_column_id(1, gtk.SORT_ASCENDING)
-        modes = [("text-x-generic", _("All"), ".*%s.*"),
+        modes = [("text-x-generic", _("All"), ".*%s"),
                  ("text-x-script", _("Regex"), None)]
         for filetype, icon, endings, viewer in FILETYPES:
             # ugly exception
             if filetype == "Folder":
                 regex = ".*%s.*\/"
             else:
-                regex = ".*%s.*\.(" + "|".join(endings) + ")$"
+                regex = "%s.*\.(" + "|".join(endings) + ")$"
             modes.append((icon, filetype, regex))
         for icon, name, regex in modes:
             model.append((iconfactory.get_icon(icon, 16), name, regex))
