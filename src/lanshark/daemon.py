@@ -406,10 +406,13 @@ class Daemon:
         config.connect("SHARE_PATH", self.share_path_changed)
 
     def share_path_changed(self):
-        if not config.INVISIBLE:
-            self.fileindex.path = config.SHARE_PATH
-            self.fileindex.update()
-        self.httpservice.docroot = config.SHARE_PATH
+        if not config.SHARE_PATH.endswith("/"):
+            config.SHARE_PATH += "/"
+        else:
+            if not config.INVISIBLE:
+                self.fileindex.path = config.SHARE_PATH
+                self.fileindex.update()
+            self.httpservice.docroot = config.SHARE_PATH
 
     def start(self):
         if not config.INVISIBLE:
