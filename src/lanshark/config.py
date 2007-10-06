@@ -53,14 +53,12 @@ def get_openfile():
         return select_app("xdg-open", "exo-open", "gnome-open") or ""
 
 def get_sys_encoding():
-    try:
-        return locale.getpreferredencoding()
-    except AttributeError:
-        # frozen or so
-        return 'cp1252'
+    if sys.platform.startswith("win"):
+        return "utf8"
+    return locale.getpreferredencoding()
 
 class Config(configuration.Config):
-    LOG_LEVEL = Enum('ERROR',
+    LOG_LEVEL = Enum('CRITICAL',
                      ('CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'),
                      'Sets the verbosity of logging output')
     LOG_TARGET = String('-',

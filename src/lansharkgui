@@ -775,8 +775,10 @@ class Downloads(gtk.Frame):
                 show_error(_("Drag and Drop only works for http!"))
 
     def add_url(self, url, relpath=None, append_cb=None,
-            incoming=config.INCOMING_PATH):
+            incoming=None):
         # sanity check, we will use the ; to seperate url and relpath later
+        if incoming is None:
+            incoming = config.INCOMING_PATH
         url = url.replace(";", "%3B")
         if url.endswith("/"):
             try:
