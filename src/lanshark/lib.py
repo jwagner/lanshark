@@ -50,7 +50,7 @@ def guess_ip():
             proc.wait()
             data = proc.stdout.read()
         except OSError, e:
-            logging.info(e)
+            logger.info(e)
             return "127.0.0.1"
         try:
             return pattern.findall(data)[0][0]
@@ -83,10 +83,11 @@ def recv(sock, timeout, async):
             if rwxlist[0]:
                 try:
                     data, addr = sock.recvfrom(1024)
+                    logger.debug("recv %r %r", addr, data)
                 except socket.error, e: # handle udp instability
                     logger.debug("socket.error in recv(): %r", e)
                 else:
-                    yield (data.decode('utf8'), addr)
+                    yield (data, addr)
                 continue
             if async:
                 yield None
@@ -106,12 +107,13 @@ def discover(async=False):
     for item in config.STATICHOSTS:
         yield (item, item)
     s = get_socket()
-    hello = config.HELLO.encode('utf-8')
+    hello = config.HELLO
     s.sendto(hello, (config.BROADCAST_IP, config.PORT))
     for data in recv(s, config.DISCOVER_TIMEOUT, async):
         if data:
             msg, (addr, port) = data
-            if config.STATICHOSTS and "%s:%i" % (addr, port) in config.STATICHOSTS:
+            if config.STATICHOSTS and\
+                    "%s:%i" % (addr, port) in config.STATICHOSTS:
                 continue
             if msg.startswith(hello):
                 name = msg[len(hello)+1:]
@@ -125,15 +127,20 @@ def discover(async=False):
 def search(what, async=False):
     """Search for files"""
     sock = get_socket()
-    sock.sendto((u"search %s %s" % (config.HELLO, what)).encode('utf8'),
+    what = what.encode('utf8')
+    sock.sendto("search %s %s" % (config.HELLO, what),
             (config.BROADCAST_IP, config.PORT))
+    results = 0
     for data in recv(sock, config.SEARCH_TIMEOUT, async):
         if data:
             msg, (addr, port) = data
-            if msg.startswith(what + u":"):
+            if msg.startswith(what + ":"):
                 result = msg[len(what)+1:]
-                msg = urllib2.quote(result.encode("utf-8"))
+                msg = urllib2.quote(result)
                 yield u"http://%s:%i/%s" % (resolve(addr), port, msg)
+                results += 1
+                if results == config.MAX_SEARCH_RESULTS:
+                    return
         else:
             yield None
 
@@ -143,7 +150,7 @@ def ls(url):
         url += "/"
     # converting f from unicode to string because urllib.quote has problems
     # with certain unicode characters
-    return map(lambda x: url + unicode(urllib2.quote(x[0].encode('utf-8'))),
+    return map(lambda x: url + urllib2.quote(x[0].encode('utf-8')),
             get_json(url))
 
 def ls_l(url):
@@ -154,7 +161,7 @@ def ls_l(url):
     # with certain unicode characters
     files = []
     for file, size, icon in get_json(url):
-        fileurl = url + unicode(urllib2.quote(file.encode('utf-8')))
+        fileurl = url + urllib2.quote(file.encode('utf-8'))
         if icon:
             icon = fileurl + icon
         elif size < config.MAX_IMAGE_SIZE and "." in file and\
@@ -186,7 +193,7 @@ def ls_r(url):
             try:
                 results += ls_r(url)
             except urllib2.HTTPError, e:
-                logging.debug(e)
+                logger.debug(e)
         else:
             results.append(url)
     return results

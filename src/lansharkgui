@@ -162,6 +162,8 @@ if sys.platform.startswith("linux"):
             update_tryorder=-1)
 gtk.about_dialog_set_url_hook(open_url, None)
 
+def get_filename(url):
+    return urllib2.unquote(url[url.rindex("/", 0, -1)+1:]).decode("utf").encode(config.SYS_ENCODING, "replace")
 
 class GtkIconFactory(icons.IconFactory):
     def __init__(self, icon_theme):
@@ -540,14 +542,7 @@ class Browser(gtk.Frame):
             folder_icon = iconfactory.get_icon("folder", 16)
             for url, size, icon in filter(lambda s: s[0].endswith("/"),
                     lib.ls_l(url)):
-                name = urllib2.unquote(url[url.rindex("/", 0, -1)+1:-1])
-                try:
-                    name = name.decode("utf8")
-                except UnicodeError, e:
-                    if config.debug:
-                        logger.exception("Exception in tree_load name=%r",
-                                name)
-                name = name.encode(config.SYS_ENCODING, "replace")
+                name = get_filename(url)
                 parent = self.treemodel.append(treeiter, (folder_icon,
                     name, url, 0))
                 if size[0]:
@@ -649,7 +644,8 @@ class Search(gtk.Frame):
         model = self.search_combo.get_model()
         regex = model.get_value(model.get_iter(i),2)
         if regex:
-            search = regex % re.escape(self.search_entry.get_text())
+            text = self.search_entry.get_text().decode(config.SYS_ENCODING)
+            search = regex % re.escape(text)
         else:
             search = self.search_entry.get_text()
         try:
@@ -1094,10 +1090,9 @@ class URLView(gtk.ScrolledWindow):
                     pass
         else:
             icon = iconfactory.guess_icon(url, config.GUI_ICON_SIZE)
-        name = urllib2.unquote(url[url.rindex("/", 0, -1)+1:]).decode('utf-8')
+        name = get_filename(url)
         try:
-            self.model.append((name.encode(config.SYS_ENCODING, 'replace'),
-                icon, url, size))
+            self.model.append((name, icon, url, size))
         except UnicodeError, e:
             if config.debug:
                 logger.exception("Exception in add_item url=%r", url)

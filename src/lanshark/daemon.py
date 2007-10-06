@@ -157,7 +157,8 @@ class UDPService(threading.Thread):
             try:
                 what = uwhat.decode('utf8')
             except UnicodeError, e:
-                logger.debug('UDPService: what=%r e=%r', what, e)
+                what = uwhat
+                logger.debug('UDPService: uwhat=%r e=%r', uwhat, e)
             try:
                 search = re.compile(what, re.IGNORECASE)
                 results = self.fileindex.search(search)

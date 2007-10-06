@@ -38,10 +38,10 @@ class LibTestCase(unittest.TestCase):
         os.mkdir(bar)
         for name in [".invisible", u"fooö", "Foo/oOo","Foo/cover.jpg",
                 "Foo/bar/spam"]:
-            name.replace("/", os.path.sep)
+            name = name.replace("/", os.path.sep).encode(config.FS_ENCODING)
             fname = os.path.join(config.SHARE_PATH, name)
             f = open(fname, "w")
-            f.write(name.encode('utf-8'))
+            f.write("test")
             f.close()
         for name in ["huge", "Foo/bar/huge"]:
             name.replace("/", os.path.sep)
@@ -151,8 +151,7 @@ class LibTestCase(unittest.TestCase):
     def test_ls_l(self):
         expected = sorted([(self.url + ex, size, icon) for ex, size, icon in
                 (("Foo/", [1, 2], self.url + u"Foo/cover.jpg"),
-                 (urllib.quote(u"fooö".encode("utf-8")),
-                     len(u"fooö".encode("utf-8")), None),
+                 (urllib.quote(u"fooö".encode("utf-8")), len("test"), None),
                  ("huge", self.huge_size, None),
                  ("incoming/", [0, 0], None))])
         self.assertEqual(sorted(lib.ls_l(self.url)), expected)
