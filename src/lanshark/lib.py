@@ -137,7 +137,7 @@ def search(what, async=False):
             if msg.startswith(what + ":"):
                 result = msg[len(what)+1:]
                 msg = urllib2.quote(result)
-                yield u"http://%s:%i/%s" % (resolve(addr), port, msg)
+                yield "http://%s:%i/%s" % (resolve(addr), port, msg)
                 results += 1
                 if results == config.MAX_SEARCH_RESULTS:
                     return
