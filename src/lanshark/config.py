@@ -171,9 +171,12 @@ class Config(configuration.Config):
         configuration.Config.save(self, path or self.path)
 
 if "win" in sys.platform:
-    # todo: make freezable
+    # portable
     config_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
         "..", "..", "conf"))
+    if not os.path.exists(config_dir):
+        # installed
+        config_dir = os.path.expanduser("~\\lanshark")
 else:
     xdg_config_home = os.environ.get("XDG_CONFIG_HOME", "~/.config")
     xdg_config_home = os.path.expanduser(xdg_config_home)
