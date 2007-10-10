@@ -7,8 +7,8 @@ import mimetypes
 import os
 import posixpath
 import re
-import shutil, socket, SocketServer, stat, sys
-import time, threading
+import shutil, socket, SocketServer, stat
+import threading
 import urllib2
 try:
     from cStringIO import StringIO
@@ -104,7 +104,7 @@ class FileIndex(threading.Thread):
                             self.index(filepath, index, links)
                     else:
                         self.index(filepath, index, links)
-            except OSError, e:
+            except OSError:
                 if config.debug:
                     logger.exception("Caught an OSError while indexing %s",
                             path)
