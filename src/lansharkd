@@ -122,9 +122,9 @@ def main():
                 cmd(*sys.argv[2:])
                 return
             except Exception, e:
-                if config.DEBUG:
-                    import traceback
-                    traceback.print_exc()
+                #if config.DEBUG:
+                #    import traceback
+                #    traceback.print_exc()
                 print e.message
                 usage()
     print "Unknown command"
