@@ -8,20 +8,20 @@ import sys
 if sys.platform == 'win32':
     import _winreg
     _registry = _winreg.ConnectRegistry(None, _winreg.HKEY_CURRENT_USER)
-    def get_runonce():
+    def get_runkey():
         return _winreg.OpenKey(_registry,
                 r"Software\Microsoft\Windows\CurrentVersion\Run", 0, 
 		_winreg.KEY_ALL_ACCESS)
 
     def add(name, application):
         """add a new autostart entry"""
-        key = get_runonce()
+        key = get_runkey()
         _winreg.SetValueEx(key, name, 0, _winreg.REG_SZ, application)
         _winreg.CloseKey(key)
 
     def exists(name):
         """check if a autostart entry exists"""
-        key = get_runonce()
+        key = get_runkey()
         exists = True
         try:
             _winreg.QueryValueEx(key, name)
@@ -32,7 +32,7 @@ if sys.platform == 'win32':
 
     def remove(name):
         """delete a autostart entry"""
-        key = get_runonce()
+        key = get_runkey()
         _winreg.DeleteValue(key, name)
         _winreg.CloseKey(key)
 else:
