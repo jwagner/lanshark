@@ -2,7 +2,7 @@ include: HEADER
 -
 *Meta
 -
-Authors:    Jonas Wagner
+Author:    Jonas Wagner
 Homepage:   http://lanshark.veers.ch/
 Bugtracker: https://bugs.launchpad.net/lanshark
 -
@@ -33,12 +33,16 @@ you download with lanshark gets shared again.
 -
 *Config File
 -
-The for linux config file is located in
+For linux config file is located in
 $XDG_CONFIG_HOME/lanshark/config. Which points normally
 to ~/.config/lanshark/config
 
-Under windows the config file is conf/lanshark.conf
-in the folder you've installed lanshark.
+If you've used the windows installer the config file
+will be located in your home directory and called
+lanshark.conf
+
+For the portable windows version the config file
+is located in the conf folder and called lanshark.conf
 
 The config file is pretty self descriptive.
 Just look at the comments (the lines starting
@@ -46,16 +50,17 @@ with a #).
 -
 *Cover Artwork/Custom Icons for Folders
 -
-To define a cover/custom icon for a folder call
-folder.png, folder.jpg. cover.jpg and so on.
+To define a cover/custom icon for a folder call the
+file folder.png, folder.jpg, cover.jpg etc.
 You can customize the list of regular expressions
 used to match the icons in the config file.
-The config key is called  
+The config key is called FolderImages.
 -
 *Acknowledgements
 -
 Lanshark includes the following software:
 simplejson by Bob Ippolito see src/lanshark/simplejson
+
 -
 *Contact/Support
 -
