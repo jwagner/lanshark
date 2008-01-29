@@ -81,11 +81,11 @@ class Config(configuration.Config):
     CACHE_TIMEOUT = Integer(600, "HTTP cache time to live")
     SHARE_PATH = String("", "Path to the files you want to share")
     INCOMING_PATH = String("", "Path to store the downloaded files")
-    MAX_SEARCH_RESULTS = String(128,
+    MAX_SEARCH_RESULTS = Integer(128,
             "Maximal number of search results per peer")
     FOLDER_IMAGES = StringList([r"\.?folder\.(png|jpg|gif|img)$",
                          r"cover\.(png|jpg|gif)$",
-                         r"cover\-front\.(png|jpg|gif)$",
+                         r"(cover\-)?front\.(png|jpg|gif)$",
                          r"cover.*?\.(png|jpg|gif)$",
                          r"albumart.*?large\.jpg$",
                          r"albumart.*?\.jpg"],
@@ -95,6 +95,7 @@ class Config(configuration.Config):
     DAEMON_IN_GUI = Boolean(True,
             "Integrates daemon in the gui process")
     RESOLVE_HOSTS = Boolean(False, "Resolve hostnames")
+    PASSWORD = String("", "Network password")
     INDEX_INTERVAL = Integer(3600,
             "Interval to update the fileindex in seconds")
     GUI_ICON_SIZE = Integer(48, "Icon size in the gtkui")
