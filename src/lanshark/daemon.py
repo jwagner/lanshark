@@ -30,7 +30,7 @@ socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
 
 
 iconpath = os.path.join(config.DATA_PATH, "icons", "32x32")
-iconfactory = icons.URLIconFactory(iconpath, "/__data__/icons/32x32/", ".png")
+iconfactory = icons.URLIconFactory(iconpath, "/__data__/icons/128x128/", ".png")
 hidden_files = [re.compile(pattern) for pattern in config.HIDDEN_FILES]
 
 def hidden(filename):
@@ -150,10 +150,10 @@ class UDPService(threading.Thread):
         if addr[0] == config.BROADCAST_IP:
             logger.warn("got message from broadcast address")
         #    continue
-        if msg == config.HELLO:
+        if msg == config.NETWORK_NAME:
             self.socket.sendto(msg + " " + config.HOSTNAME, addr)
-        elif msg.startswith("search %s " % config.HELLO):
-            uwhat = msg[8 + len(config.HELLO):]
+        elif msg.startswith("search %s " % config.NETWORK_NAME):
+            uwhat = msg[8 + len(config.NETWORK_NAME):]
             try:
                 what = uwhat.decode('utf8')
             except UnicodeError, e:
@@ -254,6 +254,7 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         files.remove(filename)
 
     def list_directory(self, path):
+        """create a directory listing"""
         self.send_response(200)
         try:
             files = []
@@ -312,23 +313,33 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         # template engine anybody?
         files.sort()
         f = StringIO()
-        self.send_header("Content-type", "text/html; charset=utf-8")
+        self.send_header("Content-type", "application/xhtml+xml; charset=utf-8")
         if config.DISABLE_WEBINTERFACE:
             return f
         displaypath = cgi.escape(urllib2.unquote(self.path))
-        f.write("<html><head><title>Index of %s</title></head>" % displaypath)
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n'
+                '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"\n'
+                '"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">\n'
+                '<html xmlns="http://www.w3.org/1999/xhtml">'
+                '<head>'
+                '<title>Index of %s</title>' % displaypath)
         f.write('<link rel="stylesheet" type="text/css" '
-                'href="/__data__/directoryindex.css">'
-                '<body><h1><a href="%s">'
-                '<img src="/__data__/icons/32x32/lanshark.png"></a>'
-                '%s</h1>' % (config.WEBSITE, displaypath))
-        if self.path.count('/') > 1:
-            f.write('<a href="%s/"><img class="action" '
-                    'src="/__data__/icons/32x32/go-up.png" /></a>'
-                    % (self.path.count('/') > 2
-                        and posixpath.normpath(self.path + posixpath.pardir)
-                        or ''))
-        f.write('<ul>')
+                'href="/__data__/directoryindex.css" />'
+                '<link rel="stylesheet" type="text/css" '
+                'href="/__data__/thickbox.css" />'
+                '<script type="text/javascript" '
+                'src="/__data__/reflection.js"></script>'
+                '<script type="text/javascript" '
+                'src="/__data__/jquery.js"></script>'
+                '<script type="text/javascript" '
+                'src="/__data__/thickbox.js"></script>'
+                '</head><body><h1>')
+        paths = self.path.split("/")
+        for i in xrange(self.path.count("/")):
+            f.write('<a href="%s/">%s/</a>' % ("/".join(paths[:i+1]),
+                cgi.escape(urllib2.unquote(paths[i]))))
+        f.write('</h1><div id="container">'
+                '<img src="/__data__/web/web_head.png" alt="" /><ul>')
         even = True
         for filename, size, icon in files:
             if filename.endswith("/"):
@@ -345,17 +356,21 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 ssize = "%i Bytes" % size
             href = urllib2.quote(filename.encode("utf8"))
             try:
-                f.write('<li class="%s"><a href="%s" title="%s">'
-                        '<img width="32" height="32" src="%s" alt="">%s'
-                        '</a></li>' %
-                        (even and "even" or "odd", href, ssize, icon,
+                f.write('<li><a')
+                if any(filename.endswith(ext)
+                        for ext in [".jpg", ".jpeg", ".gif"]):
+                    f.write(' class="thickbox"')
+                f.write(' href="%s" title="%s">'
+                        '<img src="%s" alt="" width="96" height="96"'
+                        ' class="reflect rheight25 icon" />%s</a></li>' %
+                        (href, ssize, icon,
                             cgi.escape(filename.encode("utf-8"))))
-                even = not even
             except UnicodeError:
                 pass
-        f.write('</ul><p><a href="' + config.WEBSITE +
-                '">powered by Lanshark</a></p>')
-        f.write("</body></html>")
+        f.write('</ul>'#<a href="' + config.WEBSITE + '">'
+                '<img src="/__data__/web/web_footer.png" '
+                'alt="Lanshark Webinterface" class="clear reflect" />')#</a>')
+        f.write("</div></body></html>")
         return f
 
     def translate_path(self, path):
@@ -399,6 +414,7 @@ class HTTPService(threading.Thread, SocketServer.ThreadingMixIn,
         self.serve_forever()
 
 class Daemon:
+    """The container for the lanshark http, udp and fileindex service"""
     def __init__(self):
         self.httpservice = HTTPService(config.SHARE_PATH)
         if not config.INVISIBLE:
@@ -407,6 +423,7 @@ class Daemon:
         config.connect("SHARE_PATH", self.share_path_changed)
 
     def share_path_changed(self):
+        """update the paths of all the managed services"""
         if not config.SHARE_PATH.endswith("/"):
             config.SHARE_PATH += "/"
         else:
@@ -416,11 +433,13 @@ class Daemon:
             self.httpservice.docroot = config.SHARE_PATH
 
     def start(self):
+        """starts the services in the background"""
         if not config.INVISIBLE:
             self.udpservice.start()
         self.httpservice.start()
 
     def run(self):
+        """starts the services in the foreground"""
         self.udpservice.start()
         self.httpservice.run()
 

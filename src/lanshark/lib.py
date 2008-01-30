@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
+"""The lanshark lib encapsulates the client logic"""
 from __future__ import division
 from __future__ import with_statement
-"""The lanshark lib encapsulates the client logic"""
 __version__ = "0.0.2"
 copyright = \
 """Lanshark %s - A P2P filesharing tool for local area networks
@@ -40,6 +40,7 @@ socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
 
 @cached()
 def guess_ip():
+    """guess the public ip of the system"""
     if "win" in sys.platform:
         return socket.gethostbyname(socket.gethostname())
     else:
@@ -107,7 +108,7 @@ def discover(async=False):
     for item in config.STATICHOSTS:
         yield (item, item)
     s = get_socket()
-    hello = config.HELLO
+    hello = config.NETWORK_NAME
     s.sendto(hello, (config.BROADCAST_IP, config.PORT))
     for data in recv(s, config.DISCOVER_TIMEOUT, async):
         if data:
@@ -128,7 +129,7 @@ def search(what, async=False):
     """Search for files"""
     sock = get_socket()
     what = what.encode('utf8')
-    sock.sendto("search %s %s" % (config.HELLO, what),
+    sock.sendto("search %s %s" % (config.NETWORK_NAME, what),
             (config.BROADCAST_IP, config.PORT))
     results = 0
     for data in recv(sock, config.SEARCH_TIMEOUT, async):

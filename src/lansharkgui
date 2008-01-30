@@ -1312,11 +1312,11 @@ class ConfigDialog(gtk.Dialog):
 
         advanced = []
         self.hello = gtk.Entry()
-        self.hello.set_text(config.HELLO)
+        self.hello.set_text(config.NETWORK_NAME)
         advanced.append((_("Network Name"), self.hello))
         self.password = gtk.Entry()
         self.password.set_visibility(False)
-        self.password.set_text(config.HELLO)
+        self.password.set_text(config.NETWORK_PASSWORD)
         advanced.append((_("Password"), self.password))
         self.broadcast = gtk.Entry()
         self.broadcast.set_text(config.BROADCAST_IP)
@@ -1351,7 +1351,8 @@ class ConfigDialog(gtk.Dialog):
             config.INCOMING_PATH = self.incomingpath.get_filename()
             config.PORT = int(self.port.get_text())
             config.BROADCAST_IP = self.broadcast.get_text()
-            config.HELLO = self.hello.get_text()
+            config.NETWORK_NAME = self.hello.get_text()
+            config.NETWORK_PASSWORD = self.password.get_text()
             config.HOSTNAME = self.hostname.get_text()
             try:
                 app = os.path.abspath(__file__) + " autostart"
