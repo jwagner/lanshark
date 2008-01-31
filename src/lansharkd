@@ -14,7 +14,6 @@ except:
 from lanshark.config import config
 config.set_prefix(os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.pardir)))
-from lanshark import lib
 
 def daemonize():
     """daemonize process, really minimal implementation"""
@@ -75,6 +74,7 @@ def status():
         print "Not running"
 
 def shutdown(n, frame):
+#    prof.close()
     os.remove(config.PID_FILE)
     sys.exit(0)
 
@@ -108,6 +108,7 @@ def usage():
 
 def version():
     """output copyright information and exit"""
+    from lanshark import lib
     print lib.copyright
 
 commands = (start, stop, restart, status, version)
@@ -129,6 +130,8 @@ def main():
                 usage()
     print "Unknown command"
     usage()
-
+#import hotshot
+#prof = hotshot.Profile("lansharkd.prof")
+#prof.runcall(main)
 if __name__ == "__main__":
     main()

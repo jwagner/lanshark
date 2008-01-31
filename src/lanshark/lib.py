@@ -30,13 +30,21 @@ import urllib2
 
 import simplejson
 
-from config import config
-from cache import cached
+from lanshark.config import config
+from lanshark.cache import cached
+from lanshark import network
 
 logger = logging.getLogger('lanshark')
 
 socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
         socket.getaddrinfo)
+
+# keepalive is important when using tls but should speed up everything
+if config.NETWORK_PASSWORD:
+    from lanshark.keepalive import HTTPHandler
+    keepalive_handler = HTTPHandler()
+    opener = urllib2.build_opener(keepalive_handler)
+    urllib2.install_opener(opener)
 
 @cached()
 def guess_ip():
@@ -61,12 +69,7 @@ def guess_ip():
 
 def get_socket():
     """get a new unblocking bound udp broadcast socket"""
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    sock.setblocking(0)
-    sock.bind(("", config.PORT + 1))
-    return sock
+    return network.SecureUDPSocket(config.PORT + 1, config.NETWORK_PASSWORD)
 
 def recv(sock, timeout, async):
     """Receive data from sock using a generator
@@ -129,8 +132,8 @@ def search(what, async=False):
     """Search for files"""
     sock = get_socket()
     what = what.encode('utf8')
-    sock.sendto("search %s %s" % (config.NETWORK_NAME, what),
-            (config.BROADCAST_IP, config.PORT))
+    msg = "search %s %s" % (config.NETWORK_NAME, what)
+    sock.sendto(msg, (config.BROADCAST_IP, config.PORT))
     results = 0
     for data in recv(sock, config.SEARCH_TIMEOUT, async):
         if data:

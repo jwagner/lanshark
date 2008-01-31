@@ -17,12 +17,13 @@ except ImportError:
 
 import simplejson
 
-from config import config
+from lanshark.config import config
 
 import logging
 logger = logging.getLogger('lanshark')
 
-import icons
+from lanshark import icons
+from lanshark import network
 
 from cache import cached
 socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
@@ -128,15 +129,15 @@ class UDPService(threading.Thread):
         threading.Thread.__init__(self)
         self.setDaemon(True)
         self.fileindex = fi
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        self.socket.settimeout(None)
-        self.socket.bind(("", config.PORT))
+        self.socket = network.SecureUDPSocket(config.PORT, config.NETWORK_PASSWORD)
 
     def run(self):
         while True:
-            msg, addr = self.socket.recvfrom(1024)
+            try:
+                msg, addr = self.socket.recvfrom(1024)
+            except:
+                logger.exception("Couldn't receive data from the socket")
+                continue
             try:
                 self.process(msg, addr)
             except:
@@ -146,12 +147,12 @@ class UDPService(threading.Thread):
     def process(self, msg, addr):
         if config.debug:
             logger.debug("UDPService: " + repr((addr, msg)))
-        # cheap but at least I tried :)
         if addr[0] == config.BROADCAST_IP:
             logger.warn("got message from broadcast address")
         #    continue
         if msg == config.NETWORK_NAME:
-            self.socket.sendto(msg + " " + config.HOSTNAME, addr)
+            reply = msg + " " + config.HOSTNAME
+            self.socket.sendto(reply, addr)
         elif msg.startswith("search %s " % config.NETWORK_NAME):
             uwhat = msg[8 + len(config.NETWORK_NAME):]
             try:
@@ -164,8 +165,8 @@ class UDPService(threading.Thread):
                 results = self.fileindex.search(search)
                 for result in results:
                     result = result[len(self.fileindex.path):]
-                    msg = uwhat + ":" + (result).encode("utf8")
-                    self.socket.sendto(msg, addr)
+                    reply = uwhat + ":" + (result).encode("utf8")
+                    self.socket.sendto(reply, addr)
             except re.error,e:
                     logger.exception("Recieved an invalid regex from %s", addr)
 
@@ -182,8 +183,8 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
         f = self.send_head()
         if f:
-            # one hour
-            self.connection.settimeout(3600)
+            # one minute
+#            self.connection.settimeout(60)
             shutil.copyfileobj(f, self.wfile)
             f.close()
         else:
@@ -327,8 +328,8 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 'href="/__data__/directoryindex.css" />'
                 '<link rel="stylesheet" type="text/css" '
                 'href="/__data__/thickbox.css" />'
-                '<script type="text/javascript" '
-                'src="/__data__/reflection.js"></script>'
+                #'<script type="text/javascript" '
+                #'src="/__data__/reflection.js"></script>'
                 '<script type="text/javascript" '
                 'src="/__data__/jquery.js"></script>'
                 '<script type="text/javascript" '

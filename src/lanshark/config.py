@@ -1,13 +1,12 @@
 """The lanshark config module loads and saves config files"""
 import os, sys
 
-import configuration
 import socket
-
 import locale
 locale.setlocale(locale.LC_ALL, '')
 
-from configuration import Boolean, Integer, String, StringList, Enum
+from lanshark.configuration import Boolean, Integer, String, StringList, Enum
+from lanshark import configuration
 
 
 def in_pathlist(file, pathlist = os.environ.get("PATH").split(os.pathsep)):
@@ -76,8 +75,9 @@ class Config(configuration.Config):
             "Time to wait for new hosts to answer in seconds")
     DISCOVER_INTERVAL = Integer(60,
             "Interval to search for new computers in seconds")
-    HELLO = String("HELO",
+    NETWORK_NAME = String("HELO",
             "Word to use for discovery, might act as simple password")
+    NETWORK_PASSWORD = String("", "Network password")
     CACHE_TIMEOUT = Integer(600, "HTTP cache time to live")
     SHARE_PATH = String("", "Path to the files you want to share")
     INCOMING_PATH = String("", "Path to store the downloaded files")
@@ -95,7 +95,6 @@ class Config(configuration.Config):
     DAEMON_IN_GUI = Boolean(True,
             "Integrates daemon in the gui process")
     RESOLVE_HOSTS = Boolean(False, "Resolve hostnames")
-    PASSWORD = String("", "Network password")
     INDEX_INTERVAL = Integer(3600,
             "Interval to update the fileindex in seconds")
     GUI_ICON_SIZE = Integer(48, "Icon size in the gtkui")
@@ -130,7 +129,7 @@ class Config(configuration.Config):
     # static variables
     LANGUAGES = [locale.getdefaultlocale()[0] or "en_US", "en_US"]
     WEBSITE = "http://lanshark.29a.ch/"
-    VERSION = Integer(4, "Version of the config file")
+    VERSION = Integer(5, "Version of the config file")
     VERSION.comment_out_default = False
     DOWNLOAD_BS = 65536
 

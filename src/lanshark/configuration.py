@@ -17,7 +17,7 @@ config.save()
 from __future__ import with_statement
 import os
 
-import observable
+from lanshark import observable
 
 class Error(Exception):
     """Raised when an error occures while parsing the confiuration file"""

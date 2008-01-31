@@ -4,20 +4,23 @@ import os
 import unittest
 import urllib
 import tempfile, time
-import configuration
+import random
 
-from config import config
+from lanshark.config import config
+
 config.SHARE_PATH = tempfile.mkdtemp()
 # no collisions with real instances
-import random
 config.PORT += random.randint(1, 100)
+print config.PORT
 config.INCOMING_PATH = os.path.join(config.SHARE_PATH, "incoming")
 config.MAX_SEARCH_RESULTS = 5
 config.SEARCH_TIMEOUT = 0.5
 config.DISCOVER_TIMEOUT = 0.5
+config.NETWORK_PASSWORD = "test"
 
-import lib
-import icons
+from lanshark import lib
+from lanshark import icons
+from lanshark import configuration
 
 def rm_r(path):
     if not os.path.isdir(path):
@@ -70,6 +73,15 @@ class LibTestCase(unittest.TestCase):
 
     def test_guessip(self):
         lib.guess_ip()
+
+    def test_encryption(self):
+        daemon.fileindex.update()
+        config.NETWORK_PASSWORD = "wrong"
+        try:
+            self.assertEquals(len(list(lib.search(""))), 0)
+            self.assertEquals(len(list(lib.discover())), 0)
+        finally:
+            config.NETWORK_PASSWORD = "test"
 
     def test_search(self):
         daemon.fileindex.update()
