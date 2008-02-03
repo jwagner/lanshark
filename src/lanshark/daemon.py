@@ -263,8 +263,8 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 if hidden(filename):
                     continue
                 filepath = os.path.join(path, filename)
-                stats = os.stat(filepath)
                 try:
+                    stats = os.stat(filepath)
                     if stat.S_ISDIR(stats[stat.ST_MODE]):
                         filename += '/'
                         dirfiles = os.listdir(filepath)
