@@ -127,7 +127,8 @@ def make_table(widgets):
 def idle_do(func, *args):
     """wrapper arround idle_add that will always run once"""
     def wrapper(*args):
-        func(*args)
+        with gtklock:
+            func(*args)
     gobject.idle_add(wrapper, *args)
 
 class gtklock:
@@ -165,7 +166,8 @@ def get_filename(url):
     return urllib2.unquote(url[url.rindex("/", 0, -1)+1:]).decode("utf").encode(config.SYS_ENCODING, "replace")
 
 def gtk_yield():
-    pass
+    while gtk.events_pending():
+         gtk.main_iteration()
 
 class GtkIconFactory(icons.IconFactory):
     def __init__(self, icon_theme):
@@ -1074,8 +1076,6 @@ class URLView(gtk.ScrolledWindow):
         gc.collect()
 
     def add_item(self, url, size, icon):
-        # work arroung gnome bug #404541
-        self.view.props.selection_mode = gtk.SELECTION_SINGLE
         if icon:
             pbl = gtk.gdk.PixbufLoader()
             try:
@@ -1099,15 +1099,14 @@ class URLView(gtk.ScrolledWindow):
         except UnicodeError, e:
             if config.debug:
                 logger.exception("Exception in add_item url=%r", url)
-        # work arroung gnome bug #404541
-        def reset():
-                self.view.props.selection_mode = gtk.SELECTION_MULTIPLE
-        gobject.idle_add(reset)
 
     def set_url(self, url):
         self.url = url
         self.clear()
         mainwindow.status.push(hash("loading"), _("loading..."))
+        # fixes https://bugs.launchpad.net/lanshark/+bug/188457
+        gtk_yield()
+        self.view.hide()
         try:
             contents = lib.ls_l(url)
         except urllib2.HTTPError:
@@ -1115,10 +1114,14 @@ class URLView(gtk.ScrolledWindow):
         for url, size, icon in contents:
             if icon:
                 # this should really be mutlithreaded!
-                gobject.idle_add(self.add_item, url, size, icon)
+                idle_do(self.add_item, url, size, icon)
             else:
                 self.add_item(url, size, icon)
         idle_do(mainwindow.status.pop, hash("loading"))
+        def took(t):
+            print "update took", time.time()-t, "seconds"
+        self.view.show()
+        idle_do(took, time.time())
 
     def add_url(self, url):
         size, icon = lib.stat(url)
@@ -1410,7 +1413,7 @@ if __name__ == "__main__":
         def release_gil_on_stupid_operating_system():
             time.sleep(0.001)
             return True
-        gobject.idle_add(release_gil_on_stupid_operating_system)
+        gobject.timeout_add(400, release_gil_on_stupid_operating_system)
     else:
         gtk.gdk.threads_init()
     mainwindow = MainWindow()
