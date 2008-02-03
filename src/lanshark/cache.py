@@ -28,8 +28,6 @@ class _Cached:
         t = time.time()
         while self.heap and self.heap[0][0] < t:
             del self.results[self.heap.pop(0)[1]]
-        if len(self.heap) > self.max:
-            del self.results[self.heap.pop(0)[1]]
         if hash_ in self.results:
             if self.stats: self.hits += 1
             return self.results[hash_]
@@ -37,6 +35,8 @@ class _Cached:
         result = self.func(*args, **kwargs)
         self.results[hash_] = result
         self.heap.append((t + self.timeout, hash_))
+        if len(self.heap) > self.max:
+            del self.results[self.heap.pop(0)[1]]
         return result
 
 def cached(timeout=600, max_items=128, stats=False):
