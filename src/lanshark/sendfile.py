@@ -6,7 +6,6 @@ import sys
 import select
 
 def _sendfile(sock, fileobj):
-    print "boring py sendfile"
     while True:
         buf = fileobj.read(16384)
         if not buf:
