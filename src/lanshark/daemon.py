@@ -9,7 +9,7 @@ import posixpath
 import re
 import shutil, socket, SocketServer, stat
 import threading
-import urllib2
+import urllib, urllib2
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -24,6 +24,7 @@ logger = logging.getLogger('lanshark')
 
 from lanshark import icons
 from lanshark import network
+from lanshark import sendfile
 
 from cache import cached
 socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
@@ -185,7 +186,8 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if f:
             # one minute
 #            self.connection.settimeout(60)
-            shutil.copyfileobj(f, self.wfile)
+#            shutil.copyfileobj(f, self.wfile)
+            sendfile.sendfile(self.request, f)
             f.close()
         else:
             self.wfile.close()
@@ -346,32 +348,38 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             if filename.endswith("/"):
                 ssize = "%i Directories, %i Files" % size
                 if icon:
-                    icon = cgi.escape(filename + icon)
+                    icon = (filename + icon).encode("utf-8")
+                    icon = cgi.escape(urllib2.quote(icon), True)
                 else:
                     icon = iconfactory.get_icon("folder")
             else:
                 if size < config.MAX_IMAGE_SIZE and self.images.match(filename):
-                    icon = cgi.escape(filename)
+                    icon = filename.encode("utf-8")
+                    icon = cgi.escape(urllib2.quote(icon), True)
                 else:
                     icon = iconfactory.guess_icon(filename)
                 ssize = "%i Bytes" % size
             href = urllib2.quote(filename.encode("utf8"))
             try:
+                encfilename = cgi.escape(filename.encode("utf-8"))
+            except UnicodeError:
+                logger.debug("unable to convert filename %r to utf-8",
+                        filename)
+            else:
                 f.write('<li><a')
                 if any(filename.endswith(ext)
-                        for ext in [".jpg", ".jpeg", ".gif"]):
+                    for ext in [".jpg", ".jpeg", ".gif"]):
                     f.write(' class="thickbox"')
                 f.write(' href="%s" title="%s">'
                         '<img src="%s" alt="" width="96" height="96"'
                         ' class="reflect rheight25 icon" />%s</a></li>' %
-                        (href, ssize, icon,
-                            cgi.escape(filename.encode("utf-8"))))
-            except UnicodeError:
-                pass
+                        (href, ssize, icon, encfilename))
+
         f.write('</ul>'#<a href="' + config.WEBSITE + '">'
+                '<a href="http://lanshark.29a.ch/">'
                 '<img src="/__data__/web/web_footer.png" '
-                'alt="Lanshark Webinterface" class="clear reflect" />')#</a>')
-        f.write("</div></body></html>")
+                'alt="Lanshark Webinterface" class="clear reflect" /></a>')
+        f.write("</div><div></div></body></html>")
         return f
 
     def translate_path(self, path):
