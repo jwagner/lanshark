@@ -840,6 +840,7 @@ class Downloader(threading.Thread):
     msg_queue = _("%i items in the download queue - ")
     def __init__(self, downloads):
         threading.Thread.__init__(self)
+        self.setDaemon(True)
         self.event = threading.Event()
         self.model = downloads.model
         self.downloads = downloads
