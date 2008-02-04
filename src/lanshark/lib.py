@@ -3,7 +3,7 @@
 """The lanshark lib encapsulates the client logic"""
 from __future__ import division
 from __future__ import with_statement
-__version__ = "0.0.2"
+__version__ = "1.0.0 Beta"
 copyright = \
 """Lanshark %s - A P2P filesharing tool for local area networks
 Copyright (C) 2007 Jonas Wagner
@@ -44,7 +44,8 @@ if config.NETWORK_PASSWORD:
     from lanshark.keepalive import HTTPHandler
     keepalive_handler = HTTPHandler()
     opener = urllib2.build_opener(keepalive_handler)
-    urllib2.install_opener(opener)
+# buggy?!
+#    urllib2.install_opener(opener)
 
 @cached()
 def guess_ip():
