@@ -108,10 +108,10 @@ import httplib
 import socket
 import thread
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
+#import logging
+#logging.basicConfig(level=logging.DEBUG)
 #DEBUG = logging.Logger()
-DEBUG = logging
+DEBUG = None
 
 #import sslfactory
 

@@ -40,11 +40,11 @@ socket.getaddrinfo = cached(config.CACHE_TIMEOUT, stats=config.debug)(
         socket.getaddrinfo)
 
 # keepalive is important when using tls but should speed up everything
-if config.NETWORK_PASSWORD:
-    from lanshark.keepalive import HTTPHandler
-    keepalive_handler = HTTPHandler()
-    opener = urllib2.build_opener(keepalive_handler)
-# buggy?!
+#if config.NETWORK_PASSWORD:
+#    from lanshark.keepalive import HTTPHandler
+#    keepalive_handler = HTTPHandler()
+#    opener = urllib2.build_opener(keepalive_handler)
+#    # buggy?!
 #    urllib2.install_opener(opener)
 
 @cached()
@@ -213,13 +213,22 @@ def reset_cache():
 @cached(config.CACHE_TIMEOUT, 64, stats=config.debug)
 def get_url(url):
     """return contents of url."""
-    return urllib2.urlopen(url).read()
+    f = urllib2.urlopen(url)
+    contents = f.read()
+    f.close()
+    return contents
 
 @cached(config.CACHE_TIMEOUT, 2048, stats=config.debug)
 def get_json(url):
     """return parsed json located at url"""
     req = urllib2.Request(url, None, {"Acccept": "application/json"})
-    return simplejson.load(urllib2.urlopen(req))
+    f = urllib2.urlopen(req)
+    try:
+        obj = simplejson.load(f)
+    finally:
+        f.close()
+    return obj
+
 
 class DownloadException(Exception):
     """Exceptions that happened while downloading"""
@@ -299,19 +308,16 @@ def do_download(url, downloadpath, localpath, resume):
                         data = u.read(config.DOWNLOAD_BS)
                     break
                 except socket.error:
+                    logger.exception("Error while downloading %r. Retrying in 10 seconds.", url)
                     # retry every 10 seconds
-                    print "retrying"
                     time.sleep(10)
                     req = urllib2.Request(url)
                     req.add_header("Range", "bytes=%i-" % f.tell())
                     u = urllib2.urlopen(req)
-    except urllib2.HTTPError, e:
-        logger.exception("Error while downloading %r", url)
-        raise DownloadException(e.message, e)
-    except socket.error, e:
-        logger.exception("Error while downloading %r", url)
-        raise DownloadException(e.message, e)
-    except os.error, e:
+            else:
+                logger.error("Download failed after the third retry")
+                raise DownloadException(e.message, e)
+    except (urllib2.HTTPError, socket.error, os.error), e:
         logger.exception("Error while downloading %r", url)
         raise DownloadException(e.message, e)
     os.rename(downloadpath, localpath)

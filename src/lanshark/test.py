@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# vim: set fileencoding=iso-8859-2 :
+# vim: set fileencoding=utf-8 :
 import os
 import unittest
 import urllib
@@ -39,7 +39,7 @@ class LibTestCase(unittest.TestCase):
         os.mkdir(foo)
         bar = os.path.join(foo, "bar")
         os.mkdir(bar)
-        for name in [".invisible", u"fooö", "Foo/oOo","Foo/cover.jpg",
+        for name in [".invisible", u"fooÃ¶", "Foo/oOo","Foo/cover.jpg",
                 "Foo/bar/spam"]:
             name = name.replace("/", os.path.sep).encode(config.FS_ENCODING)
             fname = os.path.join(config.SHARE_PATH, name)
@@ -85,7 +85,7 @@ class LibTestCase(unittest.TestCase):
 
     def test_search(self):
         daemon.fileindex.update()
-        self.assertEquals(len(list(lib.search(u"fooö"))), 1)
+        self.assertEquals(len(list(lib.search(u"fooÃ¶"))), 1)
         self.assertEquals(len(list(lib.search("\\.invisible"))), 0)
         self.assertEquals(len(list(lib.search("huge"))), 2)
         foo = sorted(lib.search("foo"))
@@ -112,6 +112,11 @@ class LibTestCase(unittest.TestCase):
         self.assertEquals(len(results), config.MAX_SEARCH_RESULTS)
         self.assertEquals(sorted(filter(None, lib.search("foo", True))),
                               sorted(lib.search("foo")))
+
+    def test_get_url(self):
+        url = (self.url + u"fooÃ¶").encode("utf8")
+        print repr(url)
+        self.assertEquals(lib.get_url(url), "test")
 
     def test_download(self):
         path = "Foo/bar/huge"
@@ -149,7 +154,7 @@ class LibTestCase(unittest.TestCase):
 
     def test_ls(self):
         expected = sorted([self.url + ex for ex in ("Foo/",
-                 urllib.quote(u"fooö".encode("utf-8")),
+                 urllib.quote(u"fooÃ¶".encode("utf-8")),
                  "huge",
                  "incoming/")])
         self.assertEqual(sorted(lib.ls(self.url)), expected)
@@ -163,7 +168,7 @@ class LibTestCase(unittest.TestCase):
     def test_ls_l(self):
         expected = sorted([(self.url + ex, size, icon) for ex, size, icon in
                 (("Foo/", [1, 2], self.url + u"Foo/cover.jpg"),
-                 (urllib.quote(u"fooö".encode("utf-8")), len("test"), None),
+                 (urllib.quote(u"fooÃ¶".encode("utf-8")), len("test"), None),
                  ("huge", self.huge_size, None),
                  ("incoming/", [0, 0], None))])
         self.assertEqual(sorted(lib.ls_l(self.url)), expected)
@@ -229,8 +234,13 @@ class ConfigurationTestCase(unittest.TestCase):
 
 class AutostartTestCase(unittest.TestCase):
     def run_test(self):
-        import autostart
+        from lanshark import autostart
         autostart.test()
+
+class SendfileTestCase(unittest.TestCase):
+    def run_test(self):
+        from lanshark import sendfile
+        sendfile.test()
 
 if __name__ == "__main__":
     from daemon import Daemon

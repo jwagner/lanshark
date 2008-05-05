@@ -415,7 +415,6 @@ class HTTPService(threading.Thread, SocketServer.ThreadingMixIn,
         self.docroot = docroot
 
     def handle_error(self, request, client):
-        # todo: use logger
         logger.exception("Exception occured while serving request "
                 "for client %s", client)
 
