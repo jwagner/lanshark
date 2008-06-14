@@ -407,6 +407,7 @@ class HTTPService(threading.Thread, SocketServer.ThreadingMixIn,
     allow_reuse_address = True
     logRequests = config.debug
     protocol_version = "HTTP/1.1"
+    daemon_threads = True
     def __init__(self, docroot):
         threading.Thread.__init__(self)
         SocketServer.TCPServer.__init__(self,
