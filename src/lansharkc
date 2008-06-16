@@ -46,7 +46,7 @@ def ls(url, recursive=False):
         for row in out:
             print row[0].ljust(maxsize), row[1]
 
-def download(url):
+def get(url):
     """Download url if url is - read urls from stdin"""
     urls = []
     if url == "-":
