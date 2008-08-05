@@ -1,56 +1,57 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Hebrew translation for lanshark
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the lanshark package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: lanshark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 23:56+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-10-23 22:39+0000\n"
+"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-08-05 20:24+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/lansharkgui:50
 msgid "Archive"
-msgstr ""
+msgstr "ארכיון"
 
 #: ../src/lansharkgui:52
 msgid "Audio"
-msgstr ""
+msgstr "שמע"
 
 #: ../src/lansharkgui:55
 msgid "Executable"
-msgstr ""
+msgstr "קובץ הפעלה"
 
 #: ../src/lansharkgui:57
 msgid "Folder"
-msgstr ""
+msgstr "תיקיה"
 
 #: ../src/lansharkgui:58
 msgid "Image"
-msgstr ""
+msgstr "תמונה"
 
 #: ../src/lansharkgui:61
 msgid "Office"
-msgstr ""
+msgstr "משרד"
 
 #: ../src/lansharkgui:63
 msgid "Text"
-msgstr ""
+msgstr "טקסט"
 
 #: ../src/lansharkgui:65
 msgid "Video"
-msgstr ""
+msgstr "וידאו"
 
 #: ../src/lansharkgui:110
 msgid "Error"
-msgstr ""
+msgstr "שגיאה"
 
 #: ../src/lansharkgui:208
 #, python-format
@@ -59,55 +60,60 @@ msgid ""
 "xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
 "tool as openfile command in the config file %s."
 msgstr ""
+"Lanshark לא הצליח למצוא תוכנה לפתיחת הקבצים. נא התקן את החבילה xdg-utils "
+"מהכתובת http://portland.freedesktop.org/ או הגדר את הפקודה שתפעיל את הכלי "
+"המועדף עליך לפתיחת הקובץ בקובץ ההגדרות %s."
 
 #: ../src/lansharkgui:275 ../src/lansharkgui:1378
 msgid "Open Web Interface"
-msgstr ""
+msgstr "פתח ממשק אינטרנט"
 
 #: ../src/lansharkgui:282
 msgid "Edit"
-msgstr ""
+msgstr "עריכה"
 
 #: ../src/lansharkgui:289
 msgid "Help"
-msgstr ""
+msgstr "עזרה"
 
 #: ../src/lansharkgui:308
 msgid "Browser"
-msgstr ""
+msgstr "דפדפן"
 
 #: ../src/lansharkgui:314
 msgid "Search"
-msgstr ""
+msgstr "חיפוש"
 
 #: ../src/lansharkgui:316
 msgid "Download Queue"
-msgstr ""
+msgstr "תור להורדה"
 
 #: ../src/lansharkgui:345
 msgid "A filesharing application for local area networks"
-msgstr ""
+msgstr "תוכנת שיתוף קבצים לרשתות מקומיות"
 
 #: ../src/lansharkgui:354
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Yaron https://launchpad.net/~sh-yaron"
 
 #: ../src/lansharkgui:392
 msgid "Peers"
-msgstr ""
+msgstr "עמיתים (peers)"
 
 #: ../src/lansharkgui:598
 #, python-format
 msgid "%s could not be found"
-msgstr ""
+msgstr "לא ניתן למצוא את %s"
 
 #: ../src/lansharkgui:624
 msgid "All"
-msgstr ""
+msgstr "הכל"
 
 #: ../src/lansharkgui:625
 msgid "Regex"
-msgstr ""
+msgstr "ביטוי רגולרי"
 
 #: ../src/lansharkgui:670
 #, python-format
@@ -115,112 +121,116 @@ msgid ""
 "Invalid Regex:\n"
 "%s"
 msgstr ""
+"ביטוי רגולרי שגוי:\n"
+"%s"
 
 #: ../src/lansharkgui:678
 msgid "No active download"
-msgstr ""
+msgstr "אין הורדות פעילות"
 
 #: ../src/lansharkgui:697
 msgid "Downloads"
-msgstr ""
+msgstr "הורדות"
 
 #: ../src/lansharkgui:722
 msgid "Finished downloads"
-msgstr ""
+msgstr "הורדות שסויימו"
 
 #: ../src/lansharkgui:778
 msgid "Drag and Drop only works for http!"
-msgstr ""
+msgstr "גרור ושחרר רק עבודות עבור http!"
 
 #: ../src/lansharkgui:791
 msgid "Could not add url"
-msgstr ""
+msgstr "לא ניתן להוסיף קישור"
 
 #: ../src/lansharkgui:820
 msgid "Download paused"
-msgstr ""
+msgstr "ההורדה הופסקה"
 
 #: ../src/lansharkgui:823
 msgid "Downloading..."
-msgstr ""
+msgstr "מוריד..."
 
 #: ../src/lansharkgui:828
 msgid "Download complete"
-msgstr ""
+msgstr "ההורדה הושלמה"
 
 #: ../src/lansharkgui:839
 #, python-format
 msgid "%s left - %s/s"
-msgstr ""
+msgstr "%s נותרו - %s/שניה"
 
 #: ../src/lansharkgui:840
 #, python-format
 msgid "%i items in the download queue - "
-msgstr ""
+msgstr "%i פריטים בתור להורדה - "
 
 #: ../src/lansharkgui:886
 #, python-format
 msgid "An unhandled error occured while downloading %r"
-msgstr ""
+msgstr "ארעה שגיאה לא מטופלת בעת הורדת %r"
 
 #: ../src/lansharkgui:903 ../src/lansharkgui:916
 msgid "Starting download"
-msgstr ""
+msgstr "מתחיל בהורדה"
 
 #: ../src/lansharkgui:953
 msgid "Skipped: "
-msgstr ""
+msgstr "מדלג: "
 
 #: ../src/lansharkgui:957
 msgid "Error: "
-msgstr ""
+msgstr "שגיאה: "
 
 #: ../src/lansharkgui:958
 #, python-format
 msgid "Error while downloading %r%s"
-msgstr ""
+msgstr "שגיאה בעת הורדת %r%s"
 
 #: ../src/lansharkgui:1044
 #, python-format
 msgid "%s - %i Folders %i Files"
-msgstr ""
+msgstr "%s - %i תיקיות %i קבצים"
 
 #: ../src/lansharkgui:1061
 #, python-format
 msgid "%i files total %s - %i folders"
-msgstr ""
+msgstr "%i קבצים בסך הכל %s - %i תיקיות"
 
 #: ../src/lansharkgui:1107
+#, fuzzy
 msgid "loading..."
-msgstr ""
+msgstr "מוריד..."
 
 #: ../src/lansharkgui:1149
 msgid "Preview"
-msgstr ""
+msgstr "תצוגה מקדימה"
 
 #: ../src/lansharkgui:1155 ../src/lansharkgui:1202
 msgid "Download"
-msgstr ""
+msgstr "הורדה"
 
 #: ../src/lansharkgui:1158 ../src/lansharkgui:1199
 msgid "Download to"
-msgstr ""
+msgstr "הורד אל"
 
 #: ../src/lansharkgui:1162
 msgid "Copy URL"
-msgstr ""
+msgstr "נעתק קישור"
 
 #: ../src/lansharkgui:1168
 msgid "Icon Size"
-msgstr ""
+msgstr "גודל הצלמית"
 
 #: ../src/lansharkgui:1201
 msgid "Cancel"
-msgstr ""
+msgstr "ביטול"
 
 #: ../src/lansharkgui:1225
 msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
 msgstr ""
+"נא התקן את vlc מהכתובת http://videolan.org/vlc/ על מנת להשתמש בתכונה זו"
 
 #: ../src/lansharkgui:1229
 #, python-format
@@ -228,43 +238,45 @@ msgid ""
 "Could not find a suitable mediaplayer on your system. Please configure one "
 "manually. The path to the config file is %s."
 msgstr ""
+"לא ניתן למצוא נגן מדיה מתאים במערכת שלך. נא הגדר אחד ידנית. הנתיב לקובץ "
+"ההגדרות הינו %s."
 
 #: ../src/lansharkgui:1265
 msgid "Open folder"
-msgstr ""
+msgstr "פתח תיקיה"
 
 #: ../src/lansharkgui:1291
 #, python-format
 msgid "%s Configuration"
-msgstr ""
+msgstr "הגדרת %s"
 
 #: ../src/lansharkgui:1295
 msgid "Configuration"
-msgstr ""
+msgstr "הגדרות"
 
 #: ../src/lansharkgui:1301
 msgid "Hostname"
-msgstr ""
+msgstr "שם מארח"
 
 #: ../src/lansharkgui:1303
 msgid "Select the share path"
-msgstr ""
+msgstr "סחר את נתיב השיתוף"
 
 #: ../src/lansharkgui:1306
 msgid "Share Path"
-msgstr ""
+msgstr "נתיב שיתוף"
 
 #: ../src/lansharkgui:1308
 msgid "Select the incoming path"
-msgstr ""
+msgstr "בחר את תיקיית הקבלה"
 
 #: ../src/lansharkgui:1311
 msgid "Incoming Path"
-msgstr ""
+msgstr "תיקיית קבלה"
 
 #: ../src/lansharkgui:1315
 msgid "Autostart"
-msgstr ""
+msgstr "התחלה אוטומטית"
 
 #: ../src/lansharkgui:1320
 msgid "Network Name"
@@ -272,19 +284,19 @@ msgstr ""
 
 #: ../src/lansharkgui:1323
 msgid "Broadcast Address"
-msgstr ""
+msgstr "כתובת שידור"
 
 #: ../src/lansharkgui:1326
 msgid "Port"
-msgstr ""
+msgstr "יציאה"
 
 #: ../src/lansharkgui:1335
 msgid "Basic"
-msgstr ""
+msgstr "בסיסי"
 
 #: ../src/lansharkgui:1336
 msgid "Advanced"
-msgstr ""
+msgstr "מתקדם"
 
 #: ../src/lansharkgui:1340
 #, python-format
@@ -293,7 +305,13 @@ msgid ""
 "take a look at lansharks config file:\n"
 "%s"
 msgstr ""
+"עבור הגדרות מתקדמות יותר\n"
+"נא הבט בקובץ ההגדרות של lanshark:\n"
+"%s"
 
 #: ../src/lansharkgui:1343
 msgid "More"
-msgstr ""
+msgstr "עוד"
+
+#~ msgid "Hello Message"
+#~ msgstr "הודעת פתיחה"
