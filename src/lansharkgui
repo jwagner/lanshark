@@ -39,7 +39,7 @@ import gettext
 gettext.bindtextdomain('lanshark', config.LOCALE_PATH)
 gettext.textdomain('lanshark')
 gettext.translation('lanshark', config.LOCALE_PATH,
-        languages=config.LANGUAGES, fallback = True).install()
+        languages=config.LANGUAGES, fallback = True).install(unicode=1)
 
 NAME = "Lanshark"
 VERSION = lib.__version__
@@ -215,7 +215,7 @@ iconfactory = GtkIconFactory(icon_theme)
 
 
 class IconLabel(gtk.HBox):
-    def __init__(self, label, icon, size=25):
+    def __init__(self, label, icon, size=24):
         gtk.HBox.__init__(self, False, 0)
         img = iconfactory.get_image(icon, size)
         self.pack_start(img, 0)
@@ -493,7 +493,7 @@ class Browser(gtk.Frame):
             self.button_back.set_sensitive(True)
 
     def create_tree_model(self):
-        # icon, name, url, last sing of live
+        # icon, name, url, last sign of live
         self.treemodel = gtk.TreeStore(gtk.gdk.Pixbuf, str, str, int)
         self.treemodel.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.tree.set_model(self.treemodel)
@@ -1318,10 +1318,6 @@ class ConfigDialog(gtk.Dialog):
         self.hello = gtk.Entry()
         self.hello.set_text(config.NETWORK_NAME)
         advanced.append((_("Network Name"), self.hello))
-        self.password = gtk.Entry()
-        self.password.set_visibility(False)
-        self.password.set_text(config.NETWORK_PASSWORD)
-        advanced.append((_("Password"), self.password))
         self.broadcast = gtk.Entry()
         self.broadcast.set_text(config.BROADCAST_IP)
         advanced.append((_("Broadcast Address"), self.broadcast))
@@ -1356,7 +1352,6 @@ class ConfigDialog(gtk.Dialog):
             config.PORT = int(self.port.get_text())
             config.BROADCAST_IP = self.broadcast.get_text()
             config.NETWORK_NAME = self.hello.get_text()
-            config.NETWORK_PASSWORD = self.password.get_text()
             config.HOSTNAME = self.hostname.get_text()
             try:
                 app = os.path.abspath(__file__) + " autostart"
