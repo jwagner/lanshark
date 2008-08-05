@@ -69,6 +69,7 @@ class Config(configuration.Config):
     BROADCAST_IP = String("255.255.255.255",
             "IP to use for udp broadcasts")
     PORT = Integer(31337, "Port to use for both UDP and TCP")
+    CLIENT_PORT = Integer(31338, "Port for the clients udp sockets")
     SEARCH_TIMEOUT = Integer(5,
             "Time to wait for search results in seconds")
     DISCOVER_TIMEOUT = Integer(5,
@@ -77,7 +78,6 @@ class Config(configuration.Config):
             "Interval to search for new computers in seconds")
     NETWORK_NAME = String("HELO",
             "Word to use for discovery, might act as simple password")
-    NETWORK_PASSWORD = String("", "Network password")
     CACHE_TIMEOUT = Integer(600, "HTTP cache time to live")
     SHARE_PATH = String("", "Path to the files you want to share")
     INCOMING_PATH = String("", "Path to store the downloaded files")
@@ -129,7 +129,7 @@ class Config(configuration.Config):
     # static variables
     LANGUAGES = [locale.getdefaultlocale()[0] or "en_US", "en_US"]
     WEBSITE = "http://lanshark.29a.ch/"
-    VERSION = Integer(5, "Version of the config file")
+    VERSION = Integer(6, "Version of the config file")
     VERSION.comment_out_default = False
     DOWNLOAD_BS = 65536
 

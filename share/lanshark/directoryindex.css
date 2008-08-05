@@ -1,13 +1,14 @@
-html, body {
-    width: 100%;
-    padding: 0;
-    margin: 0;
+html {
+    background-color: black;
 }
 body {
+    margin: 0;
+    padding: 10px;
     font-family: sans-serif;
     color: white;
     background-color: black;
     text-align: center;
+    height: 100%;
 }
 #container {
     width: 700px;

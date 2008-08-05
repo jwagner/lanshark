@@ -94,7 +94,7 @@ def version():
     """output copyright information and exit"""
     print lib.copyright
 
-commands = (discover, download, usage, ls, search, version)
+commands = (discover, get, usage, ls, search, version)
 
 def main():
     if len(sys.argv) < 2:

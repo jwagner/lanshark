@@ -16,7 +16,6 @@ config.INCOMING_PATH = os.path.join(config.SHARE_PATH, "incoming")
 config.MAX_SEARCH_RESULTS = 5
 config.SEARCH_TIMEOUT = 0.5
 config.DISCOVER_TIMEOUT = 0.5
-config.NETWORK_PASSWORD = "test"
 
 from lanshark import lib
 from lanshark import icons
@@ -73,15 +72,6 @@ class LibTestCase(unittest.TestCase):
 
     def test_guessip(self):
         lib.guess_ip()
-
-    def test_encryption(self):
-        daemon.fileindex.update()
-        config.NETWORK_PASSWORD = "wrong"
-        try:
-            self.assertEquals(len(list(lib.search(""))), 0)
-            self.assertEquals(len(list(lib.discover())), 0)
-        finally:
-            config.NETWORK_PASSWORD = "test"
 
     def test_search(self):
         daemon.fileindex.update()

@@ -67,11 +67,6 @@ def guess_ip():
         except IndexError:
             return "127.0.0.1"
 
-
-def get_socket():
-    """get a new unblocking bound udp broadcast socket"""
-    return network.SecureUDPSocket(config.PORT + 1, config.NETWORK_PASSWORD)
-
 def recv(sock, timeout, async):
     """Receive data from sock using a generator
     timeout specifies the time recv will run
@@ -111,7 +106,7 @@ def discover(async=False):
     """Discover other hosts in the network"""
     for item in config.STATICHOSTS:
         yield (item, item)
-    s = get_socket()
+    s = network.broadcast_dgram_socket(config.CLIENT_PORT)
     hello = config.NETWORK_NAME
     s.sendto(hello, (config.BROADCAST_IP, config.PORT))
     for data in recv(s, config.DISCOVER_TIMEOUT, async):
@@ -131,7 +126,7 @@ def discover(async=False):
 
 def search(what, async=False):
     """Search for files"""
-    sock = get_socket()
+    sock = network.broadcast_dgram_socket(config.CLIENT_PORT)
     what = what.encode('utf8')
     msg = "search %s %s" % (config.NETWORK_NAME, what)
     sock.sendto(msg, (config.BROADCAST_IP, config.PORT))

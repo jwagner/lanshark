@@ -130,7 +130,7 @@ class UDPService(threading.Thread):
         threading.Thread.__init__(self)
         self.setDaemon(True)
         self.fileindex = fi
-        self.socket = network.SecureUDPSocket(config.PORT, config.NETWORK_PASSWORD)
+        self.socket = network.broadcast_dgram_socket(config.PORT)
 
     def run(self):
         while True:
