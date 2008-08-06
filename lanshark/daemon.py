@@ -243,7 +243,7 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     folder_images = [re.compile(exp, re.IGNORECASE)
             for exp in config.FOLDER_IMAGES]
-    images = re.compile(".*\.(jpg|png|gif)$")
+    images = re.compile(".*\.(jpg|png|gif|svg)$")
     def get_folder_image(self, path, files):
         # so we can remove the big ones
         files = files[:]
