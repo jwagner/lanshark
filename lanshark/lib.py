@@ -6,7 +6,7 @@ from __future__ import with_statement
 __version__ = "1.0.0 Beta"
 copyright = \
 """Lanshark %s - A P2P filesharing tool for local area networks
-Copyright (C) 2007 Jonas Wagner
+Copyright (C) 2008 Jonas Wagner
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
