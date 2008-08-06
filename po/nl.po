@@ -1,56 +1,60 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# German translations for PACKAGE package
+# German messages for PACKAGE.
+# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#  <veers@gmx.ch>, 2007.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Lanshark 0.0.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 23:56+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2008-01-06 22:58+0000\n"
+"Last-Translator: Ely Deckers <e.deckers@gmail.com>\n"
+"Language-Team: Dutch <e.deckers@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-08-05 20:24+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Poedit-Country: NETHERLANDS\n"
+"X-Poedit-Language: Dutch\n"
 
 #: ../src/lansharkgui:50
 msgid "Archive"
-msgstr ""
+msgstr "Archief"
 
 #: ../src/lansharkgui:52
 msgid "Audio"
-msgstr ""
+msgstr "Audio"
 
 #: ../src/lansharkgui:55
 msgid "Executable"
-msgstr ""
+msgstr "Applicatie"
 
 #: ../src/lansharkgui:57
 msgid "Folder"
-msgstr ""
+msgstr "Map"
 
 #: ../src/lansharkgui:58
 msgid "Image"
-msgstr ""
+msgstr "Afbeelding"
 
 #: ../src/lansharkgui:61
 msgid "Office"
-msgstr ""
+msgstr "Office"
 
 #: ../src/lansharkgui:63
 msgid "Text"
-msgstr ""
+msgstr "Tekst"
 
 #: ../src/lansharkgui:65
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: ../src/lansharkgui:110
 msgid "Error"
-msgstr ""
+msgstr "Fout"
 
 #: ../src/lansharkgui:208
 #, python-format
@@ -59,55 +63,60 @@ msgid ""
 "xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
 "tool as openfile command in the config file %s."
 msgstr ""
+"Lanshark kan geen applicatie vinden waarmee bestanden geopend kunnen worden. "
+"Installeer xdg-utils van http://portland.freedesktop.org/ of verwijs naar "
+"een \"openfile\" applicatie in het configuratiebestand %s."
 
 #: ../src/lansharkgui:275 ../src/lansharkgui:1378
 msgid "Open Web Interface"
-msgstr ""
+msgstr "Webinterface openen"
 
 #: ../src/lansharkgui:282
 msgid "Edit"
-msgstr ""
+msgstr "Bewerken"
 
 #: ../src/lansharkgui:289
 msgid "Help"
-msgstr ""
+msgstr "Help"
 
 #: ../src/lansharkgui:308
 msgid "Browser"
-msgstr ""
+msgstr "Browser"
 
 #: ../src/lansharkgui:314
 msgid "Search"
-msgstr ""
+msgstr "Zoeken"
 
 #: ../src/lansharkgui:316
 msgid "Download Queue"
-msgstr ""
+msgstr "Downloadlijst"
 
 #: ../src/lansharkgui:345
 msgid "A filesharing application for local area networks"
-msgstr ""
+msgstr "Een filesharingapplicatie voor lokale netwerken."
 
 #: ../src/lansharkgui:354
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Ely Deckers https://launchpad.net/~e-deckers"
 
 #: ../src/lansharkgui:392
 msgid "Peers"
-msgstr ""
+msgstr "Peers"
 
 #: ../src/lansharkgui:598
 #, python-format
 msgid "%s could not be found"
-msgstr ""
+msgstr "%s is niet gevonden"
 
 #: ../src/lansharkgui:624
 msgid "All"
-msgstr ""
+msgstr "Alle"
 
 #: ../src/lansharkgui:625
 msgid "Regex"
-msgstr ""
+msgstr "Regex"
 
 #: ../src/lansharkgui:670
 #, python-format
@@ -115,112 +124,117 @@ msgid ""
 "Invalid Regex:\n"
 "%s"
 msgstr ""
+"Incorrecte Regex:\n"
+"%s"
 
 #: ../src/lansharkgui:678
 msgid "No active download"
-msgstr ""
+msgstr "Geen actieve downloads"
 
 #: ../src/lansharkgui:697
 msgid "Downloads"
-msgstr ""
+msgstr "Downloads"
 
 #: ../src/lansharkgui:722
 msgid "Finished downloads"
-msgstr ""
+msgstr "Voltooide downloads"
 
 #: ../src/lansharkgui:778
 msgid "Drag and Drop only works for http!"
-msgstr ""
+msgstr "Drag and Drop werkt alleen met http!"
 
 #: ../src/lansharkgui:791
 msgid "Could not add url"
-msgstr ""
+msgstr "kan url niet toevoegen"
 
 #: ../src/lansharkgui:820
 msgid "Download paused"
-msgstr ""
+msgstr "download gepauseerd"
 
 #: ../src/lansharkgui:823
 msgid "Downloading..."
-msgstr ""
+msgstr "Downloaden..."
 
 #: ../src/lansharkgui:828
 msgid "Download complete"
-msgstr ""
+msgstr "Download voltooid"
 
 #: ../src/lansharkgui:839
 #, python-format
 msgid "%s left - %s/s"
-msgstr ""
+msgstr "%s resterend - %s/s"
 
 #: ../src/lansharkgui:840
 #, python-format
 msgid "%i items in the download queue - "
-msgstr ""
+msgstr "%i items in de downloadlijst - "
 
 #: ../src/lansharkgui:886
 #, python-format
 msgid "An unhandled error occured while downloading %r"
-msgstr ""
+msgstr "Er is een fout opgetreden tijdens het downloaden %r"
 
 #: ../src/lansharkgui:903 ../src/lansharkgui:916
 msgid "Starting download"
-msgstr ""
+msgstr "Download initialiseren"
 
 #: ../src/lansharkgui:953
 msgid "Skipped: "
-msgstr ""
+msgstr "Overgeslagen: "
 
 #: ../src/lansharkgui:957
 msgid "Error: "
-msgstr ""
+msgstr "Fout: "
 
 #: ../src/lansharkgui:958
 #, python-format
 msgid "Error while downloading %r%s"
-msgstr ""
+msgstr "Fout bij het downloaden van %r%s"
 
 #: ../src/lansharkgui:1044
 #, python-format
 msgid "%s - %i Folders %i Files"
-msgstr ""
+msgstr "%s - %i Mappen %i Bestanden"
 
 #: ../src/lansharkgui:1061
 #, python-format
 msgid "%i files total %s - %i folders"
-msgstr ""
+msgstr "%i bestanden totaal %s - %i mappen"
 
 #: ../src/lansharkgui:1107
+#, fuzzy
 msgid "loading..."
-msgstr ""
+msgstr "Downloaden..."
 
 #: ../src/lansharkgui:1149
 msgid "Preview"
-msgstr ""
+msgstr "Preview"
 
 #: ../src/lansharkgui:1155 ../src/lansharkgui:1202
 msgid "Download"
-msgstr ""
+msgstr "Downloaden"
 
 #: ../src/lansharkgui:1158 ../src/lansharkgui:1199
 msgid "Download to"
-msgstr ""
+msgstr "Downloaden naar"
 
 #: ../src/lansharkgui:1162
 msgid "Copy URL"
-msgstr ""
+msgstr "url kopiëren"
 
 #: ../src/lansharkgui:1168
 msgid "Icon Size"
-msgstr ""
+msgstr "Pictogram grootte"
 
 #: ../src/lansharkgui:1201
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #: ../src/lansharkgui:1225
 msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
 msgstr ""
+"Installeer vlc van http://videolan.org/vlc/ om deze functionaliteit te "
+"gebruiken."
 
 #: ../src/lansharkgui:1229
 #, python-format
@@ -228,43 +242,46 @@ msgid ""
 "Could not find a suitable mediaplayer on your system. Please configure one "
 "manually. The path to the config file is %s."
 msgstr ""
+"Kan geen geschikte mediaspeler op het systeem vinden. Stel handmatig een "
+"mediaspeler in. Het configuratiebestand kan op de volgende lokatie gevonden "
+"worden: %s."
 
 #: ../src/lansharkgui:1265
 msgid "Open folder"
-msgstr ""
+msgstr "Map openen"
 
 #: ../src/lansharkgui:1291
 #, python-format
 msgid "%s Configuration"
-msgstr ""
+msgstr "%s Configuratie"
 
 #: ../src/lansharkgui:1295
 msgid "Configuration"
-msgstr ""
+msgstr "Configuratie"
 
 #: ../src/lansharkgui:1301
 msgid "Hostname"
-msgstr ""
+msgstr "Hostnaam"
 
 #: ../src/lansharkgui:1303
 msgid "Select the share path"
-msgstr ""
+msgstr "Kies een gedeelde directory"
 
 #: ../src/lansharkgui:1306
 msgid "Share Path"
-msgstr ""
+msgstr "Gedeelde directory"
 
 #: ../src/lansharkgui:1308
 msgid "Select the incoming path"
-msgstr ""
+msgstr "Kies een inkomende directory"
 
 #: ../src/lansharkgui:1311
 msgid "Incoming Path"
-msgstr ""
+msgstr "Inkomende directory"
 
 #: ../src/lansharkgui:1315
 msgid "Autostart"
-msgstr ""
+msgstr "Autostart"
 
 #: ../src/lansharkgui:1320
 msgid "Network Name"
@@ -272,19 +289,19 @@ msgstr ""
 
 #: ../src/lansharkgui:1323
 msgid "Broadcast Address"
-msgstr ""
+msgstr "Broadcastadres"
 
 #: ../src/lansharkgui:1326
 msgid "Port"
-msgstr ""
+msgstr "Poort"
 
 #: ../src/lansharkgui:1335
 msgid "Basic"
-msgstr ""
+msgstr "Basis"
 
 #: ../src/lansharkgui:1336
 msgid "Advanced"
-msgstr ""
+msgstr "Geavanceerd"
 
 #: ../src/lansharkgui:1340
 #, python-format
@@ -293,7 +310,13 @@ msgid ""
 "take a look at lansharks config file:\n"
 "%s"
 msgstr ""
+"Bekijk voor geavanceerde instellingen \n"
+"het lanshark configuratiebestand:\n"
+"%s"
 
 #: ../src/lansharkgui:1343
 msgid "More"
-msgstr ""
+msgstr "Meer"
+
+#~ msgid "Hello Message"
+#~ msgstr "Welkomstmelding"

@@ -1,56 +1,57 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Ukrainian translation for lanshark
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the lanshark package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: lanshark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 23:56+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2008-07-26 08:27+0000\n"
+"Last-Translator: Serhey Kusyumoff (Сергій Кусюмов) <sergemine@gmail.com>\n"
+"Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-08-05 20:24+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/lansharkgui:50
 msgid "Archive"
-msgstr ""
+msgstr "Архів"
 
 #: ../src/lansharkgui:52
 msgid "Audio"
-msgstr ""
+msgstr "Звук"
 
 #: ../src/lansharkgui:55
 msgid "Executable"
-msgstr ""
+msgstr "Програма"
 
 #: ../src/lansharkgui:57
 msgid "Folder"
-msgstr ""
+msgstr "Тека"
 
 #: ../src/lansharkgui:58
 msgid "Image"
-msgstr ""
+msgstr "Зображення"
 
 #: ../src/lansharkgui:61
 msgid "Office"
-msgstr ""
+msgstr "Офіс-документ"
 
 #: ../src/lansharkgui:63
 msgid "Text"
-msgstr ""
+msgstr "Текстовий файл"
 
 #: ../src/lansharkgui:65
 msgid "Video"
-msgstr ""
+msgstr "Відео"
 
 #: ../src/lansharkgui:110
 msgid "Error"
-msgstr ""
+msgstr "Помилка"
 
 #: ../src/lansharkgui:208
 #, python-format
@@ -59,55 +60,60 @@ msgid ""
 "xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
 "tool as openfile command in the config file %s."
 msgstr ""
+"Lanshark на може знайти програми, що могла б відкрити такий файл. Будь ласка "
+"встановіть the xdg-utils на http://portland.freedesktop.org/ або призначте "
+"свою улюблену програму командою openfile в файлі налаштувань %s."
 
 #: ../src/lansharkgui:275 ../src/lansharkgui:1378
 msgid "Open Web Interface"
-msgstr ""
+msgstr "Відкрити Web-інтерфейс"
 
 #: ../src/lansharkgui:282
 msgid "Edit"
-msgstr ""
+msgstr "Правити"
 
 #: ../src/lansharkgui:289
 msgid "Help"
-msgstr ""
+msgstr "Довідка"
 
 #: ../src/lansharkgui:308
 msgid "Browser"
-msgstr ""
+msgstr "Огляд мережі"
 
 #: ../src/lansharkgui:314
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: ../src/lansharkgui:316
 msgid "Download Queue"
-msgstr ""
+msgstr "Перелік завантажень"
 
 #: ../src/lansharkgui:345
 msgid "A filesharing application for local area networks"
-msgstr ""
+msgstr "Програма обміну файлами для локальної мережі"
 
 #: ../src/lansharkgui:354
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Serhey Kusyumoff (Сергій Кусюмов) https://launchpad.net/~sergemine"
 
 #: ../src/lansharkgui:392
 msgid "Peers"
-msgstr ""
+msgstr "Вузли"
 
 #: ../src/lansharkgui:598
 #, python-format
 msgid "%s could not be found"
-msgstr ""
+msgstr "%s не знайдено"
 
 #: ../src/lansharkgui:624
 msgid "All"
-msgstr ""
+msgstr "Усе"
 
 #: ../src/lansharkgui:625
 msgid "Regex"
-msgstr ""
+msgstr "Регулярний вираз"
 
 #: ../src/lansharkgui:670
 #, python-format
@@ -115,156 +121,159 @@ msgid ""
 "Invalid Regex:\n"
 "%s"
 msgstr ""
+"Помилка Regex:\n"
+"%s"
 
 #: ../src/lansharkgui:678
 msgid "No active download"
-msgstr ""
+msgstr "Наразі завантаження відсутні"
 
 #: ../src/lansharkgui:697
 msgid "Downloads"
-msgstr ""
+msgstr "Завантаження"
 
 #: ../src/lansharkgui:722
 msgid "Finished downloads"
-msgstr ""
+msgstr "Завершені завантаження"
 
 #: ../src/lansharkgui:778
 msgid "Drag and Drop only works for http!"
-msgstr ""
+msgstr "Drag and Drop застосовується лише для http!"
 
 #: ../src/lansharkgui:791
 msgid "Could not add url"
-msgstr ""
+msgstr "Невдалось додати адресу"
 
 #: ../src/lansharkgui:820
 msgid "Download paused"
-msgstr ""
+msgstr "Завантаження призупинено"
 
 #: ../src/lansharkgui:823
 msgid "Downloading..."
-msgstr ""
+msgstr "Звантажується..."
 
 #: ../src/lansharkgui:828
 msgid "Download complete"
-msgstr ""
+msgstr "Завантаження завершено"
 
 #: ../src/lansharkgui:839
 #, python-format
 msgid "%s left - %s/s"
-msgstr ""
+msgstr "%s лишилось - %s/s"
 
 #: ../src/lansharkgui:840
 #, python-format
 msgid "%i items in the download queue - "
-msgstr ""
+msgstr "%i завантажень в черзі - "
 
 #: ../src/lansharkgui:886
 #, python-format
 msgid "An unhandled error occured while downloading %r"
-msgstr ""
+msgstr "При завантаженні %r виникла помилка"
 
 #: ../src/lansharkgui:903 ../src/lansharkgui:916
 msgid "Starting download"
-msgstr ""
+msgstr "Починаємо завантажувати"
 
 #: ../src/lansharkgui:953
 msgid "Skipped: "
-msgstr ""
+msgstr "Пропущено: "
 
 #: ../src/lansharkgui:957
 msgid "Error: "
-msgstr ""
+msgstr "Помилка: "
 
 #: ../src/lansharkgui:958
 #, python-format
 msgid "Error while downloading %r%s"
-msgstr ""
+msgstr "Виникла помилкапри завантаженні %r%s"
 
 #: ../src/lansharkgui:1044
 #, python-format
 msgid "%s - %i Folders %i Files"
-msgstr ""
+msgstr "%s - %i Тек %i Файлів"
 
 #: ../src/lansharkgui:1061
 #, python-format
 msgid "%i files total %s - %i folders"
-msgstr ""
+msgstr "%i усього файлів %s - %i тек"
 
 #: ../src/lansharkgui:1107
+#, fuzzy
 msgid "loading..."
-msgstr ""
+msgstr "Звантажується..."
 
 #: ../src/lansharkgui:1149
 msgid "Preview"
-msgstr ""
+msgstr "Попередній перегляд"
 
 #: ../src/lansharkgui:1155 ../src/lansharkgui:1202
 msgid "Download"
-msgstr ""
+msgstr "Завантаження"
 
 #: ../src/lansharkgui:1158 ../src/lansharkgui:1199
 msgid "Download to"
-msgstr ""
+msgstr "Завантажити до"
 
 #: ../src/lansharkgui:1162
 msgid "Copy URL"
-msgstr ""
+msgstr "Копіювати URL"
 
 #: ../src/lansharkgui:1168
 msgid "Icon Size"
-msgstr ""
+msgstr "Розмір значка"
 
 #: ../src/lansharkgui:1201
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 #: ../src/lansharkgui:1225
 msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
-msgstr ""
+msgstr "Щоб використати цю функцію встановіть vlc на http://videolan.org/vlc/"
 
 #: ../src/lansharkgui:1229
 #, python-format
 msgid ""
 "Could not find a suitable mediaplayer on your system. Please configure one "
 "manually. The path to the config file is %s."
-msgstr ""
+msgstr "Не знахимо відповідного медіаплеєра в системі. Налаштуйте %s."
 
 #: ../src/lansharkgui:1265
 msgid "Open folder"
-msgstr ""
+msgstr "Відкрити теку"
 
 #: ../src/lansharkgui:1291
 #, python-format
 msgid "%s Configuration"
-msgstr ""
+msgstr "%s Налаштування"
 
 #: ../src/lansharkgui:1295
 msgid "Configuration"
-msgstr ""
+msgstr "Налаштовування"
 
 #: ../src/lansharkgui:1301
 msgid "Hostname"
-msgstr ""
+msgstr "Назва вузла"
 
 #: ../src/lansharkgui:1303
 msgid "Select the share path"
-msgstr ""
+msgstr "Оберіть теку для роздавання"
 
 #: ../src/lansharkgui:1306
 msgid "Share Path"
-msgstr ""
+msgstr "Роздавати файти з теки:"
 
 #: ../src/lansharkgui:1308
 msgid "Select the incoming path"
-msgstr ""
+msgstr "Оберіть теку для завантаження"
 
 #: ../src/lansharkgui:1311
 msgid "Incoming Path"
-msgstr ""
+msgstr "Тека для завантаження:"
 
 #: ../src/lansharkgui:1315
 msgid "Autostart"
-msgstr ""
+msgstr "Автозапуск"
 
 #: ../src/lansharkgui:1320
 msgid "Network Name"
@@ -272,19 +281,19 @@ msgstr ""
 
 #: ../src/lansharkgui:1323
 msgid "Broadcast Address"
-msgstr ""
+msgstr "Широкомовна адреса"
 
 #: ../src/lansharkgui:1326
 msgid "Port"
-msgstr ""
+msgstr "Порт"
 
 #: ../src/lansharkgui:1335
 msgid "Basic"
-msgstr ""
+msgstr "Головне"
 
 #: ../src/lansharkgui:1336
 msgid "Advanced"
-msgstr ""
+msgstr "Додатково"
 
 #: ../src/lansharkgui:1340
 #, python-format
@@ -293,7 +302,13 @@ msgid ""
 "take a look at lansharks config file:\n"
 "%s"
 msgstr ""
+"Для більш тонкого налаштування\n"
+"перегляньте файл config:\n"
+"%s"
 
 #: ../src/lansharkgui:1343
 msgid "More"
-msgstr ""
+msgstr "Більше"
+
+#~ msgid "Hello Message"
+#~ msgstr "Вітання"
