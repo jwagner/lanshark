@@ -21,8 +21,7 @@ kwargs = {
       'author_email': 'veers@gmx.ch',
       'url': 'http://lanshark.29a.ch',
       'packages': ['lanshark'],
-      'package_dir': {'lanshark': 'src/lanshark'},
-      'scripts': ['src/lansharkgui', 'src/lansharkc', 'src/lansharkd'],
+      'scripts': ['bin/lansharkgui', 'bin/lansharkc', 'bin/lansharkd'],
       'options': {'py2exe':{
           'packages': 'encodings',
           'includes': 'cairo, pango, pangocairo, atk, gobject',
@@ -30,7 +29,7 @@ kwargs = {
           'optimize': 2,
           }},
       'license': 'GNU GPL v3',
-      'data_files': ls_r('share')+ls_r('bin'),
+      'data_files': ls_r('share'),
       #install_requires=["pygtk >= 2.10"],
       'classifiers': ['Development Status :: 4 - Beta',
         'Environment :: Console',

@@ -1,56 +1,57 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Japanese translation for lanshark
+# Copyright (c) 2007 Rosetta Contributors and Canonical Ltd 2007
+# This file is distributed under the same license as the lanshark package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2007.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: lanshark\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-05 23:56+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2007-12-03 08:30+0000\n"
+"Last-Translator: Blucky <Unknown>\n"
+"Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-08-05 20:24+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src/lansharkgui:50
 msgid "Archive"
-msgstr ""
+msgstr "アーカイブ"
 
 #: ../src/lansharkgui:52
 msgid "Audio"
-msgstr ""
+msgstr "オーディオ"
 
 #: ../src/lansharkgui:55
 msgid "Executable"
-msgstr ""
+msgstr "実行ファイル"
 
 #: ../src/lansharkgui:57
 msgid "Folder"
-msgstr ""
+msgstr "フォルダ"
 
 #: ../src/lansharkgui:58
 msgid "Image"
-msgstr ""
+msgstr "画像"
 
 #: ../src/lansharkgui:61
 msgid "Office"
-msgstr ""
+msgstr "オフィス"
 
 #: ../src/lansharkgui:63
 msgid "Text"
-msgstr ""
+msgstr "テキスト"
 
 #: ../src/lansharkgui:65
 msgid "Video"
-msgstr ""
+msgstr "動画"
 
 #: ../src/lansharkgui:110
 msgid "Error"
-msgstr ""
+msgstr "エラー"
 
 #: ../src/lansharkgui:208
 #, python-format
@@ -59,55 +60,60 @@ msgid ""
 "xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
 "tool as openfile command in the config file %s."
 msgstr ""
+"Lanshark was unable to find an application to open files. Please install the "
+"xdg-utils from http://portland.freedesktop.org/ or configure your prefered "
+"tool as openfile command in the config file %s."
 
 #: ../src/lansharkgui:275 ../src/lansharkgui:1378
 msgid "Open Web Interface"
-msgstr ""
+msgstr "ウェブインタフェースを開く"
 
 #: ../src/lansharkgui:282
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: ../src/lansharkgui:289
 msgid "Help"
-msgstr ""
+msgstr "ヘルプ"
 
 #: ../src/lansharkgui:308
 msgid "Browser"
-msgstr ""
+msgstr "ブラウザ"
 
 #: ../src/lansharkgui:314
 msgid "Search"
-msgstr ""
+msgstr "検索"
 
 #: ../src/lansharkgui:316
 msgid "Download Queue"
-msgstr ""
+msgstr "ダウンロード一覧"
 
 #: ../src/lansharkgui:345
 msgid "A filesharing application for local area networks"
-msgstr ""
+msgstr "ローカル・エリア・ネットワークでのファイル共有アプリケーション"
 
 #: ../src/lansharkgui:354
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Blucky https://launchpad.net/~blucky"
 
 #: ../src/lansharkgui:392
 msgid "Peers"
-msgstr ""
+msgstr "接続先"
 
 #: ../src/lansharkgui:598
 #, python-format
 msgid "%s could not be found"
-msgstr ""
+msgstr "%s が見つかりませんでした"
 
 #: ../src/lansharkgui:624
 msgid "All"
-msgstr ""
+msgstr "すべて"
 
 #: ../src/lansharkgui:625
 msgid "Regex"
-msgstr ""
+msgstr "正規表現"
 
 #: ../src/lansharkgui:670
 #, python-format
@@ -115,112 +121,117 @@ msgid ""
 "Invalid Regex:\n"
 "%s"
 msgstr ""
+"誤った正規表現:\n"
+"%s"
 
 #: ../src/lansharkgui:678
 msgid "No active download"
-msgstr ""
+msgstr "ダウンロード中のファイルはありません"
 
 #: ../src/lansharkgui:697
 msgid "Downloads"
-msgstr ""
+msgstr "ダウンロード中"
 
 #: ../src/lansharkgui:722
 msgid "Finished downloads"
-msgstr ""
+msgstr "ダウンロード完了"
 
 #: ../src/lansharkgui:778
 msgid "Drag and Drop only works for http!"
-msgstr ""
+msgstr "ドラッグ＆ドロップはHTTPでのみ使用可能です"
 
 #: ../src/lansharkgui:791
 msgid "Could not add url"
-msgstr ""
+msgstr "URLを追加できませんでした"
 
 #: ../src/lansharkgui:820
 msgid "Download paused"
-msgstr ""
+msgstr "一時停止中のダウンロード"
 
 #: ../src/lansharkgui:823
 msgid "Downloading..."
-msgstr ""
+msgstr "ダウンロード中..."
 
 #: ../src/lansharkgui:828
 msgid "Download complete"
-msgstr ""
+msgstr "ダウンロード完了"
 
 #: ../src/lansharkgui:839
 #, python-format
 msgid "%s left - %s/s"
-msgstr ""
+msgstr "残り %s - %s/s"
 
 #: ../src/lansharkgui:840
 #, python-format
 msgid "%i items in the download queue - "
-msgstr ""
+msgstr "ダウンロード一覧には %i アイテムあります - "
 
 #: ../src/lansharkgui:886
 #, python-format
 msgid "An unhandled error occured while downloading %r"
-msgstr ""
+msgstr "ダウンロード時に予期しないエラーが発生しました。 %r"
 
 #: ../src/lansharkgui:903 ../src/lansharkgui:916
 msgid "Starting download"
-msgstr ""
+msgstr "ダウンロード開始"
 
 #: ../src/lansharkgui:953
 msgid "Skipped: "
-msgstr ""
+msgstr "スキップ： "
 
 #: ../src/lansharkgui:957
 msgid "Error: "
-msgstr ""
+msgstr "エラー: "
 
 #: ../src/lansharkgui:958
 #, python-format
 msgid "Error while downloading %r%s"
-msgstr ""
+msgstr "%r%s のダウンロードに失敗"
 
 #: ../src/lansharkgui:1044
 #, python-format
 msgid "%s - %i Folders %i Files"
-msgstr ""
+msgstr "%s - %i フォルダー %i ファイル"
 
 #: ../src/lansharkgui:1061
 #, python-format
 msgid "%i files total %s - %i folders"
-msgstr ""
+msgstr "全%i個 %s - %i フォルダー"
 
 #: ../src/lansharkgui:1107
+#, fuzzy
 msgid "loading..."
-msgstr ""
+msgstr "ダウンロード中..."
 
 #: ../src/lansharkgui:1149
 msgid "Preview"
-msgstr ""
+msgstr "プレビュー"
 
 #: ../src/lansharkgui:1155 ../src/lansharkgui:1202
 msgid "Download"
-msgstr ""
+msgstr "ダウンロード"
 
 #: ../src/lansharkgui:1158 ../src/lansharkgui:1199
 msgid "Download to"
-msgstr ""
+msgstr "ダウンロード先"
 
 #: ../src/lansharkgui:1162
 msgid "Copy URL"
-msgstr ""
+msgstr "URL をコピー"
 
 #: ../src/lansharkgui:1168
 msgid "Icon Size"
-msgstr ""
+msgstr "アイコンの大きさ"
 
 #: ../src/lansharkgui:1201
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: ../src/lansharkgui:1225
 msgid "Please install vlc from http://videolan.org/vlc/ to use this feature"
 msgstr ""
+"この機能を利用するには、http://videolan.org/vlc/ からVLCをインストールしてく"
+"ださい。"
 
 #: ../src/lansharkgui:1229
 #, python-format
@@ -228,43 +239,45 @@ msgid ""
 "Could not find a suitable mediaplayer on your system. Please configure one "
 "manually. The path to the config file is %s."
 msgstr ""
+"メディアプレーヤーを見つけることができませんでした。設定ファイル(%s)にて設定"
+"してください。"
 
 #: ../src/lansharkgui:1265
 msgid "Open folder"
-msgstr ""
+msgstr "フォルダを開く"
 
 #: ../src/lansharkgui:1291
 #, python-format
 msgid "%s Configuration"
-msgstr ""
+msgstr "%s 設定"
 
 #: ../src/lansharkgui:1295
 msgid "Configuration"
-msgstr ""
+msgstr "環境設定"
 
 #: ../src/lansharkgui:1301
 msgid "Hostname"
-msgstr ""
+msgstr "ホスト名"
 
 #: ../src/lansharkgui:1303
 msgid "Select the share path"
-msgstr ""
+msgstr "公開フォルダを選択してください。"
 
 #: ../src/lansharkgui:1306
 msgid "Share Path"
-msgstr ""
+msgstr "公開フォルダ"
 
 #: ../src/lansharkgui:1308
 msgid "Select the incoming path"
-msgstr ""
+msgstr "ダウンロードフォルダを選択してください。"
 
 #: ../src/lansharkgui:1311
 msgid "Incoming Path"
-msgstr ""
+msgstr "ダウンロードフォルダ"
 
 #: ../src/lansharkgui:1315
 msgid "Autostart"
-msgstr ""
+msgstr "自動起動"
 
 #: ../src/lansharkgui:1320
 msgid "Network Name"
@@ -272,19 +285,19 @@ msgstr ""
 
 #: ../src/lansharkgui:1323
 msgid "Broadcast Address"
-msgstr ""
+msgstr "ブロードキャストアドレス"
 
 #: ../src/lansharkgui:1326
 msgid "Port"
-msgstr ""
+msgstr "ポート番号"
 
 #: ../src/lansharkgui:1335
 msgid "Basic"
-msgstr ""
+msgstr "基本"
 
 #: ../src/lansharkgui:1336
 msgid "Advanced"
-msgstr ""
+msgstr "詳細"
 
 #: ../src/lansharkgui:1340
 #, python-format
@@ -293,7 +306,12 @@ msgid ""
 "take a look at lansharks config file:\n"
 "%s"
 msgstr ""
+"高度な設定を行う場合は、設定ファイルを見てください:\n"
+"%s"
 
 #: ../src/lansharkgui:1343
 msgid "More"
-msgstr ""
+msgstr "その他"
+
+#~ msgid "Hello Message"
+#~ msgstr "Hello メッセージ"
