@@ -1,0 +1,24 @@
+/* gnaaaaah I hate this fucking browser */
+body
+{
+    text-align: center;
+    padding-bottom: 10px;
+}
+body *
+{
+    text-align: justify;
+}
+#content
+{
+    width: 729px;
+}
+div.screenshot
+{
+    margin: 20px;
+    overflow: hidden;
+    float: left;
+}
+#content ul
+{
+    list-style-type: circle;
+}
