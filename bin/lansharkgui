@@ -163,7 +163,6 @@ gtk.about_dialog_set_url_hook(open_url, None)
 
 def get_filename(url):
     return gobject.filename_display_basename(urllib2.unquote(url[url.rindex("/", 0, -1)+1:]))
-    return urllib2.unquote(url[url.rindex("/", 0, -1)+1:]).decode("utf").encode(config.SYS_ENCODING, "replace")
 
 def gtk_yield():
     while gtk.events_pending():
