@@ -17,6 +17,8 @@ config.save()
 from __future__ import with_statement
 import os
 
+import simplejson
+
 from lanshark import observable
 
 class Error(Exception):
@@ -163,15 +165,27 @@ class StringList(List, String):
     "list of strings"
     pass
 
+class JSON(Key):
+    def parse(self, value):
+        return simplejson.loads(value)
+
+    def dump(self, value):
+        return simplejson.dumps(value)
+
 def test():
     from StringIO import StringIO
     class TestConfig(Config):
         s = String("default", "doc of s")
         i = Integer(0x29a, "doc of i")
         b = Boolean(False, "doc of b")
+        j = JSON({"something": ["more", "complex"]}, "doc of j")
+        j2 = JSON({"something": ["more", "complex"]}, "doc of j")
     config = TestConfig()
     assert TestConfig.s.__doc__ == "doc of s"
     assert config.s == "default"
+    assert config.j["something"][1] == "complex"
+    config.j["something"] = "different"
+    assert config.j["something"] == "different"
     assert not config.b
     config.s = "not"
     config.s += " default"
@@ -181,11 +195,14 @@ def test():
     config.save(f)
     val = f.getvalue()
     assert "doc of s" in val
+    assert "doc of j" in val
     assert "not default" in val
     config = TestConfig()
     assert config.s == "default"
     f.seek(0)
     config.load(f)
+    assert config.j2["something"][1] == "complex"
+    assert config.j["something"] == "different"
     assert config.s == "not default"
     assert config.i == 0
     assert config.b is True
