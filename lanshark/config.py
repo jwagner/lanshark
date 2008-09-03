@@ -53,7 +53,7 @@ def get_openfile():
 
 def get_sys_encoding():
     if sys.platform.startswith("win"):
-        return "utf8"
+        return "utf-8"
     return locale.getpreferredencoding()
 
 class Config(configuration.Config):

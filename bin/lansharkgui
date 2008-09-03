@@ -19,6 +19,8 @@ pygtk.require('2.0')
 import gtk
 import gobject
 
+import lanshark
+print lanshark.__file__
 from lanshark.config import config
 from lanshark import autostart
 import logging
@@ -141,7 +143,7 @@ class gtklock:
     def __exit__(*args):
         gtk.gdk.threads_leave()
 
-def bind_context_menu(view, menu):
+def bind_context_menu(view, menu, *userargs):
     """Bind a context menu to a treeview"""
     def on_button_press(view, event, menu):
         if event.button == 3:
@@ -151,7 +153,7 @@ def bind_context_menu(view, menu):
                 path, col, cellx, celly = path
                 view.grab_focus()
                 view.set_cursor(path, col, 0)
-            menu(view).popup(None, None, None, event.button, event.time)
+            menu(view, *userargs).popup(None, None, None, event.button, event.time)
     view.connect("button-press-event", on_button_press, menu)
 
 def open_url(d, link, data):
@@ -383,6 +385,8 @@ class Browser(gtk.Frame):
     _url = None
     def __init__(self, downloads):
         gtk.Frame.__init__(self)
+        self.downloads = downloads
+
         self.set_shadow_type(gtk.SHADOW_NONE)
         self.pane = gtk.HPaned()
 
@@ -497,6 +501,7 @@ class Browser(gtk.Frame):
         self.treemodel.set_sort_column_id(1, gtk.SORT_ASCENDING)
         self.tree.set_model(self.treemodel)
         self.treemodel.clear()
+        bind_context_menu(self.tree, BrowserTreeContextMenu, self)
         self.discover()
 
     def discover(self):
@@ -523,8 +528,8 @@ class Browser(gtk.Frame):
 
     def tree_selected(self, tree):
         model, treeiter = tree.get_selection().get_selected()
-        url = model.get_value(treeiter, 2)
-        self.set_list_url(url)
+        if treeiter:
+            self.set_list_url(model.get_value(treeiter, 2))
 
     def set_list_url(self, url):
         self.add_history(self.url)
@@ -694,6 +699,7 @@ class Downloads(gtk.Frame):
         self.model = gtk.ListStore(str, str, str)
         self.list = gtk.TreeView(self.model)
         tvcolumn = gtk.TreeViewColumn(_('Downloads'))
+        tvcolumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         url_cell = gtk.CellRendererText()
         tvcolumn.pack_start(url_cell)
         tvcolumn.add_attribute(url_cell, 'text', 0)
@@ -719,6 +725,7 @@ class Downloads(gtk.Frame):
         self.finishedmodel = gtk.ListStore(str, str, str)
         self.finishedview = gtk.TreeView(self.finishedmodel)
         tvcolumn = gtk.TreeViewColumn(_('Finished downloads'))
+        tvcolumn.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
         icon_cell = gtk.CellRendererPixbuf()
         url_cell = gtk.CellRendererText()
         tvcolumn.pack_start(icon_cell, False)
@@ -1127,13 +1134,13 @@ class URLView(gtk.ScrolledWindow):
         size, icon = lib.stat(url)
         self.add_item(url, size, icon)
 
-
 class URLContextMenu(gtk.Menu):
     """The context menu of the urlview"""
     def __init__(self, urlview, urls):
         gtk.Menu.__init__(self)
         self.urls = urls
         self.urlview = urlview
+        self.browser = self.urlview.browser
         items = []
 
         if len(urls) == 1:
@@ -1187,21 +1194,22 @@ class URLContextMenu(gtk.Menu):
         config.save()
 
     def open(self, evt):
-        self.urlview.browser.url = self.urls[0]
-        self.urlview.browser.grab_focus()
+        self.browser.url = self.urls[0]
+        self.browser.grab_focus()
 
     def download(self, evt):
         for url in self.urls:
-            self.urlview.downloads.add_url(url)
+            self.browser.downloads.add_url(url)
 
     def download_to(self, evt):
         dialog = gtk.FileChooserDialog(_("Download to"),
                 action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                buttons=(_("Cancel"), gtk.RESPONSE_CANCEL,
-                    _("Download"), gtk.RESPONSE_OK))
+                # stupid gtk doesn't accept unicode here
+                buttons=(_("Cancel").encode(config.SYS_ENCODING), gtk.RESPONSE_CANCEL,
+                    _("Download").encode(config.SYS_ENCODING), gtk.RESPONSE_OK))
         if dialog.run() == gtk.RESPONSE_OK:
             for url in self.urls:
-                self.urlview.downloads.add_url(url,
+                self.browser.downloads.add_url(url,
                     incoming=dialog.get_filename())
         dialog.destroy()
 
@@ -1209,7 +1217,7 @@ class URLContextMenu(gtk.Menu):
         gtk.Clipboard().set_text(self.urls[0])
 
     def refresh(self, evt):
-        self.urlview.browser.refresh(evt)
+        self.browser.refresh(evt)
 
     def preview(self, evt):
         if self.viewer:
@@ -1217,7 +1225,6 @@ class URLContextMenu(gtk.Menu):
                 webbrowser.open(self.urls[0])
             else:
                 viewer = self.viewer % self.urls[0]
-                # dont ask me why but without this it freezes
                 os.system(viewer + " &")
         else:
             if sys.platform.startswith("win"):
@@ -1229,6 +1236,39 @@ class URLContextMenu(gtk.Menu):
                         "system. Please configure one manually. "
                         "The path to the config file is %s.") % config.path)
 
+class BrowserTreeContextMenu(URLContextMenu):
+    """The context menu of the tree in the browser reuses the URLContextMenu in a ugly way"""
+    def __init__(self, view, browser):
+        gtk.Menu.__init__(self)
+        self.browser = browser
+        self.view = view
+
+        item = gtk.ImageMenuItem(stock_id=gtk.STOCK_OPEN)
+        item.connect("activate", self.open)
+        self.append(item)
+        item.show()
+
+        item = IconMenuItem("go-down", _("Download"))
+        item.connect("activate", self.download)
+        self.append(item)
+        item.show()
+
+        item = IconMenuItem("go-down", _("Download to"))
+        item.connect("activate", self.download_to)
+        self.append(item)
+        item.show()
+
+        item = IconMenuItem("edit-copy", _("Copy URL"))
+        item.connect("activate", self.copy_link)
+        self.append(item)
+        item.show()
+
+        item = gtk.ImageMenuItem(stock_id=gtk.STOCK_REFRESH)
+        item.connect("activate", self.refresh)
+        self.append(item)
+        item.show()
+
+        self.urls = [view.get_model().get_value(view.get_selection().get_selected()[1], 2)]
 
 class DownloadContextMenu(gtk.Menu):
     """The context menu of the download treeviews"""
