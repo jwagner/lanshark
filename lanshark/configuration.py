@@ -89,7 +89,7 @@ class Config(observable.Observable):
                 doc = "# " + attr.__doc__.replace(os.linesep,
                         os.linesep + "# ")
                 f.write(doc + os.linesep)
-                value = getattr(self, name)
+                value = attr.dump(getattr(self, name))
                 if attr.comment_out_default and value == attr.default:
                     fmt = '# %s = %s%s'
                 else:
@@ -178,14 +178,14 @@ def test():
         s = String("default", "doc of s")
         i = Integer(0x29a, "doc of i")
         b = Boolean(False, "doc of b")
-        j = JSON({"something": ["more", "complex"]}, "doc of j")
+        j = JSON({"something": ["more", "complex\\"]}, "doc of j")
         j2 = JSON({"something": ["more", "complex"]}, "doc of j")
     config = TestConfig()
     assert TestConfig.s.__doc__ == "doc of s"
     assert config.s == "default"
-    assert config.j["something"][1] == "complex"
-    config.j["something"] = "different"
-    assert config.j["something"] == "different"
+    assert config.j["something"][1] == "complex\\"
+    config.j["something"] = "different\\"
+    assert config.j["something"] == "different\\"
     assert not config.b
     config.s = "not"
     config.s += " default"
@@ -202,11 +202,12 @@ def test():
     f.seek(0)
     config.load(f)
     assert config.j2["something"][1] == "complex"
-    assert config.j["something"] == "different"
+    assert config.j["something"] == "different\\"
     assert config.s == "not default"
     assert config.i == 0
     assert config.b is True
     observable.test()
+    print "test complete"
 
 if __name__ == "__main__":
     test()
