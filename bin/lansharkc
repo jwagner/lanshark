@@ -12,6 +12,13 @@ try:
 except:
     signal = None
 
+# make it startable by using ./bin/lansharkc
+try:
+    import lanshark
+except ImportError:
+    sys.path.append("..")
+    import lanshark
+
 from lanshark.config import config
 config.set_prefix(os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.pardir)))

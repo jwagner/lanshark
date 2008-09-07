@@ -19,10 +19,16 @@ pygtk.require('2.0')
 import gtk
 import gobject
 
-import lanshark
-print lanshark.__file__
+# make it startable by using ./bin/lansharkgui
+try:
+    import lanshark
+except ImportError:
+    sys.path.append("..")
+    import lanshark
+
 from lanshark.config import config
 from lanshark import autostart
+
 import logging
 logger = logging.getLogger('lanshark')
 try:
@@ -34,7 +40,7 @@ except NameError:
     config.set_prefix(os.path.abspath(appdir))
     sys.stderr.write = lambda *x: None
     logger.debug("frozen")
-# config.set_prefix(".") # useful for tracing
+
 from lanshark import lib, icons
 
 import gettext
@@ -110,9 +116,6 @@ def show_error(msg):
     dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, message_format=str(msg),
             buttons=gtk.BUTTONS_OK)
     dialog.set_title(_("Error"))
-    # dialog.run() - this breaks when called from gobject.idle_add
-    # dialog.hide()
-    # dialog.destroy
     dialog.show()
     dialog.connect("response", lambda dialog, response: dialog.destroy())
 
@@ -149,7 +152,6 @@ def bind_context_menu(view, menu, *userargs):
         if event.button == 3:
             path = view.get_path_at_pos(int(event.x), int(event.y))
             if path is not None:
-                #iter = view.get_model().get_iter(path)
                 path, col, cellx, celly = path
                 view.grab_focus()
                 view.set_cursor(path, col, 0)
@@ -272,7 +274,7 @@ class MainWindow(gtk.Window):
         main_menu = gtk.Menu()
         main_item.set_submenu(main_menu)
         if not config.DISABLE_WEBINTERFACE:
-            web_item = IconMenuItem("applications-internet",
+            web_item = IconMenuItem("lanshark",
                     _("Open Web Interface"))
             web_item.connect("activate", self.open_webinterface)
             main_menu.append(web_item)

@@ -15,7 +15,7 @@ def ls_r(dir):
 
 kwargs = {
       'name': 'lanshark',
-      'version': "0.0.2",
+      'version': "1.0.0 beta",
       'description': 'A P2P Filesharing tool for local area networks',
       'author': 'Jonas Wagner',
       'author_email': 'veers@gmx.ch',
