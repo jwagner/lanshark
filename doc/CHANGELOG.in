@@ -1,6 +1,6 @@
 include: HEADER
 -
-Lanshark 1.0.0 ( Aug 2008 )
+Lanshark 1.0.0 beta ( Sep 2008 )
  * Fixed all known bugs
  * New design for the webinterface
  * Refactored some code

@@ -3,7 +3,7 @@ include: HEADER
 *Meta
 -
 Author:    Jonas Wagner
-Homepage:   http://lanshark.veers.ch/
+Homepage:   http://lanshark.29a.ch/
 Bugtracker: https://bugs.launchpad.net/lanshark
 -
 *Installation
@@ -59,12 +59,11 @@ The config key is called FolderImages.
 *Acknowledgements
 -
 Lanshark includes the following software:
-simplejson by Bob Ippolito see src/lanshark/simplejson
-
+simplejson by Bob Ippolito see lanshark/simplejson
 -
 *Contact/Support
 -
 IRC: irc.freenode.net/#lanshark my nick there is veerz.
 Please write out my nick (veerz: some question?) and be
-patient.
+patient. You can also write me an email: veers at gmx dot ch.
 -
