@@ -433,6 +433,7 @@ class Browser(gtk.Frame):
             # hack: remove text
             hbox.pack_start(button, False, False)
         self.entry_location = gtk.Entry()
+        self.entry_location.connect("activate", self.goto)
         hbox.pack_start(self.entry_location, True, True)
         # this icon is missing quite often
         if iconfactory.get_icon("go-jump", 16):
