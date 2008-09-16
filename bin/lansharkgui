@@ -156,6 +156,7 @@ def bind_context_menu(view, menu, *userargs):
                 view.grab_focus()
                 view.set_cursor(path, col, 0)
             menu(view, *userargs).popup(None, None, None, event.button, event.time)
+            return True
     view.connect("button-press-event", on_button_press, menu)
 
 def open_url(d, link, data):
