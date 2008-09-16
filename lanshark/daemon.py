@@ -193,11 +193,7 @@ class HTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             self.wfile.close()
 
     def send_head(self):
-        if "?" in self.path:
-            self.path, query = self.path.split("?")
-        else:
-            query = ""
-        self.query = cgi.parse_qs(query)
+        self.path = self.path.split("?")[0]
         path = self.translate_path(self.path)
         if os.path.isdir(path):
             return self.list_directory(path)
