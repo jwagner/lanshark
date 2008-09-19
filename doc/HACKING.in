@@ -66,7 +66,7 @@ The reply message consists of the regular expression used for the
 search that resultet in the reply and the path of the match reperated
 by a :. The reply messages are encoded in utf8 aswell.
 Example: 'foo:/some/folder/foo.png'. The response of the example
-means that a file matching the search query foo is locatet at
+means that a file matching the search query foo is located at
 http://senderaddress:port/some/folder/foo.png.
 -
 *HTTP Protocol
