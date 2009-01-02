@@ -8,7 +8,7 @@ pygtk >= 2.10 (only for the GUI)
 *Installation
 -
 As simple as that:
-$ python setup.py install
+# python setup.py install
 -
 *Use without installation
 -

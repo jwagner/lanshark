@@ -11,7 +11,6 @@ from lanshark.config import config
 config.SHARE_PATH = tempfile.mkdtemp()
 # no collisions with real instances
 config.PORT += random.randint(1, 100)
-print config.PORT
 config.INCOMING_PATH = os.path.join(config.SHARE_PATH, "incoming")
 config.MAX_SEARCH_RESULTS = 5
 config.SEARCH_TIMEOUT = 0.5

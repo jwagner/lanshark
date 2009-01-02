@@ -13,7 +13,7 @@
 	</head>
 	<body>
         <div id="header">
-            lanshark lan filesharing tool
+            <strong>lanshark lan filesharing file sharing tool</strong>
             <ul id="navigation">
             % for name in self.navigation():
                 <li class="${ name + ".html" == page and "active page" or "page"}">
