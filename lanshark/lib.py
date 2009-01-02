@@ -105,7 +105,8 @@ def resolve(addr):
 def discover(async=False):
     """Discover other hosts in the network"""
     for item in config.STATICHOSTS:
-        yield (item, item)
+        url = "http://%s/" % item
+        yield (item, url)
     s = network.broadcast_dgram_socket(config.CLIENT_PORT)
     hello = config.NETWORK_NAME
     s.sendto(hello, (config.BROADCAST_IP, config.PORT))
