@@ -13,6 +13,13 @@ def ls_r(dir):
         return a
     return reduce(do_reduce, os.walk(dir), [])
 
+packages = ['lanshark']
+
+try:
+    import simplejson
+except ImportError:
+    packages += ['simplejson']
+
 kwargs = {
       'name': 'lanshark',
       'version': "1.0.0 beta",
@@ -20,7 +27,7 @@ kwargs = {
       'author': 'Jonas Wagner',
       'author_email': 'veers@gmx.ch',
       'url': 'http://lanshark.29a.ch',
-      'packages': ['lanshark'],
+      'packages': packages,
       'scripts': ['bin/lansharkgui', 'bin/lansharkc', 'bin/lansharkd'],
       'options': {'py2exe':{
           'packages': 'encodings',
