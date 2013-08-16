@@ -1,33 +1,12 @@
 include: HEADER
 -
 You are very welcome to hack on lanshark. Here are some
-guidelines for doing so. If you need help to understand the
-source code please just ask :)
+guidelines for doing so. 
 -
-*Coordination
--
-Please use launchpad and irc for coordination!
-https://launchpad.net/lanshark
-irc://irc.freenode.net/#lanshark
 -
 *Getting started
 -
-1: get the source code from my git repository
-   $ git clone http://29a.ch/git/lanshark.git/
-
-2: Search for a ticket that covers the work you are planning to do.
-   In case you cannot find one, just create a new one.
-
-2: start hacking!
-   $ vim src/lansharkgui
-
-3: test your changes
-   $ python src/lanshark/test.py
-
-3: when finnished make a patch
-   $ git diff > agoodname.patch
-
-4: publish your path or a link to your branch in launchpad
+Just For the bloody thing already. ;)
 -
 *Coding Style
 -

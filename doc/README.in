@@ -4,7 +4,11 @@ include: HEADER
 -
 Author:    Jonas Wagner
 Homepage:   http://lanshark.29a.ch/
-Bugtracker: https://bugs.launchpad.net/lanshark
+-
+*Note
+-
+This is an old piece of software. I wrote it over six
+years ago. Use it at your own risk. ;)
 -
 *Installation
 -
@@ -60,10 +64,4 @@ The config key is called FolderImages.
 -
 Lanshark includes the following software:
 simplejson by Bob Ippolito see lanshark/simplejson
--
-*Contact/Support
--
-IRC: irc.freenode.net/#lanshark my nick there is veerz.
-Please write out my nick (veerz: some question?) and be
-patient. You can also write me an email: veers at gmx dot ch.
 -
